@@ -1,0 +1,745 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Jeu de donnees\nThe Global Database of Events, Language, and Tone (*GDELT*), est une initiative pour construire un catalogue de comportements et de croyances sociales à travers le monde, reliant chaque personne, organisation, lieu, dénombrement, thème, source d\u0027information, et événement à travers la planète en un seul réseau massif qui capture ce qui se passe dans le monde, le contexte, les implications ainsi que la perception des gens sur chaque jour.\n\n\nCette base de données a eu beaucoup d\u0027utilisations, par exemple pour mieux comprendre l\u0027évolution et l\u0027impact de la crise financière du 2008 (https://arxiv.org/pdf/1403.2272v1.pdf[Bayesian dynamic financial networks with time-varying predictors]) ou analyser l\u0027évolution des relations entre des pays impliquées dans des conflits (http://www.gao.ece.ufl.edu/GXU/fun_reading/sbp_hurst.pdf[Massive Media Event Data Analysis to Assess World-Wide Political Conflict and Instability] ).\n\nGDELT est compose par trois jeux de fichiers CSV, avec un fichier compressé par tranche de 15 minutes:\n\n* les events (https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.events?tab\u003dschema[schema], http://data.gdeltproject.org/documentation/CAMEO.Manual.1.1b3.pdf[CAMEO Ontology], http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation])\n* les mentions (https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.eventmentions[schema], http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation])\n* le graph des relations \u003d\u003e GKG, Global Knowledge Graph (https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.gkg[schema], http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf[documentation])\n\nL\u0027ensemble des donnees _GDELT_ sont disponibles via HTTP. Un fichier CSV _masterfilelist.txt_\n(http://data.gdeltproject.org/gdeltv2/masterfilelist.txt[Master CSV data file list]) nous permmet d\u0027avoir la liste de tous les fichiers du jeu de donnees GDELT ainsi que l\u0027URL pour telecharger chaque fichier.\n\n\nPour plus d\u0027infos sur le format des fichiers vous pouvez consulter la documentation GDELT: https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.550",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eJeu de donnees\u003c/h2\u003e\n\u003cp\u003eThe Global Database of Events, Language, and Tone (*GDELT*), est une initiative pour construire un catalogue de comportements et de croyances sociales à travers le monde, reliant chaque personne, organisation, lieu, dénombrement, thème, source d\u0026rsquo;information, et événement à travers la planète en un seul réseau massif qui capture ce qui se passe dans le monde, le contexte, les implications ainsi que la perception des gens sur chaque jour.\u003c/p\u003e\n\u003cp\u003eCette base de données a eu beaucoup d\u0026rsquo;utilisations, par exemple pour mieux comprendre l\u0026rsquo;évolution et l\u0026rsquo;impact de la crise financière du 2008 (\u003ca href\u003d\"https://arxiv.org/pdf/1403.2272v1.pdf[Bayesian\"\u003ehttps://arxiv.org/pdf/1403.2272v1.pdf[Bayesian\u003c/a\u003e dynamic financial networks with time-varying predictors]) ou analyser l\u0026rsquo;évolution des relations entre des pays impliquées dans des conflits (\u003ca href\u003d\"http://www.gao.ece.ufl.edu/GXU/fun_reading/sbp_hurst.pdf[Massive\"\u003ehttp://www.gao.ece.ufl.edu/GXU/fun_reading/sbp_hurst.pdf[Massive\u003c/a\u003e Media Event Data Analysis to Assess World-Wide Political Conflict and Instability] ).\u003c/p\u003e\n\u003cp\u003eGDELT est compose par trois jeux de fichiers CSV, avec un fichier compressé par tranche de 15 minutes:\u003c/p\u003e\n\u003cul\u003e\n  \u003cli\u003eles events (\u003ca href\u003d\"https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.events?tab\u003dschema[schema]\"\u003ehttps://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.events?tab\u003dschema[schema]\u003c/a\u003e, \u003ca href\u003d\"http://data.gdeltproject.org/documentation/CAMEO.Manual.1.1b3.pdf[CAMEO\"\u003ehttp://data.gdeltproject.org/documentation/CAMEO.Manual.1.1b3.pdf[CAMEO\u003c/a\u003e Ontology], \u003ca href\u003d\"http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation]\"\u003ehttp://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation]\u003c/a\u003e)\u003c/li\u003e\n  \u003cli\u003eles mentions (\u003ca href\u003d\"https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.eventmentions[schema]\"\u003ehttps://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.eventmentions[schema]\u003c/a\u003e, \u003ca href\u003d\"http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation]\"\u003ehttp://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation]\u003c/a\u003e)\u003c/li\u003e\n  \u003cli\u003ele graph des relations \u003d\u0026gt; GKG, Global Knowledge Graph (\u003ca href\u003d\"https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.gkg[schema]\"\u003ehttps://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.gkg[schema]\u003c/a\u003e, \u003ca href\u003d\"http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf[documentation]\"\u003ehttp://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf[documentation]\u003c/a\u003e)\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eL\u0026rsquo;ensemble des donnees \u003cem\u003eGDELT\u003c/em\u003e sont disponibles via HTTP. Un fichier CSV \u003cem\u003emasterfilelist.txt\u003c/em\u003e\u003cbr/\u003e(\u003ca href\u003d\"http://data.gdeltproject.org/gdeltv2/masterfilelist.txt[Master\"\u003ehttp://data.gdeltproject.org/gdeltv2/masterfilelist.txt[Master\u003c/a\u003e CSV data file list]) nous permmet d\u0026rsquo;avoir la liste de tous les fichiers du jeu de donnees GDELT ainsi que l\u0026rsquo;URL pour telecharger chaque fichier.\u003c/p\u003e\n\u003cp\u003ePour plus d\u0026rsquo;infos sur le format des fichiers vous pouvez consulter la documentation GDELT: \u003ca href\u003d\"https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/\"\u003ehttps://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/\u003c/a\u003e\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686546_2095022686",
+      "id": "20181212-100610_115068599",
+      "dateCreated": "2019-01-07 22:31:26.546",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nDans ce notebook nous allons telecharger les fichiers GDELT pour la journee de 1er decembre 2018.\nOn commence par definir une function *fileDownloder* qui telecharge un fichier a partir d\u0027un URL.",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.557",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eDans ce notebook nous allons telecharger les fichiers GDELT pour la journee de 1er decembre 2018.\u003cbr/\u003eOn commence par definir une function \u003cem\u003efileDownloder\u003c/em\u003e qui telecharge un fichier a partir d\u0026rsquo;un URL.\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686557_1942872035",
+      "id": "20181212-100702_1116690996",
+      "dateCreated": "2019-01-07 22:31:26.557",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import sys.process._\nimport java.net.URL\nimport java.io.File\nimport java.io.File\nimport java.nio.file.{Files, StandardCopyOption}\nimport java.net.HttpURLConnection \nimport org.apache.spark.sql.functions._\n\n\ndef fileDownloader(urlOfFileToDownload: String, fileName: String) \u003d {\n    val url \u003d new URL(urlOfFileToDownload)\n    val connection \u003d url.openConnection().asInstanceOf[HttpURLConnection]\n    connection.setConnectTimeout(5000)\n    connection.setReadTimeout(5000)\n    connection.connect()\n\n    if (connection.getResponseCode \u003e\u003d 400)\n        println(\"error\")\n    else\n        url #\u003e new File(fileName) !!\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.558",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import sys.process._\nimport java.net.URL\nimport java.io.File\nimport java.io.File\nimport java.nio.file.{Files, StandardCopyOption}\nimport java.net.HttpURLConnection\nimport org.apache.spark.sql.functions._\nwarning: there was one feature warning; re-run with -feature for details\nfileDownloader: (urlOfFileToDownload: String, fileName: String)Any\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686558_1746003437",
+      "id": "20181209-161931_737140067",
+      "dateCreated": "2019-01-07 22:31:26.558",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nOn peut tester cette function pour telecharger en local le *masterfilelist* GDELT. Sur quelle machine ce fichier sera stocque ? ",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.567",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eOn peut tester cette function pour telecharger en local le \u003cem\u003emasterfilelist\u003c/em\u003e GDELT. Sur quelle machine ce fichier sera stocque ?\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686566_-1778539751",
+      "id": "20181212-101024_1671681559",
+      "dateCreated": "2019-01-07 22:31:26.566",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "fileDownloader(\"http://data.gdeltproject.org/gdeltv2/masterfilelist.txt\", \"/mnt/tmp/masterfilelist.txt\") // save the list file to the Spark Master",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.568",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res5: Any \u003d \"\"\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686567_-443665725",
+      "id": "20181209-162121_1695304399",
+      "dateCreated": "2019-01-07 22:31:26.567",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nOn peut verifier que le fichier a bien ete telecharge",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.571",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eOn peut verifier que le fichier a bien ete telecharge\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686570_-1958880490",
+      "id": "20181212-101108_352331024",
+      "dateCreated": "2019-01-07 22:31:26.570",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\nls -lrth /mnt/tmp |grep masterfilelist",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.572",
+      "config": {
+        "editorSetting": {
+          "language": "sh",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sh",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "-rw-r--r--  1 zeppelin zeppelin  41M Dec 12 09:54 masterfilelist.txt\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686571_1203286972",
+      "id": "20181210-111357_801203770",
+      "dateCreated": "2019-01-07 22:31:26.571",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nNous allons uploader le *masterfilelist.txt* dans notre bucket S3 via l\u0027api scala AWS",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.574",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eNous allons uploader le \u003cem\u003emasterfilelist.txt\u003c/em\u003e dans notre bucket S3 via l\u0026rsquo;api scala AWS\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686573_869773673",
+      "id": "20181212-101200_46908780",
+      "dateCreated": "2019-01-07 22:31:26.573",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import com.amazonaws.services.s3.AmazonS3Client\nimport com.amazonaws.auth.BasicAWSCredentials\n    \nval AWS_ID \u003d \"TODO\"\nval AWS_KEY \u003d \"TODO\"\nval awsClient \u003d new AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY))\n\nsc.hadoopConfiguration.set(\"fs.s3a.access.key\", AWS_ID) // mettre votre ID du fichier credentials.csv\nsc.hadoopConfiguration.set(\"fs.s3a.secret.key\", AWS_KEY) // mettre votre secret du fichier credentials.csv\n\nawsClient.putObject(\"john-doe-telecom-gdelt2018\", \"masterfilelist.txt\", new File( \"/mnt/tmp/masterfilelist.txt\") )\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.575",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686574_2108680834",
+      "id": "20181212-095117_1356104178",
+      "dateCreated": "2019-01-07 22:31:26.574",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md Verifions que le fichier a bien ete uploade dans le bucket S3 via un dataframe Spark",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.576",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eVerifions que le fichier a bien ete uploade dans le bucket S3 via un dataframe Spark\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686576_2101162543",
+      "id": "20181212-101258_954978327",
+      "dateCreated": "2019-01-07 22:31:26.576",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.sql.SQLContext\n\nval sqlContext \u003d new SQLContext(sc)\nval filesDF \u003d sqlContext.read.\n                    option(\"delimiter\",\" \").\n                    option(\"infer_schema\",\"true\").\n                    csv(\"s3a://john-doe-telecom-gdelt2018/masterfilelist.txt\").\n                    withColumnRenamed(\"_c0\",\"size\").\n                    withColumnRenamed(\"_c1\",\"hash\").\n                    withColumnRenamed(\"_c2\",\"url\").\n                    cache",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.577",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.SQLContext\nwarning: there was one deprecation warning; re-run with -deprecation for details\nsqlContext: org.apache.spark.sql.SQLContext \u003d org.apache.spark.sql.SQLContext@29a2b934\nfilesDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [size: string, hash: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686577_2116405415",
+      "id": "20181209-163052_14263535",
+      "dateCreated": "2019-01-07 22:31:26.577",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "filesDF.show(false)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.580",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+--------------------------------+--------------------------------------------------------------------+\n|size    |hash                            |url                                                                 |\n+--------+--------------------------------+--------------------------------------------------------------------+\n|150383  |297a16b493de7cf6ca809a7cc31d0b93|http://data.gdeltproject.org/gdeltv2/20150218230000.export.CSV.zip  |\n|318084  |bb27f78ba45f69a17ea6ed7755e9f8ff|http://data.gdeltproject.org/gdeltv2/20150218230000.mentions.CSV.zip|\n|10768507|ea8dde0beb0ba98810a92db068c0ce99|http://data.gdeltproject.org/gdeltv2/20150218230000.gkg.csv.zip     |\n|149211  |2a91041d7e72b0fc6a629e2ff867b240|http://data.gdeltproject.org/gdeltv2/20150218231500.export.CSV.zip  |\n|339037  |dec3f427076b716a8112b9086c342523|http://data.gdeltproject.org/gdeltv2/20150218231500.mentions.CSV.zip|\n|10269336|2f1a504a3c4558694ade0442e9a5ae6f|http://data.gdeltproject.org/gdeltv2/20150218231500.gkg.csv.zip     |\n|149723  |12268e821823aae2da90882621feda18|http://data.gdeltproject.org/gdeltv2/20150218233000.export.CSV.zip  |\n|357229  |744acad14559f2781a8db67715d63872|http://data.gdeltproject.org/gdeltv2/20150218233000.mentions.CSV.zip|\n|11279827|66b03e2efd7d51dabf916b1666910053|http://data.gdeltproject.org/gdeltv2/20150218233000.gkg.csv.zip     |\n|158842  |a5298ce3c6df1a8a759c61b5c0b6f8bb|http://data.gdeltproject.org/gdeltv2/20150218234500.export.CSV.zip  |\n|374528  |dd322c888f28311aca2c735468405551|http://data.gdeltproject.org/gdeltv2/20150218234500.mentions.CSV.zip|\n|11212939|cd20f295649b214dd16666ca451b9994|http://data.gdeltproject.org/gdeltv2/20150218234500.gkg.csv.zip     |\n|362610  |c4268d558bb22c02b3c132c17818c68b|http://data.gdeltproject.org/gdeltv2/20150219000000.export.CSV.zip  |\n|287807  |e7f464a7a451ad2af6e9c8fa24f0ccea|http://data.gdeltproject.org/gdeltv2/20150219000000.mentions.CSV.zip|\n|9728953 |8f4b26e134bd6605cce2d32e92e5d3d7|http://data.gdeltproject.org/gdeltv2/20150219000000.gkg.csv.zip     |\n|251605  |7685a6c71f010918f3be0d4ed2be977e|http://data.gdeltproject.org/gdeltv2/20150219001500.export.CSV.zip  |\n|263793  |e23ee65a60a1577dc74b979a54da406e|http://data.gdeltproject.org/gdeltv2/20150219001500.mentions.CSV.zip|\n|9459370 |6031464dfdcb331551d491916d400c18|http://data.gdeltproject.org/gdeltv2/20150219001500.gkg.csv.zip     |\n|255259  |f41066efb05d4024fca9dc1c2c6b9112|http://data.gdeltproject.org/gdeltv2/20150219003000.export.CSV.zip  |\n|308019  |061133d1efd29c66c7ecba0d52063927|http://data.gdeltproject.org/gdeltv2/20150219003000.mentions.CSV.zip|\n+--------+--------------------------------+--------------------------------------------------------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686578_1392520191",
+      "id": "20181209-185148_142944415",
+      "dateCreated": "2019-01-07 22:31:26.579",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md Par la suite on va charger uniquement les fichiers qui correspond a la journee du 1er decembre 2018",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.581",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003ePar la suite on va charger uniquement les fichiers qui correspond a la journee du 1er decembre 2018\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686581_1961557219",
+      "id": "20181212-101345_616653479",
+      "dateCreated": "2019-01-07 22:31:26.581",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sampleDF \u003d filesDF.filter(col(\"url\").contains(\"/20181201\")).cache\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.582",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "sampleDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [size: string, hash: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686582_-485688828",
+      "id": "20181209-162427_816541907",
+      "dateCreated": "2019-01-07 22:31:26.582",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sampleDF.show(false)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.592",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+--------------------------------+--------------------------------------------------------------------+\n|size    |hash                            |url                                                                 |\n+--------+--------------------------------+--------------------------------------------------------------------+\n|286749  |7745b74ca805d90a86a19909a67e410a|http://data.gdeltproject.org/gdeltv2/20181201000000.export.CSV.zip  |\n|249784  |95ea33b0393a85214eebfa58a02ceb38|http://data.gdeltproject.org/gdeltv2/20181201000000.mentions.CSV.zip|\n|9694304 |c0a3d85a1f3a5263b4c9f7ee1aa632f7|http://data.gdeltproject.org/gdeltv2/20181201000000.gkg.csv.zip     |\n|250319  |47317d0bd9cd56e7b96732677a918435|http://data.gdeltproject.org/gdeltv2/20181201001500.export.CSV.zip  |\n|304863  |37513cccbabc99a9e50a36dc8a590cb6|http://data.gdeltproject.org/gdeltv2/20181201001500.mentions.CSV.zip|\n|10119350|50c3fa1e60385a2ca1314af48dfbad4f|http://data.gdeltproject.org/gdeltv2/20181201001500.gkg.csv.zip     |\n|224825  |8ca8b3a6b4ff6a960b8db5ac8eb9174a|http://data.gdeltproject.org/gdeltv2/20181201003000.export.CSV.zip  |\n|298101  |68369aec62706a2b5a3752d2d725caa9|http://data.gdeltproject.org/gdeltv2/20181201003000.mentions.CSV.zip|\n|9705075 |8cd7aa2af725aa02b42412e0944cfe26|http://data.gdeltproject.org/gdeltv2/20181201003000.gkg.csv.zip     |\n|191077  |906e6599092855ba2965fe59fce70062|http://data.gdeltproject.org/gdeltv2/20181201004500.export.CSV.zip  |\n|252312  |de9048e047049b3b6ac86c0029caeb9c|http://data.gdeltproject.org/gdeltv2/20181201004500.mentions.CSV.zip|\n|9370422 |5a674db2a8d110d27753b97617431688|http://data.gdeltproject.org/gdeltv2/20181201004500.gkg.csv.zip     |\n|187888  |cee25cd1ab712b7ac4e2538c48353f21|http://data.gdeltproject.org/gdeltv2/20181201010000.export.CSV.zip  |\n|274338  |e12ffacb37d73d9c9470a93032a50f41|http://data.gdeltproject.org/gdeltv2/20181201010000.mentions.CSV.zip|\n|10008236|48764cfe5bc415441ed34b4b5a1b0372|http://data.gdeltproject.org/gdeltv2/20181201010000.gkg.csv.zip     |\n|145719  |df1010eb1a3466fef5c9a5b89368328c|http://data.gdeltproject.org/gdeltv2/20181201011500.export.CSV.zip  |\n|255772  |781fffb723e8b5595fc08517ccc6c91b|http://data.gdeltproject.org/gdeltv2/20181201011500.mentions.CSV.zip|\n|8933180 |e1fa1f13da14b85e2ba31c35cbbac8b1|http://data.gdeltproject.org/gdeltv2/20181201011500.gkg.csv.zip     |\n|133461  |1bcaee75fe0a316dac205752030a05e5|http://data.gdeltproject.org/gdeltv2/20181201013000.export.CSV.zip  |\n|246396  |2c9bac79d58fc5a141651ddc072d0cd6|http://data.gdeltproject.org/gdeltv2/20181201013000.mentions.CSV.zip|\n+--------+--------------------------------+--------------------------------------------------------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686583_1502100402",
+      "id": "20181209-184529_2045997321",
+      "dateCreated": "2019-01-07 22:31:26.583",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md Nous allons charger tous ces fichiers dans le bucket S3 via un ETL Spark:",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.593",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eNous allons charger tous ces fichiers dans le bucket S3 via un ETL Spark:\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686593_-578083459",
+      "id": "20181212-101426_1390220831",
+      "dateCreated": "2019-01-07 22:31:26.593",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\nobject AwsClient{\n    val s3 \u003d new AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY))\n}\n\n\nsampleDF.select(\"url\").repartition(100).foreach( r\u003d\u003e {\n            val URL \u003d r.getAs[String](0)\n            val fileName \u003d r.getAs[String](0).split(\"/\").last\n            val dir \u003d \"/mnt/tmp/\"\n            val localFileName \u003d dir + fileName\n            fileDownloader(URL,  localFileName)\n            val localFile \u003d new File(localFileName)\n            AwsClient.s3.putObject(\"john-doe-telecom-gdelt2018\", fileName, localFile )\n            localFile.delete()\n            \n})",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.600",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "warning: there was one deprecation warning; re-run with -deprecation for details\ndefined object AwsClient\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686600_340889555",
+      "id": "20181209-163933_1336720866",
+      "dateCreated": "2019-01-07 22:31:26.600",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nVerifiez via awscli sur votre machine que vous avez bien charge les donnees su 1er decembre 2018\n\naws s3 ls --summarize --human-readable --recursive s3://john-doe-telecom-gdelt2018/                                           \n\n2018-12-12 11:02:29  280.0 KiB 20181201000000.export.CSV.zip\n2018-12-12 11:02:20    9.2 MiB 20181201000000.gkg.csv.zip\n2018-12-12 11:03:00  243.9 KiB 20181201000000.mentions.CSV.zip\n2018-12-12 11:03:06  244.5 KiB 20181201001500.export.CSV.zip\n2018-12-12 11:03:02    9.7 MiB 20181201001500.gkg.csv.zip\n2018-12-12 11:02:22  297.7 KiB 20181201001500.mentions.CSV.zip\n2018-12-12 11:02:16  219.6 KiB 20181201003000.export.CSV.zip\n2018-12-12 11:02:36    9.3 MiB 20181201003000.gkg.csv.zip\n2018-12-12 11:02:22  291.1 KiB 20181201003000.mentions.CSV.zip\n2018-12-12 11:02:59  186.6 KiB 20181201004500.export.CSV.zip\n2018-12-12 11:03:08    8.9 MiB 20181201004500.gkg.csv.zip\n2018-12-12 11:02:42  246.4 KiB 20181201004500.mentions.CSV.zip\n2018-12-12 11:02:15  183.5 KiB 20181201010000.export.CSV.zip\n2018-12-12 11:02:12    9.5 MiB 20181201010000.gkg.csv.zip\n2018-12-12 11:02:23  267.9 KiB 20181201010000.mentions.CSV.zip\n2018-12-12 11:02:49  142.3 KiB 20181201011500.export.CSV.zip\n2018-12-12 11:02:31    8.5 MiB 20181201011500.gkg.csv.zip\n2018-12-12 11:02:59  249.8 KiB 20181201011500.mentions.CSV.zip\n2018-12-12 11:02:57  130.3 KiB 20181201013000.export.CSV.zip\n2018-12-12 11:03:06    8.2 MiB 20181201013000.gkg.csv.zip\n2018-12-12 11:02:55  240.6 KiB 20181201013000.mentions.CSV.zip\n2018-12-12 11:02:38  127.2 KiB 20181201014500.export.CSV.zip\n2018-12-12 11:03:03    8.0 MiB 20181201014500.gkg.csv.zip\n2018-12-12 11:02:35  218.4 KiB 20181201014500.mentions.CSV.zip\n2018-12-12 11:02:42  145.2 KiB 20181201020000.export.CSV.zip\n2018-12-12 11:02:57    7.8 MiB 20181201020000.gkg.csv.zip\n2018-12-12 11:02:29  224.8 KiB 20181201020000.mentions.CSV.zip\n2018-12-12 11:02:24  126.9 KiB 20181201021500.export.CSV.zip\n2018-12-12 11:02:42    8.0 MiB 20181201021500.gkg.csv.zip\n2018-12-12 11:02:37  238.3 KiB 20181201021500.mentions.CSV.zip\n2018-12-12 11:03:00  113.9 KiB 20181201023000.export.CSV.zip\n2018-12-12 11:02:37    6.7 MiB 20181201023000.gkg.csv.zip\n2018-12-12 11:03:00  217.0 KiB 20181201023000.mentions.CSV.zip\n2018-12-12 11:02:58  128.1 KiB 20181201024500.export.CSV.zip\n2018-12-12 11:02:13    7.3 MiB 20181201024500.gkg.csv.zip\n2018-12-12 11:02:37  230.7 KiB 20181201024500.mentions.CSV.zip\n2018-12-12 11:02:32  129.0 KiB 20181201030000.export.CSV.zip\n2018-12-12 11:02:15    7.4 MiB 20181201030000.gkg.csv.zip\n2018-12-12 11:02:24  256.3 KiB 20181201030000.mentions.CSV.zip\n2018-12-12 11:02:40   97.1 KiB 20181201031500.export.CSV.zip\n2018-12-12 11:03:06    6.3 MiB 20181201031500.gkg.csv.zip\n2018-12-12 11:02:39  202.4 KiB 20181201031500.mentions.CSV.zip\n2018-12-12 11:02:49  103.9 KiB 20181201033000.export.CSV.zip\n2018-12-12 11:02:20    6.8 MiB 20181201033000.gkg.csv.zip\n2018-12-12 11:02:35  223.3 KiB 20181201033000.mentions.CSV.zip\n2018-12-12 11:02:39   96.2 KiB 20181201034500.export.CSV.zip\n2018-12-12 11:02:52    6.5 MiB 20181201034500.gkg.csv.zip\n2018-12-12 11:02:56  212.9 KiB 20181201034500.mentions.CSV.zip\n2018-12-12 11:02:42   94.9 KiB 20181201040000.export.CSV.zip\n2018-12-12 11:02:51    6.6 MiB 20181201040000.gkg.csv.zip\n2018-12-12 11:02:48  203.0 KiB 20181201040000.mentions.CSV.zip\n2018-12-12 11:02:37   92.1 KiB 20181201041500.export.CSV.zip\n2018-12-12 11:02:47    5.6 MiB 20181201041500.gkg.csv.zip\n2018-12-12 11:02:11  191.3 KiB 20181201041500.mentions.CSV.zip\n2018-12-12 11:02:38   81.4 KiB 20181201043000.export.CSV.zip\n2018-12-12 11:03:03    6.1 MiB 20181201043000.gkg.csv.zip\n2018-12-12 11:02:30  229.8 KiB 20181201043000.mentions.CSV.zip\n2018-12-12 11:03:02   99.1 KiB 20181201044500.export.CSV.zip\n2018-12-12 11:02:30    6.7 MiB 20181201044500.gkg.csv.zip\n2018-12-12 11:02:22  219.6 KiB 20181201044500.mentions.CSV.zip\n2018-12-12 11:03:04   75.8 KiB 20181201050000.export.CSV.zip\n2018-12-12 11:03:01    5.6 MiB 20181201050000.gkg.csv.zip\n2018-12-12 11:02:34  188.3 KiB 20181201050000.mentions.CSV.zip\n2018-12-12 11:02:53   72.7 KiB 20181201051500.export.CSV.zip\n2018-12-12 11:02:57    5.4 MiB 20181201051500.gkg.csv.zip\n2018-12-12 11:02:21  166.5 KiB 20181201051500.mentions.CSV.zip\n2018-12-12 11:02:11   80.1 KiB 20181201053000.export.CSV.zip\n2018-12-12 11:02:50    6.0 MiB 20181201053000.gkg.csv.zip\n2018-12-12 11:02:56  164.2 KiB 20181201053000.mentions.CSV.zip\n2018-12-12 11:02:46  102.2 KiB 20181201054500.export.CSV.zip\n2018-12-12 11:02:48    6.6 MiB 20181201054500.gkg.csv.zip\n2018-12-12 11:02:27  175.3 KiB 20181201054500.mentions.CSV.zip\n2018-12-12 11:02:23   89.9 KiB 20181201060000.export.CSV.zip\n2018-12-12 11:02:52    6.9 MiB 20181201060000.gkg.csv.zip\n2018-12-12 11:02:09  207.7 KiB 20181201060000.mentions.CSV.zip\n2018-12-12 11:02:28   80.5 KiB 20181201061500.export.CSV.zip\n2018-12-12 11:02:58    6.5 MiB 20181201061500.gkg.csv.zip\n2018-12-12 11:02:47  170.7 KiB 20181201061500.mentions.CSV.zip\n2018-12-12 11:02:47   82.1 KiB 20181201063000.export.CSV.zip\n2018-12-12 11:02:52    6.9 MiB 20181201063000.gkg.csv.zip\n2018-12-12 11:02:27  190.3 KiB 20181201063000.mentions.CSV.zip\n2018-12-12 11:02:17   84.2 KiB 20181201064500.export.CSV.zip\n2018-12-12 11:02:26    6.1 MiB 20181201064500.gkg.csv.zip\n2018-12-12 11:02:52  149.1 KiB 20181201064500.mentions.CSV.zip\n2018-12-12 11:02:58   81.5 KiB 20181201070000.export.CSV.zip\n2018-12-12 11:02:58    6.5 MiB 20181201070000.gkg.csv.zip\n2018-12-12 11:02:40  158.6 KiB 20181201070000.mentions.CSV.zip\n2018-12-12 11:02:49   80.2 KiB 20181201071500.export.CSV.zip\n2018-12-12 11:03:05    6.1 MiB 20181201071500.gkg.csv.zip\n2018-12-12 11:03:01  160.5 KiB 20181201071500.mentions.CSV.zip\n2018-12-12 11:02:27   67.4 KiB 20181201073000.export.CSV.zip\n2018-12-12 11:02:26    6.0 MiB 20181201073000.gkg.csv.zip\n2018-12-12 11:03:08  149.9 KiB 20181201073000.mentions.CSV.zip\n2018-12-12 11:02:09   67.9 KiB 20181201074500.export.CSV.zip\n2018-12-12 11:02:26    6.4 MiB 20181201074500.gkg.csv.zip\n2018-12-12 11:02:30  140.5 KiB 20181201074500.mentions.CSV.zip\n2018-12-12 11:03:02  145.7 KiB 20181201080000.export.CSV.zip\n2018-12-12 11:02:14    8.1 MiB 20181201080000.gkg.csv.zip\n2018-12-12 11:02:24  224.6 KiB 20181201080000.mentions.CSV.zip\n2018-12-12 11:02:54   60.5 KiB 20181201081500.export.CSV.zip\n2018-12-12 11:02:39    6.0 MiB 20181201081500.gkg.csv.zip\n2018-12-12 11:02:26  157.6 KiB 20181201081500.mentions.CSV.zip\n2018-12-12 11:02:29   67.8 KiB 20181201083000.export.CSV.zip\n2018-12-12 11:03:03    5.8 MiB 20181201083000.gkg.csv.zip\n2018-12-12 11:02:42  158.9 KiB 20181201083000.mentions.CSV.zip\n2018-12-12 11:02:47   66.1 KiB 20181201084500.export.CSV.zip\n2018-12-12 11:02:52    6.1 MiB 20181201084500.gkg.csv.zip\n2018-12-12 11:02:18  163.5 KiB 20181201084500.mentions.CSV.zip\n2018-12-12 11:02:46   70.0 KiB 20181201090000.export.CSV.zip\n2018-12-12 11:02:42    5.9 MiB 20181201090000.gkg.csv.zip\n2018-12-12 11:02:26  189.6 KiB 20181201090000.mentions.CSV.zip\n2018-12-12 11:02:26   55.0 KiB 20181201091500.export.CSV.zip\n2018-12-12 11:03:01    5.5 MiB 20181201091500.gkg.csv.zip\n2018-12-12 11:02:29  170.1 KiB 20181201091500.mentions.CSV.zip\n2018-12-12 11:02:55   75.4 KiB 20181201093000.export.CSV.zip\n2018-12-12 11:02:41    5.5 MiB 20181201093000.gkg.csv.zip\n2018-12-12 11:02:38  168.6 KiB 20181201093000.mentions.CSV.zip\n2018-12-12 11:02:18   79.7 KiB 20181201094500.export.CSV.zip\n2018-12-12 11:02:59    5.9 MiB 20181201094500.gkg.csv.zip\n2018-12-12 11:02:23  168.9 KiB 20181201094500.mentions.CSV.zip\n2018-12-12 11:02:09   70.0 KiB 20181201100000.export.CSV.zip\n2018-12-12 11:02:57    6.1 MiB 20181201100000.gkg.csv.zip\n2018-12-12 11:02:49  166.5 KiB 20181201100000.mentions.CSV.zip\n2018-12-12 11:02:44   62.2 KiB 20181201101500.export.CSV.zip\n2018-12-12 11:02:33    5.9 MiB 20181201101500.gkg.csv.zip\n2018-12-12 11:03:02  176.8 KiB 20181201101500.mentions.CSV.zip\n2018-12-12 11:02:09   64.6 KiB 20181201103000.export.CSV.zip\n2018-12-12 11:03:06    5.3 MiB 20181201103000.gkg.csv.zip\n2018-12-12 11:02:41  149.9 KiB 20181201103000.mentions.CSV.zip\n2018-12-12 11:03:00   76.0 KiB 20181201104500.export.CSV.zip\n2018-12-12 11:03:01    4.8 MiB 20181201104500.gkg.csv.zip\n2018-12-12 11:03:01  139.5 KiB 20181201104500.mentions.CSV.zip\n2018-12-12 11:02:33   66.7 KiB 20181201110000.export.CSV.zip\n2018-12-12 11:02:46    4.8 MiB 20181201110000.gkg.csv.zip\n2018-12-12 11:02:21  138.0 KiB 20181201110000.mentions.CSV.zip\n2018-12-12 11:02:22   73.8 KiB 20181201111500.export.CSV.zip\n2018-12-12 11:02:11    4.9 MiB 20181201111500.gkg.csv.zip\n2018-12-12 11:02:52  135.4 KiB 20181201111500.mentions.CSV.zip\n2018-12-12 11:02:41   67.6 KiB 20181201113000.export.CSV.zip\n2018-12-12 11:02:59    4.9 MiB 20181201113000.gkg.csv.zip\n2018-12-12 11:02:51  139.9 KiB 20181201113000.mentions.CSV.zip\n2018-12-12 11:02:21   66.7 KiB 20181201114500.export.CSV.zip\n2018-12-12 11:02:24    4.3 MiB 20181201114500.gkg.csv.zip\n2018-12-12 11:02:09  125.6 KiB 20181201114500.mentions.CSV.zip\n2018-12-12 11:02:35   59.0 KiB 20181201120000.export.CSV.zip\n2018-12-12 11:02:28    4.6 MiB 20181201120000.gkg.csv.zip\n2018-12-12 11:02:33  127.7 KiB 20181201120000.mentions.CSV.zip\n2018-12-12 11:02:29   61.7 KiB 20181201121500.export.CSV.zip\n2018-12-12 11:03:03    4.4 MiB 20181201121500.gkg.csv.zip\n2018-12-12 11:03:01  127.0 KiB 20181201121500.mentions.CSV.zip\n2018-12-12 11:02:49   68.7 KiB 20181201123000.export.CSV.zip\n2018-12-12 11:02:46    4.6 MiB 20181201123000.gkg.csv.zip\n2018-12-12 11:02:56  133.7 KiB 20181201123000.mentions.CSV.zip\n2018-12-12 11:02:21   45.7 KiB 20181201124500.export.CSV.zip\n2018-12-12 11:02:31    4.3 MiB 20181201124500.gkg.csv.zip\n2018-12-12 11:02:41  122.4 KiB 20181201124500.mentions.CSV.zip\n2018-12-12 11:02:24   59.0 KiB 20181201130000.export.CSV.zip\n2018-12-12 11:03:05    4.5 MiB 20181201130000.gkg.csv.zip\n2018-12-12 11:02:12  124.2 KiB 20181201130000.mentions.CSV.zip\n2018-12-12 11:03:00   62.6 KiB 20181201131500.export.CSV.zip\n2018-12-12 11:02:32    5.7 MiB 20181201131500.gkg.csv.zip\n2018-12-12 11:02:37  142.0 KiB 20181201131500.mentions.CSV.zip\n2018-12-12 11:02:10   83.9 KiB 20181201133000.export.CSV.zip\n2018-12-12 11:02:41    6.0 MiB 20181201133000.gkg.csv.zip\n2018-12-12 11:02:49  153.1 KiB 20181201133000.mentions.CSV.zip\n2018-12-12 11:02:54   85.5 KiB 20181201134500.export.CSV.zip\n2018-12-12 11:02:46    5.6 MiB 20181201134500.gkg.csv.zip\n2018-12-12 11:02:29  151.0 KiB 20181201134500.mentions.CSV.zip\n2018-12-12 11:02:26   65.4 KiB 20181201140000.export.CSV.zip\n2018-12-12 11:02:15    4.6 MiB 20181201140000.gkg.csv.zip\n2018-12-12 11:02:55  133.5 KiB 20181201140000.mentions.CSV.zip\n2018-12-12 11:02:35   67.2 KiB 20181201141500.export.CSV.zip\n2018-12-12 11:02:20    5.9 MiB 20181201141500.gkg.csv.zip\n2018-12-12 11:02:28  151.0 KiB 20181201141500.mentions.CSV.zip\n2018-12-12 11:02:31   61.7 KiB 20181201143000.export.CSV.zip\n2018-12-12 11:02:47    5.4 MiB 20181201143000.gkg.csv.zip\n2018-12-12 11:03:03  147.3 KiB 20181201143000.mentions.CSV.zip\n2018-12-12 11:02:28   76.5 KiB 20181201144500.export.CSV.zip\n2018-12-12 11:02:44    5.9 MiB 20181201144500.gkg.csv.zip\n2018-12-12 11:02:27  151.0 KiB 20181201144500.mentions.CSV.zip\n2018-12-12 11:02:18   65.5 KiB 20181201150000.export.CSV.zip\n2018-12-12 11:02:41    5.5 MiB 20181201150000.gkg.csv.zip\n2018-12-12 11:02:48  138.2 KiB 20181201150000.mentions.CSV.zip\n2018-12-12 11:02:57   82.0 KiB 20181201151500.export.CSV.zip\n2018-12-12 11:02:47    5.6 MiB 20181201151500.gkg.csv.zip\n2018-12-12 11:03:05  155.1 KiB 20181201151500.mentions.CSV.zip\n2018-12-12 11:02:28   71.1 KiB 20181201153000.export.CSV.zip\n2018-12-12 11:02:51    5.6 MiB 20181201153000.gkg.csv.zip\n2018-12-12 11:02:12  147.8 KiB 20181201153000.mentions.CSV.zip\n2018-12-12 11:02:28   62.4 KiB 20181201154500.export.CSV.zip\n2018-12-12 11:02:41    6.4 MiB 20181201154500.gkg.csv.zip\n2018-12-12 11:03:06  162.7 KiB 20181201154500.mentions.CSV.zip\n2018-12-12 11:03:03   69.0 KiB 20181201160000.export.CSV.zip\n2018-12-12 11:02:45    5.8 MiB 20181201160000.gkg.csv.zip\n2018-12-12 11:02:22  157.7 KiB 20181201160000.mentions.CSV.zip\n2018-12-12 11:02:27   73.7 KiB 20181201161500.export.CSV.zip\n2018-12-12 11:02:10    6.3 MiB 20181201161500.gkg.csv.zip\n2018-12-12 11:02:27  172.1 KiB 20181201161500.mentions.CSV.zip\n2018-12-12 11:02:45   96.4 KiB 20181201163000.export.CSV.zip\n2018-12-12 11:02:55    6.7 MiB 20181201163000.gkg.csv.zip\n2018-12-12 11:02:27  209.1 KiB 20181201163000.mentions.CSV.zip\n2018-12-12 11:02:09   60.9 KiB 20181201164500.export.CSV.zip\n2018-12-12 11:03:01    6.1 MiB 20181201164500.gkg.csv.zip\n2018-12-12 11:02:27  188.4 KiB 20181201164500.mentions.CSV.zip\n2018-12-12 11:03:09   72.1 KiB 20181201170000.export.CSV.zip\n2018-12-12 11:02:56    6.0 MiB 20181201170000.gkg.csv.zip\n2018-12-12 11:02:50  178.6 KiB 20181201170000.mentions.CSV.zip\n2018-12-12 11:03:04   81.8 KiB 20181201171500.export.CSV.zip\n2018-12-12 11:03:06    7.1 MiB 20181201171500.gkg.csv.zip\n2018-12-12 11:02:09  222.5 KiB 20181201171500.mentions.CSV.zip\n2018-12-12 11:02:12   76.9 KiB 20181201173000.export.CSV.zip\n2018-12-12 11:02:33    6.6 MiB 20181201173000.gkg.csv.zip\n2018-12-12 11:03:01  182.1 KiB 20181201173000.mentions.CSV.zip\n2018-12-12 11:02:48   71.2 KiB 20181201174500.export.CSV.zip\n2018-12-12 11:02:48    6.2 MiB 20181201174500.gkg.csv.zip\n2018-12-12 11:02:17  195.2 KiB 20181201174500.mentions.CSV.zip\n2018-12-12 11:02:37   79.5 KiB 20181201180000.export.CSV.zip\n2018-12-12 11:02:46    5.9 MiB 20181201180000.gkg.csv.zip\n2018-12-12 11:02:46  177.8 KiB 20181201180000.mentions.CSV.zip\n2018-12-12 11:03:01   60.5 KiB 20181201181500.export.CSV.zip\n2018-12-12 11:02:28    6.0 MiB 20181201181500.gkg.csv.zip\n2018-12-12 11:02:17  163.6 KiB 20181201181500.mentions.CSV.zip\n2018-12-12 11:02:52   82.3 KiB 20181201183000.export.CSV.zip\n2018-12-12 11:02:50    6.5 MiB 20181201183000.gkg.csv.zip\n2018-12-12 11:02:32  199.1 KiB 20181201183000.mentions.CSV.zip\n2018-12-12 11:03:02   74.5 KiB 20181201184500.export.CSV.zip\n2018-12-12 11:02:56    6.4 MiB 20181201184500.gkg.csv.zip\n2018-12-12 11:02:37  211.4 KiB 20181201184500.mentions.CSV.zip\n2018-12-12 11:02:55   79.6 KiB 20181201190000.export.CSV.zip\n2018-12-12 11:02:56    6.7 MiB 20181201190000.gkg.csv.zip\n2018-12-12 11:02:36  208.4 KiB 20181201190000.mentions.CSV.zip\n2018-12-12 11:02:56   78.6 KiB 20181201191500.export.CSV.zip\n2018-12-12 11:02:23    7.4 MiB 20181201191500.gkg.csv.zip\n2018-12-12 11:02:49  219.1 KiB 20181201191500.mentions.CSV.zip\n2018-12-12 11:02:35   68.5 KiB 20181201193000.export.CSV.zip\n2018-12-12 11:02:58    6.6 MiB 20181201193000.gkg.csv.zip\n2018-12-12 11:03:01  211.9 KiB 20181201193000.mentions.CSV.zip\n2018-12-12 11:02:52   71.7 KiB 20181201194500.export.CSV.zip\n2018-12-12 11:02:39    6.8 MiB 20181201194500.gkg.csv.zip\n2018-12-12 11:02:48  214.5 KiB 20181201194500.mentions.CSV.zip\n2018-12-12 11:02:56   53.9 KiB 20181201200000.export.CSV.zip\n2018-12-12 11:02:17    5.5 MiB 20181201200000.gkg.csv.zip\n2018-12-12 11:02:48  192.7 KiB 20181201200000.mentions.CSV.zip\n2018-12-12 11:03:07   68.5 KiB 20181201201500.export.CSV.zip\n2018-12-12 11:02:51    6.3 MiB 20181201201500.gkg.csv.zip\n2018-12-12 11:02:54  202.6 KiB 20181201201500.mentions.CSV.zip\n2018-12-12 11:03:00   65.5 KiB 20181201203000.export.CSV.zip\n2018-12-12 11:02:52    5.6 MiB 20181201203000.gkg.csv.zip\n2018-12-12 11:02:51  166.3 KiB 20181201203000.mentions.CSV.zip\n2018-12-12 11:02:53   68.9 KiB 20181201204500.export.CSV.zip\n2018-12-12 11:02:17    5.5 MiB 20181201204500.gkg.csv.zip\n2018-12-12 11:02:27  172.4 KiB 20181201204500.mentions.CSV.zip\n2018-12-12 11:02:42   51.2 KiB 20181201210000.export.CSV.zip\n2018-12-12 11:02:39    5.2 MiB 20181201210000.gkg.csv.zip\n2018-12-12 11:02:18  152.5 KiB 20181201210000.mentions.CSV.zip\n2018-12-12 11:02:13   41.8 KiB 20181201211500.export.CSV.zip\n2018-12-12 11:02:54    6.0 MiB 20181201211500.gkg.csv.zip\n2018-12-12 11:02:39  164.7 KiB 20181201211500.mentions.CSV.zip\n2018-12-12 11:02:28   73.3 KiB 20181201213000.export.CSV.zip\n2018-12-12 11:02:39    5.9 MiB 20181201213000.gkg.csv.zip\n2018-12-12 11:02:49  183.4 KiB 20181201213000.mentions.CSV.zip\n2018-12-12 11:02:29   62.2 KiB 20181201214500.export.CSV.zip\n2018-12-12 11:02:25    6.4 MiB 20181201214500.gkg.csv.zip\n2018-12-12 11:02:55  200.6 KiB 20181201214500.mentions.CSV.zip\n2018-12-12 11:02:47   60.5 KiB 20181201220000.export.CSV.zip\n2018-12-12 11:02:23    5.8 MiB 20181201220000.gkg.csv.zip\n2018-12-12 11:02:35  168.6 KiB 20181201220000.mentions.CSV.zip\n2018-12-12 11:03:07   56.5 KiB 20181201221500.export.CSV.zip\n2018-12-12 11:03:09    5.5 MiB 20181201221500.gkg.csv.zip\n2018-12-12 11:03:04  162.8 KiB 20181201221500.mentions.CSV.zip\n2018-12-12 11:02:22   56.5 KiB 20181201223000.export.CSV.zip\n2018-12-12 11:02:39    5.7 MiB 20181201223000.gkg.csv.zip\n2018-12-12 11:03:03  169.5 KiB 20181201223000.mentions.CSV.zip\n2018-12-12 11:02:59   57.9 KiB 20181201224500.export.CSV.zip\n2018-12-12 11:02:43    6.3 MiB 20181201224500.gkg.csv.zip\n2018-12-12 11:03:08  176.0 KiB 20181201224500.mentions.CSV.zip\n2018-12-12 11:02:10   63.3 KiB 20181201230000.export.CSV.zip\n2018-12-12 11:02:20    6.1 MiB 20181201230000.gkg.csv.zip\n2018-12-12 11:02:21  182.2 KiB 20181201230000.mentions.CSV.zip\n2018-12-12 11:02:34   58.8 KiB 20181201231500.export.CSV.zip\n2018-12-12 11:02:34    5.2 MiB 20181201231500.gkg.csv.zip\n2018-12-12 11:02:18  139.9 KiB 20181201231500.mentions.CSV.zip\n2018-12-12 11:02:33   58.6 KiB 20181201233000.export.CSV.zip\n2018-12-12 11:02:36    6.0 MiB 20181201233000.gkg.csv.zip\n2018-12-12 11:02:48  172.1 KiB 20181201233000.mentions.CSV.zip\n2018-12-12 11:02:41   59.8 KiB 20181201234500.export.CSV.zip\n2018-12-12 11:02:45    5.6 MiB 20181201234500.gkg.csv.zip\n2018-12-12 11:02:37  157.1 KiB 20181201234500.mentions.CSV.zip\n2018-12-12 10:57:56   40.2 MiB masterfilelist.txt\n\nTotal Objects: 289\n   Total Size: 663.2 MiB\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.601",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eVerifiez via awscli sur votre machine que vous avez bien charge les donnees su 1er decembre 2018\u003c/p\u003e\n\u003cp\u003eaws s3 ls \u0026ndash;summarize \u0026ndash;human-readable \u0026ndash;recursive s3://john-doe-telecom-gdelt2018/ \u003c/p\u003e\n\u003cp\u003e2018-12-12 11:02:29 280.0 KiB 20181201000000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:20 9.2 MiB 20181201000000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:00 243.9 KiB 20181201000000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:06 244.5 KiB 20181201001500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:02 9.7 MiB 20181201001500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:22 297.7 KiB 20181201001500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:16 219.6 KiB 20181201003000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:36 9.3 MiB 20181201003000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:22 291.1 KiB 20181201003000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:59 186.6 KiB 20181201004500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:08 8.9 MiB 20181201004500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:42 246.4 KiB 20181201004500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:15 183.5 KiB 20181201010000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:12 9.5 MiB 20181201010000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:23 267.9 KiB 20181201010000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:49 142.3 KiB 20181201011500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:31 8.5 MiB 20181201011500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:59 249.8 KiB 20181201011500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:57 130.3 KiB 20181201013000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:06 8.2 MiB 20181201013000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:55 240.6 KiB 20181201013000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:38 127.2 KiB 20181201014500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:03 8.0 MiB 20181201014500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:35 218.4 KiB 20181201014500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:42 145.2 KiB 20181201020000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:57 7.8 MiB 20181201020000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:29 224.8 KiB 20181201020000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:24 126.9 KiB 20181201021500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:42 8.0 MiB 20181201021500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:37 238.3 KiB 20181201021500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:00 113.9 KiB 20181201023000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:37 6.7 MiB 20181201023000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:00 217.0 KiB 20181201023000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:58 128.1 KiB 20181201024500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:13 7.3 MiB 20181201024500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:37 230.7 KiB 20181201024500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:32 129.0 KiB 20181201030000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:15 7.4 MiB 20181201030000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:24 256.3 KiB 20181201030000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:40 97.1 KiB 20181201031500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:06 6.3 MiB 20181201031500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:39 202.4 KiB 20181201031500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:49 103.9 KiB 20181201033000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:20 6.8 MiB 20181201033000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:35 223.3 KiB 20181201033000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:39 96.2 KiB 20181201034500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:52 6.5 MiB 20181201034500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:56 212.9 KiB 20181201034500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:42 94.9 KiB 20181201040000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:51 6.6 MiB 20181201040000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:48 203.0 KiB 20181201040000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:37 92.1 KiB 20181201041500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:47 5.6 MiB 20181201041500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:11 191.3 KiB 20181201041500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:38 81.4 KiB 20181201043000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:03 6.1 MiB 20181201043000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:30 229.8 KiB 20181201043000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:02 99.1 KiB 20181201044500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:30 6.7 MiB 20181201044500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:22 219.6 KiB 20181201044500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:04 75.8 KiB 20181201050000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:01 5.6 MiB 20181201050000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:34 188.3 KiB 20181201050000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:53 72.7 KiB 20181201051500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:57 5.4 MiB 20181201051500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:21 166.5 KiB 20181201051500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:11 80.1 KiB 20181201053000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:50 6.0 MiB 20181201053000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:56 164.2 KiB 20181201053000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:46 102.2 KiB 20181201054500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:48 6.6 MiB 20181201054500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:27 175.3 KiB 20181201054500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:23 89.9 KiB 20181201060000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:52 6.9 MiB 20181201060000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:09 207.7 KiB 20181201060000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:28 80.5 KiB 20181201061500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:58 6.5 MiB 20181201061500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:47 170.7 KiB 20181201061500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:47 82.1 KiB 20181201063000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:52 6.9 MiB 20181201063000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:27 190.3 KiB 20181201063000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:17 84.2 KiB 20181201064500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:26 6.1 MiB 20181201064500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:52 149.1 KiB 20181201064500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:58 81.5 KiB 20181201070000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:58 6.5 MiB 20181201070000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:40 158.6 KiB 20181201070000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:49 80.2 KiB 20181201071500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:05 6.1 MiB 20181201071500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:01 160.5 KiB 20181201071500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:27 67.4 KiB 20181201073000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:26 6.0 MiB 20181201073000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:08 149.9 KiB 20181201073000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:09 67.9 KiB 20181201074500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:26 6.4 MiB 20181201074500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:30 140.5 KiB 20181201074500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:02 145.7 KiB 20181201080000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:14 8.1 MiB 20181201080000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:24 224.6 KiB 20181201080000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:54 60.5 KiB 20181201081500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:39 6.0 MiB 20181201081500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:26 157.6 KiB 20181201081500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:29 67.8 KiB 20181201083000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:03 5.8 MiB 20181201083000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:42 158.9 KiB 20181201083000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:47 66.1 KiB 20181201084500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:52 6.1 MiB 20181201084500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:18 163.5 KiB 20181201084500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:46 70.0 KiB 20181201090000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:42 5.9 MiB 20181201090000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:26 189.6 KiB 20181201090000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:26 55.0 KiB 20181201091500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:01 5.5 MiB 20181201091500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:29 170.1 KiB 20181201091500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:55 75.4 KiB 20181201093000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:41 5.5 MiB 20181201093000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:38 168.6 KiB 20181201093000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:18 79.7 KiB 20181201094500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:59 5.9 MiB 20181201094500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:23 168.9 KiB 20181201094500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:09 70.0 KiB 20181201100000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:57 6.1 MiB 20181201100000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:49 166.5 KiB 20181201100000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:44 62.2 KiB 20181201101500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:33 5.9 MiB 20181201101500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:02 176.8 KiB 20181201101500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:09 64.6 KiB 20181201103000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:06 5.3 MiB 20181201103000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:41 149.9 KiB 20181201103000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:00 76.0 KiB 20181201104500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:01 4.8 MiB 20181201104500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:01 139.5 KiB 20181201104500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:33 66.7 KiB 20181201110000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:46 4.8 MiB 20181201110000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:21 138.0 KiB 20181201110000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:22 73.8 KiB 20181201111500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:11 4.9 MiB 20181201111500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:52 135.4 KiB 20181201111500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:41 67.6 KiB 20181201113000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:59 4.9 MiB 20181201113000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:51 139.9 KiB 20181201113000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:21 66.7 KiB 20181201114500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:24 4.3 MiB 20181201114500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:09 125.6 KiB 20181201114500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:35 59.0 KiB 20181201120000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:28 4.6 MiB 20181201120000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:33 127.7 KiB 20181201120000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:29 61.7 KiB 20181201121500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:03 4.4 MiB 20181201121500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:01 127.0 KiB 20181201121500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:49 68.7 KiB 20181201123000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:46 4.6 MiB 20181201123000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:56 133.7 KiB 20181201123000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:21 45.7 KiB 20181201124500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:31 4.3 MiB 20181201124500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:41 122.4 KiB 20181201124500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:24 59.0 KiB 20181201130000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:05 4.5 MiB 20181201130000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:12 124.2 KiB 20181201130000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:00 62.6 KiB 20181201131500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:32 5.7 MiB 20181201131500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:37 142.0 KiB 20181201131500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:10 83.9 KiB 20181201133000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:41 6.0 MiB 20181201133000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:49 153.1 KiB 20181201133000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:54 85.5 KiB 20181201134500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:46 5.6 MiB 20181201134500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:29 151.0 KiB 20181201134500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:26 65.4 KiB 20181201140000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:15 4.6 MiB 20181201140000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:55 133.5 KiB 20181201140000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:35 67.2 KiB 20181201141500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:20 5.9 MiB 20181201141500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:28 151.0 KiB 20181201141500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:31 61.7 KiB 20181201143000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:47 5.4 MiB 20181201143000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:03 147.3 KiB 20181201143000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:28 76.5 KiB 20181201144500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:44 5.9 MiB 20181201144500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:27 151.0 KiB 20181201144500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:18 65.5 KiB 20181201150000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:41 5.5 MiB 20181201150000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:48 138.2 KiB 20181201150000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:57 82.0 KiB 20181201151500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:47 5.6 MiB 20181201151500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:05 155.1 KiB 20181201151500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:28 71.1 KiB 20181201153000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:51 5.6 MiB 20181201153000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:12 147.8 KiB 20181201153000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:28 62.4 KiB 20181201154500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:41 6.4 MiB 20181201154500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:06 162.7 KiB 20181201154500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:03 69.0 KiB 20181201160000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:45 5.8 MiB 20181201160000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:22 157.7 KiB 20181201160000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:27 73.7 KiB 20181201161500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:10 6.3 MiB 20181201161500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:27 172.1 KiB 20181201161500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:45 96.4 KiB 20181201163000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:55 6.7 MiB 20181201163000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:27 209.1 KiB 20181201163000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:09 60.9 KiB 20181201164500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:01 6.1 MiB 20181201164500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:27 188.4 KiB 20181201164500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:09 72.1 KiB 20181201170000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:56 6.0 MiB 20181201170000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:50 178.6 KiB 20181201170000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:04 81.8 KiB 20181201171500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:06 7.1 MiB 20181201171500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:09 222.5 KiB 20181201171500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:12 76.9 KiB 20181201173000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:33 6.6 MiB 20181201173000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:01 182.1 KiB 20181201173000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:48 71.2 KiB 20181201174500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:48 6.2 MiB 20181201174500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:17 195.2 KiB 20181201174500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:37 79.5 KiB 20181201180000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:46 5.9 MiB 20181201180000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:46 177.8 KiB 20181201180000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:01 60.5 KiB 20181201181500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:28 6.0 MiB 20181201181500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:17 163.6 KiB 20181201181500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:52 82.3 KiB 20181201183000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:50 6.5 MiB 20181201183000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:32 199.1 KiB 20181201183000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:02 74.5 KiB 20181201184500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:56 6.4 MiB 20181201184500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:37 211.4 KiB 20181201184500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:55 79.6 KiB 20181201190000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:56 6.7 MiB 20181201190000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:36 208.4 KiB 20181201190000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:56 78.6 KiB 20181201191500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:23 7.4 MiB 20181201191500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:49 219.1 KiB 20181201191500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:35 68.5 KiB 20181201193000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:58 6.6 MiB 20181201193000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:01 211.9 KiB 20181201193000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:52 71.7 KiB 20181201194500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:39 6.8 MiB 20181201194500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:48 214.5 KiB 20181201194500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:56 53.9 KiB 20181201200000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:17 5.5 MiB 20181201200000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:48 192.7 KiB 20181201200000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:07 68.5 KiB 20181201201500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:51 6.3 MiB 20181201201500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:54 202.6 KiB 20181201201500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:00 65.5 KiB 20181201203000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:52 5.6 MiB 20181201203000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:51 166.3 KiB 20181201203000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:53 68.9 KiB 20181201204500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:17 5.5 MiB 20181201204500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:27 172.4 KiB 20181201204500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:42 51.2 KiB 20181201210000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:39 5.2 MiB 20181201210000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:18 152.5 KiB 20181201210000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:13 41.8 KiB 20181201211500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:54 6.0 MiB 20181201211500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:39 164.7 KiB 20181201211500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:28 73.3 KiB 20181201213000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:39 5.9 MiB 20181201213000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:49 183.4 KiB 20181201213000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:29 62.2 KiB 20181201214500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:25 6.4 MiB 20181201214500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:55 200.6 KiB 20181201214500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:47 60.5 KiB 20181201220000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:23 5.8 MiB 20181201220000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:35 168.6 KiB 20181201220000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:03:07 56.5 KiB 20181201221500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:03:09 5.5 MiB 20181201221500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:04 162.8 KiB 20181201221500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:22 56.5 KiB 20181201223000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:39 5.7 MiB 20181201223000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:03 169.5 KiB 20181201223000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:59 57.9 KiB 20181201224500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:43 6.3 MiB 20181201224500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:03:08 176.0 KiB 20181201224500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:10 63.3 KiB 20181201230000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:20 6.1 MiB 20181201230000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:21 182.2 KiB 20181201230000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:34 58.8 KiB 20181201231500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:34 5.2 MiB 20181201231500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:18 139.9 KiB 20181201231500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:33 58.6 KiB 20181201233000.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:36 6.0 MiB 20181201233000.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:48 172.1 KiB 20181201233000.mentions.CSV.zip\u003cbr/\u003e2018-12-12 11:02:41 59.8 KiB 20181201234500.export.CSV.zip\u003cbr/\u003e2018-12-12 11:02:45 5.6 MiB 20181201234500.gkg.csv.zip\u003cbr/\u003e2018-12-12 11:02:37 157.1 KiB 20181201234500.mentions.CSV.zip\u003cbr/\u003e2018-12-12 10:57:56 40.2 MiB masterfilelist.txt\u003c/p\u003e\n\u003cp\u003eTotal Objects: 289\u003cbr/\u003e Total Size: 663.2 MiB\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686601_714029678",
+      "id": "20181209-184708_506680398",
+      "dateCreated": "2019-01-07 22:31:26.601",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nWell done! Vous pouvez maintenaient explorer les donnees via le notebook gdeltExploration.json",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-07 22:31:26.616",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eWell done! Vous pouvez maintenaient explorer les donnees via le notebook gdeltExploration.json\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546896686615_1795750447",
+      "id": "20181212-100557_635513911",
+      "dateCreated": "2019-01-07 22:31:26.615",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "gdeltETL",
+  "id": "2E2MKV4FE",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
