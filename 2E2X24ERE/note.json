@@ -74,9 +74,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%md Les fichiers sont stoquees compresses, on a besoin d\u0027un bout de code pour les decompresser en parallel sur les workers au fur et a mesure qu\u0027on les lit depuis S3:",
+      "text": "%md Les fichiers sont stoquées compresses, on a besoin d\u0027un bout de code pour les decompresser en parallel sur les workers au fur et a mesure qu\u0027on les lit depuis S3:",
       "user": "anonymous",
-      "dateUpdated": "2019-01-07 22:31:37.247",
+      "dateUpdated": "2019-01-08 08:38:32.895",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -101,7 +101,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eLes fichiers sont stoquees compresses, on a besoin d\u0026rsquo;un bout de code pour les decompresser en parallel sur les workers au fur et a mesure qu\u0026rsquo;on les lit depuis S3:\u003c/p\u003e\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eLes fichiers sont stoquées compresses, on a besoin d\u0026rsquo;un bout de code pour les decompresser en parallel sur les workers au fur et a mesure qu\u0026rsquo;on les lit depuis S3:\u003c/p\u003e\n\u003c/div\u003e"
           }
         ]
       },
@@ -109,8 +109,9 @@
       "jobName": "paragraph_1546896697246_-1622565412",
       "id": "20181212-102329_808049084",
       "dateCreated": "2019-01-07 22:31:37.246",
-      "status": "READY",
-      "errorMessage": "",
+      "dateStarted": "2019-01-08 08:38:32.912",
+      "dateFinished": "2019-01-08 08:38:35.868",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
