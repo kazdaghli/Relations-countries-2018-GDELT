@@ -3,7 +3,7 @@
     {
       "text": "%md\n## Jeu de donnees\nThe Global Database of Events, Language, and Tone (*GDELT*), est une initiative pour construire un catalogue de comportements et de croyances sociales à travers le monde, reliant chaque personne, organisation, lieu, dénombrement, thème, source d\u0027information, et événement à travers la planète en un seul réseau massif qui capture ce qui se passe dans le monde, le contexte, les implications ainsi que la perception des gens sur chaque jour.\n\n\nCette base de données a eu beaucoup d\u0027utilisations, par exemple pour mieux comprendre l\u0027évolution et l\u0027impact de la crise financière du 2008 (https://arxiv.org/pdf/1403.2272v1.pdf[Bayesian dynamic financial networks with time-varying predictors]) ou analyser l\u0027évolution des relations entre des pays impliquées dans des conflits (http://www.gao.ece.ufl.edu/GXU/fun_reading/sbp_hurst.pdf[Massive Media Event Data Analysis to Assess World-Wide Political Conflict and Instability] ).\n\nGDELT est compose par trois jeux de fichiers CSV, avec un fichier compressé par tranche de 15 minutes:\n\n* les events (https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.events?tab\u003dschema[schema], http://data.gdeltproject.org/documentation/CAMEO.Manual.1.1b3.pdf[CAMEO Ontology], http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation])\n* les mentions (https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.eventmentions[schema], http://data.gdeltproject.org/documentation/GDELT-Event_Codebook-V2.0.pdf[documentation])\n* le graph des relations \u003d\u003e GKG, Global Knowledge Graph (https://bigquery.cloud.google.com/table/gdelt-bq:gdeltv2.gkg[schema], http://data.gdeltproject.org/documentation/GDELT-Global_Knowledge_Graph_Codebook-V2.1.pdf[documentation])\n\nL\u0027ensemble des donnees _GDELT_ sont disponibles via HTTP. Un fichier CSV _masterfilelist.txt_\n(http://data.gdeltproject.org/gdeltv2/masterfilelist.txt[Master CSV data file list]) nous permmet d\u0027avoir la liste de tous les fichiers du jeu de donnees GDELT ainsi que l\u0027URL pour telecharger chaque fichier.\n\n\nPour plus d\u0027infos sur le format des fichiers vous pouvez consulter la documentation GDELT: https://blog.gdeltproject.org/gdelt-2-0-our-global-world-in-realtime/\n",
       "user": "anonymous",
-      "dateUpdated": "2019-01-08 09:39:47.329",
+      "dateUpdated": "2019-01-08 10:18:22.397",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -36,8 +36,49 @@
       "jobName": "paragraph_1546896686546_2095022686",
       "id": "20181212-100610_115068599",
       "dateCreated": "2019-01-07 22:31:26.546",
-      "dateStarted": "2019-01-08 09:39:47.346",
-      "dateFinished": "2019-01-08 09:39:50.635",
+      "dateStarted": "2019-01-08 10:18:22.408",
+      "dateFinished": "2019-01-08 10:18:24.964",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nHello World",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-08 10:18:39.350",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eHello World\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1546939112060_-714868591",
+      "id": "20190108-101832_1198156022",
+      "dateCreated": "2019-01-08 10:18:32.060",
+      "dateStarted": "2019-01-08 10:18:39.364",
+      "dateFinished": "2019-01-08 10:18:39.397",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -740,7 +781,9 @@
   "noteParams": {},
   "noteForms": {},
   "angularObjects": {
-    "md:shared_process": []
+    "md:shared_process": [],
+    "sh:shared_process": [],
+    "spark:shared_process": []
   },
   "config": {
     "isZeppelinNotebookCronEnable": false
