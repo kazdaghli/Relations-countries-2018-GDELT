@@ -1,0 +1,371 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n### Loading dependencies",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-14 09:04:49.310",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eLoading dependencies\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547452957544_-239038142",
+      "id": "20190114-090237_1957055787",
+      "dateCreated": "2019-01-14 09:02:37.544",
+      "dateStarted": "2019-01-14 09:04:49.327",
+      "dateFinished": "2019-01-14 09:04:51.869",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import scala.language.postfixOps\nimport scala.sys.process._\nimport scala.io.Source.{fromFile}\nimport java.net.{HttpURLConnection, URL}\nimport java.io.File\nimport java.text.SimpleDateFormat\nimport java.util.Date\nimport com.amazonaws.services.s3.AmazonS3Client\nimport com.amazonaws.auth.BasicAWSCredentials",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-15 16:20:35.032",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import scala.language.postfixOps\nimport scala.sys.process._\nimport scala.io.Source.fromFile\nimport java.net.{HttpURLConnection, URL}\nimport java.io.File\nimport java.text.SimpleDateFormat\nimport java.util.Date\nimport com.amazonaws.services.s3.AmazonS3Client\nimport com.amazonaws.auth.BasicAWSCredentials\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547453089250_-862759646",
+      "id": "20190114-090449_1511534715",
+      "dateCreated": "2019-01-14 09:04:49.250",
+      "dateStarted": "2019-01-15 16:20:35.241",
+      "dateFinished": "2019-01-15 16:21:03.554",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### (Any) File Downloader Function",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-15 09:00:54.015",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003e(Any) File Downloader Function\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547453100187_637559034",
+      "id": "20190114-090500_1400079422",
+      "dateCreated": "2019-01-14 09:05:00.187",
+      "dateStarted": "2019-01-15 09:00:54.045",
+      "dateFinished": "2019-01-15 09:00:56.000",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "def fileDownloader(urlOfFileToDownload: String, file: File) \u003d {\n    val parentDirName \u003d new File(file.getParent())\n    if (! parentDirName.exists()){\n        parentDirName.mkdirs();\n    }\n    val url \u003d new URL(urlOfFileToDownload)\n    val connection \u003d url.openConnection().asInstanceOf[HttpURLConnection]\n    connection.setConnectTimeout(5000)\n    connection.setReadTimeout(5000)\n    connection.connect()\n    if(connection.getResponseCode \u003e\u003d 400){\n        println(\"error\")\n    }\n    else {\n        url #\u003e file !!\n    }\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-15 11:05:54.944",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "fileDownloader: (urlOfFileToDownload: String, file: java.io.File)Any\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547453112911_-1463655183",
+      "id": "20190114-090512_68347694",
+      "dateCreated": "2019-01-14 09:05:12.911",
+      "dateStarted": "2019-01-15 11:05:54.969",
+      "dateFinished": "2019-01-15 11:05:55.550",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Main Function",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-15 09:01:21.110",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eMain Function\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547539257584_1286368344",
+      "id": "20190115-090057_1267195589",
+      "dateCreated": "2019-01-15 09:00:57.584",
+      "dateStarted": "2019-01-15 09:01:21.122",
+      "dateFinished": "2019-01-15 09:01:21.154",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "def main(AWS_ID : String, AWS_KEY:String, local_path : String, inf: String, sup:String, nb_worker:Int, nb_core_per_worker:Int) \u003d {\n    \n    val DATE_FORMAT \u003d \"yyyyMMddHHmmss\"\n    val dateFormat \u003d new SimpleDateFormat(DATE_FORMAT)\n    val minDate \u003d dateFormat.parse(inf).getTime\n    val maxDate \u003d dateFormat.parse(sup).getTime\n    \n    val local_master_file \u003d new File(local_path + \"/masterfiletranslationlist.txt\")\n    fileDownloader(\"http://data.gdeltproject.org/gdeltv2/masterfilelist-translation.txt\", local_master_file)\n    new AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY)).putObject(\"parameswaran-pakiradhaan-telecom-gdelt2018\", \"masterfilelist-translation.txt\", local_master_file)\n    \n    val masterfile \u003d spark.read.format(\"csv\").option(\"header\", \"false\").option(\"delimiter\", \" \").load(local_path + \"/masterfiletranslationlist.txt\").toDF(\"ID_1\", \"ID_2\", \"Link\").filter(\"Link is not null\")\n    \n    val masterfilecc \u003d masterfile.map{ myRow \u003d\u003e {\n        val link \u003d myRow.getAs[String](\"Link\")\n        val parsedData \u003d link.split(\"/\").last.split(\"\\\\.\")\n        val info \u003d parsedData(1)\n        var fileCategory \u003d parsedData(1)\n        if(info \u003d\u003d \"translation\"){\n            if(parsedData(2) \u003d\u003d \"export\"){\n                fileCategory \u003d \"events\"\n            } else {\n                fileCategory \u003d parsedData(2)\n            }\n        }\n        val date \u003d dateFormat.parse(parsedData(0)).getTime\n        (date, fileCategory, link)}\n    }.toDF(\"Date\", \"Type\", \"Link\")\n    \n    val master \u003d masterfilecc.filter($\"Date\" \u003e\u003d minDate \u0026\u0026 $\"Date\" \u003c\u003d maxDate).repartition(3 * nb_worker * nb_core_per_worker)\n    \n    master.foreach{row \u003d\u003e \n        val fileCategory \u003d row.getAs[String](\"Type\")\n        val link \u003d row.getAs[String](\"Link\")\n        val parsedLink \u003d link.split(\"/\")\n        val fileName \u003d parsedLink.last\n        val local_filePath \u003d new File(local_path +  \"/\", fileName)\n        fileDownloader(link, local_filePath)\n        new AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY)).putObject(\"parameswaran-pakiradhaan-telecom-gdelt2018\", fileCategory + \"/\" + fileName, local_filePath)\n        local_filePath.delete()\n    }\n    \n    local_master_file.delete()\n    \n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-15 11:46:08.552",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "main: (AWS_ID: String, AWS_KEY: String, local_path: String, inf: String, sup: String, nb_worker: Int, nb_core_per_worker: Int)Unit\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547494615429_-969456055",
+      "id": "20190114-203655_218275784",
+      "dateCreated": "2019-01-14 20:36:55.429",
+      "dateStarted": "2019-01-15 11:14:45.493",
+      "dateFinished": "2019-01-15 11:14:46.430",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Execution",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-14 20:36:31.826",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eExecution\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547494579128_-1839222270",
+      "id": "20190114-203619_1032681401",
+      "dateCreated": "2019-01-14 20:36:19.128",
+      "dateStarted": "2019-01-14 20:36:31.827",
+      "dateFinished": "2019-01-14 20:36:34.594",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val local_path \u003d System.getProperty(\"user.dir\")\n\nval AWS_ID \u003d \"AKIAJBBT6RZVYO5FV2PQ\" //(1) ID du fichier credentials\nval AWS_KEY \u003d \"T/AMxAP0oPZAj7DqJ94HzwGmri9DypOS620eXZAN\" //(2) Secret du fichier credentials\nsc.hadoopConfiguration.set(\"fs.s3a.access.key\", AWS_ID) \nsc.hadoopConfiguration.set(\"fs.s3a.secret.key\", AWS_KEY) \nsc.hadoopConfiguration.set(\"fs.s3a.connection.maximum\",\"1000\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-15 11:46:20.162",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "local_path: String \u003d /home/p_paki\nAWS_ID: String \u003d AKIAJBBT6RZVYO5FV2PQ\nAWS_KEY: String \u003d T/AMxAP0oPZAj7DqJ94HzwGmri9DypOS620eXZAN\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1547495227311_-901994878",
+      "id": "20190114-204707_1438745632",
+      "dateCreated": "2019-01-14 20:47:07.311",
+      "dateStarted": "2019-01-15 11:46:20.180",
+      "dateFinished": "2019-01-15 11:46:21.514",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "main(AWS_ID, AWS_KEY, local_path, \"20180218230000\", \"20180218233000\", 2, 4)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-15 11:14:50.800",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1547495059294_1162717899",
+      "id": "20190114-204419_760240161",
+      "dateCreated": "2019-01-14 20:44:19.294",
+      "dateStarted": "2019-01-15 11:14:50.824",
+      "dateFinished": "2019-01-15 11:15:19.933",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "gdeltDataDownloader_S3",
+  "id": "2E1E7YQFX",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
