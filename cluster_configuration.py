@@ -127,4 +127,36 @@ for node in nodes:
 
 	c.close()
 
+print("Making sure all Cassandra nodes are up and running!")
+print("------------------------------------------------------")
+# Some cassandra nodes may not start after configuration
+# Make sure all cassandra nodes are up and running
+for node in nodes:
+	is_slave = node['is_slave']
+	dns = node['dns']
+	if is_slave:
+		print("Connecting to Slave with public DNS '{}'".format(dns))
+		print("------------------------------------------------------")
+		c.connect( hostname = dns, username = "hadoop", pkey=k)
+		print("Connected!")
+		print("------------------------------------------------------")
+		stdin, stdout, stderr = c.exec_command("sudo service cassandra status")
+		exit_status = stdout.channel.recv_exit_status()
+		command_status(exit_status, "Cassandra Status")
+		response = "".join(stdout.readlines())
+		if "running" in response:
+			print("Cassandra is running, nothing to do here.")
+			print("------------------------------------------------------")
+		elif "dead" in response:
+			print("Cassandra is dead in this node, needs to restart the service")
+			print("------------------------------------------------------")
+			stdin, cstdout, stderr = c.exec_command("sudo service cassandra restart")
+			exit_status = cstdout.channel.recv_exit_status()
+			command_status(exit_status, "Cassandra Restarted with message ===> {}".format(cstdout.readlines()))
+		elif "stopped" in response:
+			print("Cassandra was stopped!")
+			print("------------------------------------------------------")
+	c.close()
+
+
 print("Configuration Finished!")
