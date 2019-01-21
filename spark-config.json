@@ -1,0 +1,9 @@
+
+[
+    {
+      "Classification": "spark-defaults",
+      "Properties": {
+        "spark.jars.packages": "datastax:spark-cassandra-connector:2.3.0-s_2.11"
+      }
+    }
+]

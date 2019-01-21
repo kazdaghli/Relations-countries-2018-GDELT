@@ -1,0 +1,273 @@
+Code,Pays
+AA,Aruba
+AC,Antigua-et-Barbuda
+AE,Émirats arabes unis
+AF,Afghanistan
+AG,Algérie
+AJ,Azerbaïdjan
+AL,Albanie
+AM,Arménie
+AN,Andorre
+AO,Angola
+AQ,Samoa américaines
+AR,Argentine
+AS,Australie
+AT,Îles Ashmore et Cartier
+AU,Autriche
+AV,Anguilla
+AX,Akrotiri et Dhekelia
+AY,Antarctique
+BA,Bahreïn
+BB,Barbade
+BC,Botswana
+BD,Bermudes
+BE,Belgique
+BF,Bahamas
+BG,Bangladesh
+BH,Belize
+BK,Bosnie-Herzégovine
+BL,Bolivie
+BM,Birmanie
+BN,Bénin
+BO,Biélorussie
+BP,Îles Salomon
+BQ,Île de la Navasse
+BR,Brésil
+BS,Bassas da India
+BT,Bhoutan
+BU,Bulgarie
+BV,Île Bouvet
+BX,Brunei
+BY,Burundi
+CA,Canada
+CB,Cambodge
+CD,Tchad
+CE,Sri Lanka
+CF,République du Congo
+CG,République démocratique du Congo
+CH,République populaire de Chine
+CI,Chili
+CJ,Îles Caïmans
+CK,Keeling
+CM,Cameroun
+CN,Comores
+CO,Colombie
+CQ,Îles Mariannes du Nord
+CR,Îles de la Mer de Corail
+CS,Costa Rica
+CT,République centrafricaine
+CU,Cuba
+CV,Cap-Vert
+CW,Îles Cook
+CY,Chypre
+DA,Danemark
+DJ,Djibouti
+DO,Dominique
+DQ,Île Jarvis
+DR,République dominicaine
+DX,Dhekelia
+EC,Équateur
+EG,Égypte
+EI,Irlande
+EK,Guinée équatoriale
+EN,Estonie
+ER,Érythrée
+ES,Salvador
+ET,Éthiopie
+EU,Île Europa
+EZ,République tchèque
+FG,Guyane française
+FI,Finlande
+FJ,Fidji
+FK,Îles Falkland/Malouines
+FM,Micronésie
+FO,Îles Féroé
+FP,Polynésie française
+FQ,Île Baker
+FR,France
+FS,Terres australes et antarctiques françaises
+GA,Gambie
+GB,Gabon
+GG,Géorgie
+GH,Ghana
+GI,Gibraltar
+GJ,Grenade
+GK,Guernesey
+GL,Groenland
+GM,Allemagne
+GO,Îles Glorieuses
+GP,Guadeloupe
+GQ,Guam
+GR,Grèce
+GT,Guatemala
+GV,Guinée
+GY,Guyana
+GZ,Bande de Gaza
+HA,Haïti
+HK,Hong Kong
+HM,Îles Heard-et-MacDonald
+HO,Honduras
+HQ,Île Howland
+HR,Croatie
+HU,Hongrie
+IC,Islande
+ID,Indonésie
+IM,Île de Man
+IN,Inde
+IO,Territoire britannique de l'océan Indien
+IP,Île de Clipperton
+IR,Iran
+IS,Israël
+IT,Italie
+IV,Côte d'Ivoire
+IZ,Irak
+JA,Japon
+JE,Jersey
+JM,Jamaïque
+JN,Île Jan Mayen
+JO,Jordanie
+JQ,Atoll Johnston
+JU,Île Juan de Nova
+KE,Kenya
+KG,Kirghizistan
+KN,Corée du Nord
+KQ,Récif Kingman
+KR,Kiribati
+KS,Corée du Sud
+KT,Île Christmas
+KU,Koweït
+KV,Kosovo
+KZ,Kazakhstan
+LA,Laos
+LE,Liban
+LG,Lettonie
+LH,Lituanie
+LI,Liberia
+LO,Slovaquie
+LQ,Atoll Palmyra
+LS,Liechtenstein
+LT,Lesotho
+LU,Luxembourg
+LY,Libye
+MA,Madagascar
+MB,Martinique
+MC,Macao
+MD,Moldavie
+MF,Mayotte
+MG,Mongolie
+MH,Montserrat
+MI,Malawi
+MJ,Monténégro
+MK,ex-République yougoslave de
+ML,Mali
+MN,Monaco
+MO,Maroc
+MP,Maurice
+MQ,Îles Midway
+MR,Mauritanie
+MT,Malte
+MU,Oman
+MV,Maldives
+MX,Mexique
+MY,Malaisie
+MZ,Mozambique
+NC,Nouvelle-Calédonie
+NE,Niue
+NF,Île Norfolk
+NG,Niger
+NH,Vanuatu
+NI,Nigeria
+NL,Pays-Bas
+NO,Norvège
+NP,Népal
+NR,Nauru
+NS,Suriname
+NT,Antilles néerlandaises
+NU,Nicaragua
+NZ,Nouvelle-Zélande
+OD,Soudan du Sud
+PA,Paraguay
+PC,Îles Pitcairn
+PE,Pérou
+PF,Îles Paracel
+PG,Îles Spratley
+PJ,"Itouroup, Kounachir, Chikotan, Îles Habomai"
+PK,Pakistan
+PL,Pologne
+PM,Panama
+PO,Portugal
+PP,Papouasie-Nouvelle-Guinée
+PS,Palaos
+PU,Guinée-Bissao
+QA,Qatar
+RE,Réunion
+RI,Serbie
+RM,Îles Marshall
+RN,Antilles françaises
+RO,Roumanie
+RP,Philippines
+RQ,Porto Rico
+RS,Russie
+RW,Rwanda
+SA,Arabie saoudite
+SB,Saint-Pierre-et-Miquelon
+SC,Saint-Christophe-et-Niévès
+SE,Seychelles
+SF,Afrique du Sud
+SG,Sénégal
+SH,Sainte-Hélène
+SI,Slovénie
+SL,Sierra Leone
+SM,Saint-Marin
+SN,Singapour
+SO,Somalie
+SP,Espagne
+ST,Sainte-Lucie
+SU,Soudan
+SV,Svalbard
+SW,Suède
+SX,Géorgie du Sud-et-les Îles Sandwich du Sud
+SY,Syrie
+SZ,Suisse
+TB,Antilles françaises
+TD,Trinité-et-Tobago
+TE,Île Tromelin
+TH,Thaïlande
+TI,Tadjikistan
+TK,Îles Turques et Caïques
+TL,Tokelau
+TN,Tonga
+TO,Togo
+TP,Sao Tomé-et-Principe
+TS,Tunisie
+TT,mise à jour FIPS 104
+TU,Turquie
+TV,Tuvalu
+TW,Taïwan
+TX,Turkménistan
+TZ,Tanzanie
+UA,Ukraine
+UC,Curaçao
+UG,Ouganda
+UK,Royaume-Uni
+US,États-Unis
+UV,Burkina
+UY,Uruguay
+UZ,Ouzbékistan
+VC,Saint-Vincent-et-les-Grenadines
+VE,Venezuela
+VI,Îles Vierges britanniques
+VN,Viêt Nam
+VQ,Îles Vierges américaines
+VT,Vatican
+WA,Namibie
+WE,Cisjordanie
+WF,Îles Wallis-et-Futuna
+WI,Sahara occidental
+WQ,Wake
+WS,Samoa occidentales
+WZ,Swaziland
+YI,Serbie et Monténégro
+YM,Yémen
+ZA,Zambie
+ZI,Zimbabwe
