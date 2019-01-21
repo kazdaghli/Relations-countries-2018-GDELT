@@ -129,6 +129,9 @@ for node in nodes:
 
 print("Making sure all Cassandra nodes are up and running!")
 print("------------------------------------------------------")
+print("Now a 30 s delay to make sure Cassandra nodes status are accurate")
+print("------------------------------------------------------")
+time.sleep(10)
 # Some cassandra nodes may not start after configuration
 # Make sure all cassandra nodes are up and running
 for node in nodes:
