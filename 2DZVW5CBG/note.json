@@ -1,0 +1,994 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Creation of RDD from Data\nDans ce notebook nous allons charger les données dans des RDD",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:01:34.124",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreation of RDD from Data\u003c/h2\u003e\n\u003cp\u003eDans ce notebook nous allons charger les données dans des RDD\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294118_1186369359",
+      "id": "20181212-102323_67420128",
+      "dateCreated": "2019-01-22 11:01:34.118",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md Les fichiers sont stockés compressés, on a besoin d\u0027un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0027on les lit depuis S3:",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:01:34.127",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eLes fichiers sont stockés compressés, on a besoin d\u0026rsquo;un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0026rsquo;on les lit depuis S3:\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294127_1069769907",
+      "id": "20181212-102329_808049084",
+      "dateCreated": "2019-01-22 11:01:34.127",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data_path \u003d \"/Users/weijia/Documents/Nosql/GDELTData/translation\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:07.260",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "data_path: String \u003d /Users/weijia/Documents/Nosql/GDELTData/translation\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294127_1160916797",
+      "id": "20190122-093133_1845500535",
+      "dateCreated": "2019-01-22 11:01:34.127",
+      "dateStarted": "2019-01-22 11:04:07.318",
+      "dateFinished": "2019-01-22 11:04:18.641",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\n\n\ndef RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n       case (name: String, content: PortableDataStream) \u003d\u003e\n          val zis \u003d new ZipInputStream(content.open)\n          Stream.continually(zis.getNextEntry).\n                takeWhile(_ !\u003d null).\n                flatMap { _ \u003d\u003e\n                    val br \u003d new BufferedReader(new InputStreamReader(zis))\n                    Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                }\n    }\n    return resultRDD\n}\n// Export Events\nval eventsRDD \u003d RDDDownloader(data_path + \"/events/*.export.CSV.zip\")\nval mentionsRDD \u003d RDDDownloader(data_path + \"/mentions/*.CSV.zip\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:22.697",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\nRDDDownloader: (fileName: String)org.apache.spark.rdd.RDD[String]\neventsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[1] at flatMap at \u003cconsole\u003e:33\nmentionsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[3] at flatMap at \u003cconsole\u003e:33\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294128_686146864",
+      "id": "20171217-232457_1732696781",
+      "dateCreated": "2019-01-22 11:01:34.128",
+      "dateStarted": "2019-01-22 11:04:22.747",
+      "dateFinished": "2019-01-22 11:04:24.843",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val cachedEvents \u003d eventsRDD.cache // RDD\nval cachedMentions \u003d mentionsRDD.cache",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:35.810",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "cachedEvents: eventsRDD.type \u003d MapPartitionsRDD[1] at flatMap at \u003cconsole\u003e:33\ncachedMentions: mentionsRDD.type \u003d MapPartitionsRDD[3] at flatMap at \u003cconsole\u003e:33\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294128_-1426697634",
+      "id": "20190107-102856_946427568",
+      "dateCreated": "2019-01-22 11:01:34.128",
+      "dateStarted": "2019-01-22 11:04:35.858",
+      "dateFinished": "2019-01-22 11:04:36.268",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Event(GLOBALEVENTID: Int,\nSQLDATE: String,\nMonthYear: String,\nYear: Int,\nFractionDate: Double,\nActor1Code: String,\nActor1Name: String,\nActor1CountryCode: String,\nActor1KnownGroupCode: String,\nActor1EthnicCode: String,\nActor1Religion1Code: String,\nActor1Religion2Code: String,\nActor1Type1Code: String,\nActor1Type2Code: String,\nActor1Type3Code: String,\nActor2Code: String,\nActor2Name: String,\nActor2CountryCode: String,\nActor2KnownGroupCode: String,\nActor2EthnicCode: String,\nActor2Religion1Code: String,\nActor2Religion2Code: String,\nActor2Type1Code: String,\nActor2Type2Code: String,\nActor2Type3Code: String,\nIsRootEvent: Int,\nEventCode: String,\nEventBaseCode: String,\nEventRootCode: String,\nQuadClass: Int,\nGoldsteinScale: Double,\nNumMentions: Int,\nNumSources: Int,\nNumArticles: Int,\nAvgTone: Double,\nActor1Geo_Type: Int,\nActor1Geo_FullName: String,\nActor1Geo_CountryCode: String,\nActor1Geo_ADM1Code: String,\nActor1Geo_ADM2Code: String,\nActor1Geo_Lat: Double,\nActor1Geo_Long: Double,\nActor1Geo_FeatureID: String,\nActor2Geo_Type: Int,\nActor2Geo_FullName: String,\nActor2Geo_CountryCode: String,\nActor2Geo_ADM1Code: String,\nActor2Geo_ADM2Code: String,\nActor2Geo_Lat: Double,\nActor2Geo_Long: Double,\nActor2Geo_FeatureID: String,\nActionGeo_Type: Int,\nActionGeo_FullName: String,\nActionGeo_CountryCode: String,\nActionGeo_ADM1Code: String,\nActionGeo_ADM2Code: String,\nActionGeo_Lat: Double,\nActionGeo_Long: Double,\nActionGeo_FeatureID: String,\nDATEADDED: String,\nSOURCEURL: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:38.195",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Event\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294128_-1977228491",
+      "id": "20190107-095023_1048093380",
+      "dateCreated": "2019-01-22 11:01:34.128",
+      "dateStarted": "2019-01-22 11:04:38.235",
+      "dateFinished": "2019-01-22 11:04:38.922",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Mention(GLOBALEVENTID: Int,\nEventTimeDate: String,\nMentionTimeDate: String,\nMentionType: Int,\nMentionSourceName: String,\nMentionIdentifier: String,\nSentenceID: Int,\nActor1CharOffset: Int,\nActor2CharOffset: Int,\nActionCharOffset: Int,\nInRawText: Int,\nConfidence: Int,\nMentionDocLen: Int,\nMentionDocTone: Double,\nMentionDocTranslationInfo: String)//,\n//Extras: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:40.312",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Mention\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294129_1438063242",
+      "id": "20190122-093120_1753376525",
+      "dateCreated": "2019-01-22 11:01:34.129",
+      "dateStarted": "2019-01-22 11:04:40.352",
+      "dateFinished": "2019-01-22 11:04:40.681",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.text.SimpleDateFormat\n\ndef toDouble(s : String): Double \u003d if (s.isEmpty) 0 else s.toDouble\ndef toInt(s : String): Int \u003d if (s.isEmpty) 0  else s.toInt\ndef toBigInt(s : String): BigInt \u003d if (s.isEmpty) BigInt(0) else BigInt(s)\n \nval inputFormat_ymd \u003d new SimpleDateFormat(\"yyyyMMdd\")\nval outputFormat_ymd \u003d new SimpleDateFormat(\"yyyy-MM-dd\")\n\nval inputFormat_ym \u003d new SimpleDateFormat(\"yyyyMM\")\nval outputFormat_ym \u003d new SimpleDateFormat(\"yyyy-MM\")\n\nval inputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyyMMddhhmmss\")\nval outputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyy-MM-dd hh:mm:ss\")\n    \ndef parse_date(s : String, inputFormat : SimpleDateFormat, outputFormat : SimpleDateFormat):\n    String \u003d if (s.isEmpty) s else  outputFormat.format(inputFormat.parse(s))   \n\n\ncachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDS.createOrReplaceTempView(\"events\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:42.299",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.text.SimpleDateFormat\ntoDouble: (s: String)Double\ntoInt: (s: String)Int\ntoBigInt: (s: String)BigInt\ninputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@ef87e460\noutputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@f67a0200\ninputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d55c4fe0\noutputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d62d344d\ninputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@88c7dd60\noutputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@e863f5a0\nparse_date: (s: String, inputFormat: java.text.SimpleDateFormat, outputFormat: java.text.SimpleDateFormat)String\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294129_824381791",
+      "id": "20190121-175524_598037471",
+      "dateCreated": "2019-01-22 11:01:34.129",
+      "dateStarted": "2019-01-22 11:04:42.338",
+      "dateFinished": "2019-01-22 11:04:45.714",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val ds1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDS\n\nval ds2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDS\n\nval ds3 \u003d ds1.union(ds2)\nds3.createOrReplaceTempView(\"mentions\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:46.499",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "ds1: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds2: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds3: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294129_-1979054682",
+      "id": "20190122-093356_682030381",
+      "dateCreated": "2019-01-22 11:01:34.129",
+      "dateStarted": "2019-01-22 11:04:46.531",
+      "dateFinished": "2019-01-22 11:04:47.658",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var events \u003d cachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDF()\n\nevents \u003d events.withColumn(\"SQLDate_date\",$\"SQLDATE\".cast(\"date\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:48.750",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 59 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 60 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294130_-1356809978",
+      "id": "20190121-175556_1570822517",
+      "dateCreated": "2019-01-22 11:01:34.130",
+      "dateStarted": "2019-01-22 11:04:48.777",
+      "dateFinished": "2019-01-22 11:04:49.611",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var df1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDF()\n\nvar df2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDF()\n\nvar mentions \u003d df1.union(df2).toDF()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:04:50.650",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "df1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\ndf2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nmentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294130_-1022233631",
+      "id": "20190122-093506_992271553",
+      "dateCreated": "2019-01-22 11:01:34.130",
+      "dateStarted": "2019-01-22 11:04:50.685",
+      "dateFinished": "2019-01-22 11:04:51.785",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Preprocess on the events and mentions DF ",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:01:34.131",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003ePreprocess on the events and mentions DF\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294130_1007047974",
+      "id": "20190121-165005_1391737556",
+      "dateCreated": "2019-01-22 11:01:34.130",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ## Cameo translation",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:01:34.131",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCameo translation\u003c/h2\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294131_-1257142612",
+      "id": "20190121-165029_321139741",
+      "dateCreated": "2019-01-22 11:01:34.131",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val Cameolocation \u003d \"/usr/local/zeppelin-0.8.0-bin-all/NoSQL_Project/CameoFolder\"\nval file_Country \u003d \"CAMEO.country.txt\"\nval file_Ethnic \u003d \"CAMEO.ethnic.txt\"\nval file_Eventcodes \u003d \"CAMEO.eventcodes.txt\"\nval file_Knowngroup \u003d \"CAMEO.knowngroup.txt\"\nval file_Religion \u003d \"CAMEO.religion.txt\"\nval file_Type \u003d \"CAMEO.type.txt\"\nval file_Quad \u003d \"CAMEO.QuadClass.txt\"\nval file_GeoType \u003d \"CAMEO.GeoType.txt\"\nval file_FIPSCountryCode \u003d \"CAMEO.FIPSCountyCode.txt\"\nval file_Language \u003d \"CAMEO.language.txt\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:05:21.646",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Cameolocation: String \u003d /usr/local/zeppelin-0.8.0-bin-all/NoSQL_Project/CameoFolder\nfile_Country: String \u003d CAMEO.country.txt\nfile_Ethnic: String \u003d CAMEO.ethnic.txt\nfile_Eventcodes: String \u003d CAMEO.eventcodes.txt\nfile_Knowngroup: String \u003d CAMEO.knowngroup.txt\nfile_Religion: String \u003d CAMEO.religion.txt\nfile_Type: String \u003d CAMEO.type.txt\nfile_Quad: String \u003d CAMEO.QuadClass.txt\nfile_GeoType: String \u003d CAMEO.GeoType.txt\nfile_FIPSCountryCode: String \u003d CAMEO.FIPSCountyCode.txt\nfile_Language: String \u003d CAMEO.language.txt\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294131_-1128244489",
+      "id": "20190121-165124_2136866161",
+      "dateCreated": "2019-01-22 11:01:34.131",
+      "dateStarted": "2019-01-22 11:05:21.672",
+      "dateFinished": "2019-01-22 11:05:22.493",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// creation of the mapping dataset\nval country_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Country)\n\nval ethnic_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Ethnic)\n\nval eventCodes_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Eventcodes)\n\nval group_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Knowngroup)\n\nval religion_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Religion)\n\nval type_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Type)\n\nval quad_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Quad)\n    \nval geoType_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_GeoType)\n    \nval FIPS_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_FIPSCountryCode)\n    \nval language_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Language)\n    \n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:05:24.227",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "country_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nethnic_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\neventCodes_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngroup_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nreligion_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ntype_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nquad_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngeoType_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nFIPS_transco: org.apache.spark.sql.DataFrame \u003d [LABEL: string, CODE: string]\nlanguage_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://localhost:4040/jobs/job?id\u003d0",
+            "http://localhost:4040/jobs/job?id\u003d1",
+            "http://localhost:4040/jobs/job?id\u003d2",
+            "http://localhost:4040/jobs/job?id\u003d3",
+            "http://localhost:4040/jobs/job?id\u003d4",
+            "http://localhost:4040/jobs/job?id\u003d5",
+            "http://localhost:4040/jobs/job?id\u003d6",
+            "http://localhost:4040/jobs/job?id\u003d7",
+            "http://localhost:4040/jobs/job?id\u003d8",
+            "http://localhost:4040/jobs/job?id\u003d9"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294131_1284784531",
+      "id": "20190121-165205_570025735",
+      "dateCreated": "2019-01-22 11:01:34.131",
+      "dateStarted": "2019-01-22 11:05:24.254",
+      "dateFinished": "2019-01-22 11:05:29.170",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events \u003d events.join(country_transco, events(\"Actor1CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor1CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\nevents \u003d events.join(country_transco, events(\"Actor2CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor2CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\n\nevents \u003d events.join(ethnic_transco, events(\"Actor1EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor1EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\nevents \u003d events.join(ethnic_transco, events(\"Actor2EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor2EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\n\nevents \u003d events.join(eventCodes_transco, events(\"EventCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventBaseCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventBaseCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventRootCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventRootCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\n\nevents \u003d events.join(group_transco, events(\"Actor1KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor1KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\nevents \u003d events.join(group_transco, events(\"Actor2KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor2KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\n\nevents \u003d events.join(religion_transco, events(\"Actor1Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor1Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\n\nevents \u003d events.join(type_transco, events(\"Actor1Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\n\nevents \u003d events.join(quad_transco, events(\"QuadClass\")\u003d\u003d\u003dquad_transco(\"CODE\"), \"left\").withColumn(\"QuadClassType\", col(\"LABEL\")).drop(quad_transco.columns: _*)\n\nevents \u003d events.join(geoType_transco, events(\"Actor1Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"Actor2Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"ActionGeo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\n\nevents \u003d events.join(FIPS_transco, events(\"Actor1Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"Actor2Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"ActionGeo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:05:31.299",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 61 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 62 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 63 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 64 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 65 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 66 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 67 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 68 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 69 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 70 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 71 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 72 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 73 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 74 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 75 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 76 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 77 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 78 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 79 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 80 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 81 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 82 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 83 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 84 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 85 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294132_2087987528",
+      "id": "20190121-165736_1049734185",
+      "dateCreated": "2019-01-22 11:01:34.132",
+      "dateStarted": "2019-01-22 11:05:31.331",
+      "dateFinished": "2019-01-22 11:05:37.128",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\nmentions \u003d mentions.join(language_transco, mentions(\"MentionDocTranslationInfo\")\u003d\u003d\u003dlanguage_transco(\"CODE\"), \"left\").withColumn(\"Language\", col(\"LABEL\")).drop(language_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:05:40.520",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "mentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 14 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294132_-1388070400",
+      "id": "20190122-094703_2016048028",
+      "dateCreated": "2019-01-22 11:01:34.132",
+      "dateStarted": "2019-01-22 11:05:40.545",
+      "dateFinished": "2019-01-22 11:05:40.769",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:05:42.618",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 235.533,
+              "optionOpen": false
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nSQLDATE\nMonthYear\nYear\nFractionDate\nActor1Code\nActor1Name\nActor1CountryCode\nActor1KnownGroupCode\nActor1EthnicCode\nActor1Religion1Code\nActor1Religion2Code\nActor1Type1Code\nActor1Type2Code\nActor1Type3Code\nActor2Code\nActor2Name\nActor2CountryCode\nActor2KnownGroupCode\nActor2EthnicCode\nActor2Religion1Code\nActor2Religion2Code\nActor2Type1Code\nActor2Type2Code\nActor2Type3Code\nIsRootEvent\nEventCode\nEventBaseCode\nEventRootCode\nQuadClass\nGoldsteinScale\nNumMentions\nNumSources\nNumArticles\nAvgTone\nActor1Geo_Type\nActor1Geo_FullName\nActor1Geo_CountryCode\nActor1Geo_ADM1Code\nActor1Geo_ADM2Code\nActor1Geo_Lat\nActor1Geo_Long\nActor1Geo_FeatureID\nActor2Geo_Type\nActor2Geo_FullName\nActor2Geo_CountryCode\nActor2Geo_ADM1Code\nActor2Geo_ADM2Code\nActor2Geo_Lat\nActor2Geo_Long\nActor2Geo_FeatureID\nActionGeo_Type\nActionGeo_FullName\nActionGeo_CountryCode\nActionGeo_ADM1Code\nActionGeo_ADM2Code\nActionGeo_Lat\nActionGeo_Long\nActionGeo_FeatureID\nDATEADDED\nSOURCEURL\nSQLDate_date\nActor1CountryName\nActor2CountryName\nActor1EthnicName\nActor2EthnicName\nEventCodeDesc\nEventBaseCodeDesc\nEventRootCodeDesc\nActor1KnownGroupName\nActor2KnownGroupName\nActor1Religion1Name\nActor1Religion2Name\nActor2Religion1Name\nActor2Religion2Name\nActor1Type1Name\nActor1Type2Name\nActor1Type3Name\nActor2Type1Name\nActor2Type2Name\nActor2Type3Name\nQuadClassType\nActor1Geo_Name\nActor2Geo_Name\nActionGeo_Name\nActor1Geo_CountryName\nActor2Geo_CountryName\nActionGeo_CountryName\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294133_344291041",
+      "id": "20190121-172121_428905243",
+      "dateCreated": "2019-01-22 11:01:34.133",
+      "dateStarted": "2019-01-22 11:05:42.646",
+      "dateFinished": "2019-01-22 11:05:42.884",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "mentions.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:05:45.838",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nEventTimeDate\nMentionTimeDate\nMentionType\nMentionSourceName\nMentionIdentifier\nSentenceID\nActor1CharOffset\nActor2CharOffset\nActionCharOffset\nInRawText\nConfidence\nMentionDocLen\nMentionDocTone\nMentionDocTranslationInfo\nLanguage\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294134_-1774039818",
+      "id": "20190122-095247_714216003",
+      "dateCreated": "2019-01-22 11:01:34.134",
+      "dateStarted": "2019-01-22 11:05:45.869",
+      "dateFinished": "2019-01-22 11:05:46.091",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 2 processing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:38:29.899",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 2 processing\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151294135_-761470884",
+      "id": "20190121-111706_406896183",
+      "dateCreated": "2019-01-22 11:01:34.135",
+      "dateStarted": "2019-01-22 11:38:29.900",
+      "dateFinished": "2019-01-22 11:38:29.907",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 3 processing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:06:24.857",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 3 processing\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151575674_771000110",
+      "id": "20190122-110615_324386812",
+      "dateCreated": "2019-01-22 11:06:15.674",
+      "dateStarted": "2019-01-22 11:06:24.857",
+      "dateFinished": "2019-01-22 11:06:27.377",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.sql.functions._\n//var mentions_q3 \u003d mentions.select($\"GLOBALEVENTID\" , $\"MentionDocTone\", $\"Language\")\nvar joined_df \u003d events.select($\"GLOBALEVENTID\", $\"SQLDate_date\", $\"Actor1Name\", $\"Actor2Name\",$\"Actor1Code\", $\"Actor2Code\", $\"ActionGeo_CountryName\").withColumn(\"SQLMonth\",month($\"SQLDate_date\")).join(mentions.select($\"GLOBALEVENTID\" , $\"MentionDocTone\", $\"Language\"), Seq(\"GLOBALEVENTID\"), \"inner\").drop(\"SQLDate_date\")\njoined_df \u003d joined_df.withColumn(\"Positive\", when( $\"MentionDocTone\"\u003e0, $\"MentionDocTone\").otherwise(0))\njoined_df \u003d joined_df.withColumn(\"Negative\", when( $\"MentionDocTone\"\u003c0,  $\"MentionDocTone\").otherwise(0)).drop(\"MentionDocTone\")\n\nvar df_actor1 \u003d joined_df.filter( \"Actor1Name !\u003d \u0027\u0027\").withColumn(\"ActorCode\", $\"Actor1Code\").withColumn(\"ActorName\", $\"Actor1Name\").drop(\"Actor1Name\").drop(\"Actor2Name\").drop(\"Actor1Code\").drop(\"Actor2Code\")\nvar df_actor2 \u003d joined_df.filter( \"Actor2Name !\u003d \u0027\u0027\").withColumn(\"ActorCode\", $\"Actor2Code\").withColumn(\"ActorName\", $\"Actor2Name\").drop(\"Actor1Name\").drop(\"Actor2Name\").drop(\"Actor1Code\").drop(\"Actor2Code\")\n\njoined_df \u003d df_actor1.union(df_actor2)\n\nvar df_query3 \u003d joined_df.groupBy(\"GLOBALEVENTID\",  \"SQLMonth\",  \"ActionGeo_CountryName\", \"Language\", \"ActorCode\", \"ActorName\").agg(sum(\"Positive\").as(\"Positive\"),sum(\"Negative\").as(\"Negative\"))\n\nz.show(df_query3)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:29:31.348",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "GLOBALEVENTID": "string",
+                      "ActionGeo_CountryName": "string",
+                      "SQLMonth": "string",
+                      "Language": "string",
+                      "Positive": "string",
+                      "Negative": "string",
+                      "ActorCode": "string",
+                      "ActorName": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.functions._\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, Actor1Name: string ... 7 more fields]\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, Actor1Name: string ... 8 more fields]\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, Actor1Name: string ... 8 more fields]\ndf_actor1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, ActionGeo_CountryName: string ... 6 more fields]\ndf_actor2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, ActionGeo_CountryName: string ... 6 more fields]\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, ActionGeo_CountryName: string ... 6 more fields]\ndf_query3: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLMonth: int ... 6 more fields]\n"
+          },
+          {
+            "type": "TABLE",
+            "data": "GLOBALEVENTID\tSQLMonth\tActionGeo_CountryName\tLanguage\tActorCode\tActorName\tPositive\tNegative\n731962723\t2\tIRAN\tPersian\tIRNJUD\tTEHRAN\t0.0\t-5.75657894736842\n731964356\t2\tIRAN\tRussian\tCOPGOVMIL\tDEPUTY\t0.0\t-2.28136882129277\n731962493\t2\tCOLOMBIA\tSpanish, Castilian\tCOL\tBARRANQUILLA\t0.0\t-6.06060606060606\n731961132\t2\tCONGO\tFrench\tLAB\tEMPLOYEE\t0.0\t-2.98507462686567\n731960938\t2\tCHINA\tFrench\tDZAMIL\tALGERIA\t0.0\t-1.73160173160174\n731961150\t2\tBELGIUM\tFrench\tLEG\tCONGRESS\t1.05448154657293\t0.0\n731961026\t2\tINDONESIA\tIndonesian\tIDN\tJAKARTA\t0.75187969924812\t0.0\n731964704\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t0.71428571428571\t0.0\n731961080\t2\tCHINA\tFrench\tIRN\tIRAN\t0.0\t-6.25\n731962613\t2\tFRANCE\tArabic\tMRT\tMAURITANIA\t0.33444816053511\t0.0\n731960976\t2\tUNITED STATES\tFrench\tELI\tFIRST LADY\t0.45045045045045\t0.0\n731961196\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t0.0\t-7.33944954128441\n731961395\t2\tUNITED STATES\tPersian\tUSA\tUNITED STATES\t0.0\t-2.96774193548387\n731962775\t2\tNETHERLANDS\tCzech\tLEG\tSENATOR\t0.0642673521850896\t0.0\n731961257\t2\tCHINA\tFrench\tPSEREB\tHAMAS\t0.0\t-9.05660377358491\n731964699\t2\tPORTUGAL\tPortuguese\tUSA\tAMERICAN\t2.79027902790279\t0.0\n731964774\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tUAF\tMILITIA\t0.0\t-13.7931034482759\n731961355\t2\tGREECE\tModern Greek (since 1453–)\tTUR\tTURKEY\t0.0\t-3.41013824884793\n731962772\t2\tDJIBOUTI\tCzech\tLEG\tCHAMBER\t0.0\t0.0\n731962688\t2\tRUSSIA\tSerbian\tGOV\tEMBASSY\t0.0\t-5.53633217993079\n731964819\t2\tCUBA\tSpanish, Castilian\tUSAOPP\tORLANDO\t0.0\t-5.80645161290323\n731961028\t2\tISRAEL\tArabic\tGOV\tGOVERNMENT\t0.8\t0.0\n731962951\t2\tIRAN\tSpanish, Castilian\tUSA\tAMERICAN\t0.0\t-1.07913669064748\n731964822\t2\tVENEZUELA\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-2.57731958762887\n731964365\t2\tPOLAND\tPolish\tPOLCVL\tPOLAND\t0.0\t-7.6103500761035\n731964430\t2\tUNITED STATES\tSpanish, Castilian\tEDU\tSTUDENTS AND TEACHER\t0.0\t-1.32231404958678\n731960957\t2\tIRAQ\tArabic\tEDUMOS\tCOLLEGE\t0.0\t-2.4\n731961114\t2\tISRAEL\tRussian\tISRUAF\tISRAEL\t0.0\t-5.38116591928251\n731961303\t2\tCHINA\tFrench\tRUS\tRUSSIA\t0.0\t-4.62633451957296\n731961188\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tMED\tNEWSPAPER\t0.0\t-5.0251256281407\n731961135\t2\tISRAEL\tArabic\tLBNGOV\tLEBANESE\t0.0\t-1.63398692810457\n731961380\t2\tnull\tRussian\tLAB\tWORKER\t0.0\t-0.55555555555556\n731962420\t2\tUNITED STATES\tArabic\tRUS\tMOSCOW\t0.0\t-5.07936507936508\n731962860\t2\tEGYPT\tArabic\tEGY\tEGYPT\t1.78926441351888\t0.0\n731964424\t2\tUNITED STATES\tSpanish, Castilian\tEDU\tSCHOOL\t0.0\t-3.51966873706004\n731962882\t2\tGERMANY\tAlbanian\tRUS\tMOSCOW\t0.0\t-5.15505436971405\n731960963\t2\tISRAEL\tArabic\tEGY\tSINAI\t0.0\t-3.81944444444445\n731961074\t2\tINDIA\tPunjabi, Panjabi\tINDGOV\tGUJARAT\t4.58333333333333\t0.0\n731964436\t2\tEGYPT\tArabic\tEGY\tEGYPT\t0.0\t-1.16550116550116\n731962810\t2\tMEXICO\tSpanish, Castilian\tMEXBUS\tMEXICO\t0.0\t-0.15151515151515\n731961242\t2\tPOLAND\tArabic\tGOV\tEMBASSY\t0.0\t-4.40251572327044\n731964614\t2\tMEXICO\tSpanish, Castilian\tUSA\tWASHINGTON\t4.34782608695652\t0.0\n731964529\t2\tBRAZIL\tSpanish, Castilian\tMIL\tMILITARY\t0.0\t-2.53583241455347\n731961051\t2\tGERMANY\tSpanish, Castilian\tUSA\tAMERICAN\t0.0\t-4.86026731470231\n731962438\t2\tALBANIA\tGerman\tALBGOV\tALBANIA\t2.32558139534884\t0.0\n731962891\t2\tEGYPT\tArabic\tSDN\tSUDAN\t0.0\t-1.46443514644351\n731962708\t2\tRUSSIA\tRussian\tIGO\tOBSERVERS IN\t0.40322580645161\t0.0\n731962859\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t3.31061343719572\t0.0\n731961308\t2\tTURKEY\tFrench\tREL\tWORSHIPPER\t0.0\t-5.72519083969466\n731964778\t2\tALGERIA\tArabic\tGOVMIL\tAUTHORITIES\t0.0\t-2.97397769516729\n731961384\t2\tSPAIN\tRussian\tUAF\tMILITANT\t0.0\t-7.51445086705202\n731960860\t2\tCHILE\tSpanish, Castilian\tLEG\tSENATOR\t0.0\t-4.73282442748092\n731964689\t2\tISRAEL\tUkrainian\tGOV\tDEPUTY PRIME MINISTER\t0.0\t-13.25125398996809\n731964378\t2\tSENEGAL\tFrench\tEDU\tCOLLEGE\t0.0\t-2.20820189274448\n731964276\t2\tOMAN\tArabic\tOMN\tOMAN\t2.90178571428572\t0.0\n731962768\t2\tAUSTRALIA\tFrench\tLEG\tGENERAL ASSEMBLY\t1.57992565055762\t0.0\n731964295\t2\tARGENTINA\tSpanish, Castilian\tARG\tARGENTINA\t2.8380634390651\t0.0\n731962497\t2\tCHINA\tSpanish, Castilian\tCOP\tPOLICE\t0.0\t-3.47490347490348\n731964448\t2\tITALY\tSpanish, Castilian\tESP\tSPAIN\t1.08191653786708\t0.0\n731962734\t2\tUNITED STATES\tSpanish, Castilian\tJPN\tJAPAN\t0.84566596194503\t0.0\n731960780\t2\tUKRAINE\tRussian\tLEG\tREPRESENTATIVES\t0.0\t-2.16216216216216\n731962724\t2\tIRAN\tPersian\tIRN\tIRAN\t0.0\t-5.75657894736842\n731961018\t2\tEGYPT\tArabic\tEDU\tSCHOOL\t3.24324324324324\t0.0\n731960846\t2\tNORTH KOREA\tSlovak\tBUS\tCOMPANY\t0.0\t-1.97775030902348\n731962776\t2\tNETHERLANDS\tCzech\tLEG\tSENATOR\t0.0642673521850896\t0.0\n731961072\t2\tINDIA\tHindi\tIND\tLUCKNOW\t1.28676470588235\t0.0\n731961404\t2\tUNITED STATES\tArabic\tUSAELI\tMISSOURI\t11.4406779661017\t0.0\n731962539\t2\tSPAIN\tSpanish, Castilian\tESP\tSPANIARD\t1.99778024417315\t0.0\n731960872\t2\tSWEDEN\tSwedish\tCOP\tPOLICE\t0.0\t-2.60086695565188\n731961253\t2\tISRAEL\tFrench\tISR\tISRAEL\t0.0\t-9.05660377358491\n731961309\t2\tTURKEY\tFrench\tRUS\tDAGESTAN\t0.0\t-5.72519083969466\n731964708\t2\tSWEDEN\tSpanish, Castilian\tPTY\tPRESIDENTIAL CANDIDATE\t0.85470085470086\t0.0\n731961353\t2\tTUNISIA\tFrench\tTUN\tTUNISIA\t4.17536534446764\t0.0\n731964611\t2\tINDONESIA\tIndonesian\tCRM\tCRIMINAL\t0.0\t-9.07715582450835\n731961016\t2\tBULGARIA\tDutch, Flemish\tBGR\tBULGARIA\t2.98507462686567\t0.0\n731962778\t2\tALBANIA\tGerman\tLEG\tPARLIAMENT\t2.32558139534884\t0.0\n731964210\t2\tIRAN\tFrench\tISR\tISRAELI\t0.0\t-6.50406504065041\n731961047\t2\tUKRAINE\tRussian\tGOV\tPRESIDENT\t1.17416829745597\t-2.4390243902439\n731964248\t2\tALGERIA\tArabic\tGOV\tMINISTRY\t1.55440414507772\t0.0\n731962910\t2\tLEBANON\tArabic\tkur\tKURD\t0.0\t-1.79573512906846\n731960910\t2\tINDONESIA\tIndonesian\tCVL\tRESIDENTS\t1.37931034482759\t0.0\n731962476\t2\tGERMANY\tGerman\tIRNBUS\tIRAN\t0.0\t-4.34782608695652\n731961029\t2\tFRANCE\tPortuguese\tJUD\tJUDGE\t1.31492439184747\t0.0\n731962370\t1\tPAKISTAN\tUrdu\tMED\tSPOKESMAN\t5.86080586080586\t0.0\n731962901\t2\tRUSSIA\tAlbanian\tSYR\tSYRIA\t0.0\t-5.15505436971405\n731961144\t2\tBRAZIL\tGerman\tLEG\tCONGRESS\t0.0\t-4.18470418470419\n731964569\t2\tTURKEY\tTurkish\tTUR\tTURKEY\t0.0\t-1.18085767557489\n731960948\t2\tAFGHANISTAN\tPersian\tEDU\tINTELLECTUAL\t1.08695652173913\t0.0\n731964408\t2\tALGERIA\tArabic\tDZA\tALGERIA\t1.55440414507772\t0.0\n731961320\t2\tIRAQ\tArabic\tSAU\tRIYADH\t0.0\t-7.18954248366013\n731961400\t2\tUNITED STATES\tSpanish, Castilian\tURYGOVBUS\tPEDRO BORDABERRY\t0.0\t-4.17690417690418\n731960884\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tCRM\tROBBER\t0.0\t-5.69777043765483\n731962652\t2\tJAPAN\tSpanish, Castilian\tBUS\tBANK\t0.0\t-2.54777070063694\n731960983\t2\tQATAR\tSpanish, Castilian\tESP\tSPAIN\t0.0\t-2.71186440677967\n731964778\t2\tALGERIA\tArabic\tUAF\tTERRORIST\t0.0\t-2.97397769516729\n731960941\t2\tGUINEA\tRussian\tEDU\tSCHOLAR\t0.0\t-2.79329608938548\n731961170\t2\tISRAEL\tSwedish\tMDV\tMALE\t0.0\t-2.60086695565188\n731961289\t2\tUNITED STATES\tUkrainian\tREL\tSAINT\t4.54545454545454\t0.0\n731960973\t2\tEGYPT\tArabic\tUAF\tTERRORIST\t0.0\t-8.14070351758796\n731964334\t2\tSWITZERLAND\tSpanish, Castilian\tESP\tCATALONIA\t0.0\t-6.89655172413793\n731964477\t2\tUNITED KINGDOM\tArabic\tYEM\tSANAA\t0.0\t-2.24137931034483\n731964670\t2\tIRAN\tArabic\tMOS\tISLAMIC\t0.0\t-5.58139534883721\n731962536\t2\tGERMANY\tGerman\tDEU\tLEIPZIG\t0.60483870967742\t0.0\n731961130\t2\tnull\tSpanish, Castilian\tLAB\tEMPLOYEE\t5.05337270043152\t0.0\n731961016\t2\tBULGARIA\tDutch, Flemish\tGOV\tKING\t2.98507462686567\t0.0\n731962701\t2\tGUATEMALA\tSpanish, Castilian\tGTM\tGUATEMALA\t0.617283950617284\t0.0\n731961102\t2\tCONGO, DEMOCRATIC REPUBLIC OF THE\tFrench\tPSE\tPALESTINIAN\t0.0\t-8.13464235624123\n731964643\t2\tFRANCE\tGerman\tMAR\tMOROCCO\t0.0\t-0.37593984962406\n731962660\t2\tSPAIN\tFrench\tESP\tMADRID\t0.0\t-1.09489051094891\n731961292\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tROUELI\tROMANIA\t0.0\t-2.78745644599304\n731962861\t2\tMEXICO\tSpanish, Castilian\tREB\tREBELLION\t1.99778024417315\t0.0\n731964585\t2\tEGYPT\tArabic\tJORELI\tHASSAN\t0.0\t-5.32544378698225\n731962504\t2\tnull\tAlbanian\tCOP\tDEPUTY\t9.56521739130435\t0.0\n731964213\t2\tGERMANY\tArabic\tQAT\tQATAR\t0.0\t-3.84245917387128\n731961166\t2\tSRI LANKA\tSinhalese, Sinhala\tLKA\tSRI LANKA\t0.0\t-7.92079207920792\n731962696\t2\tPERU\tSpanish, Castilian\tPER\tLIMA\t3.32409972299169\t0.0\n731962577\t2\tGAZA STRIP\tArabic\tPSEREB\tHAMAS\t0.0\t-1.05263157894737\n731961353\t2\tTUNISIA\tFrench\tBFA\tBURKINA FASO\t4.17536534446764\t0.0\n731961344\t2\tTURKEY\tArabic\tSYR\tSYRIA\t0.0\t-1.20918984280532\n731962426\t2\tUNITED STATES\tSpanish, Castilian\tUSA\tUNITED STATES\t0.0\t-4.1015625\n731962375\t2\tCOLOMBIA\tSpanish, Castilian\tCOL\tCOLOMBIAN\t0.0\t-3.98860398860399\n731964614\t2\tMEXICO\tSpanish, Castilian\tLEG\tREPRESENTATIVES\t4.34782608695652\t0.0\n731962564\t2\tUNITED STATES\tGerman\tUSA\tUNITED STATES\t0.0\t-7.32833237160992\n731960824\t2\tBOLIVIA\tSpanish, Castilian\tBOL\tBOLIVIA\t0.0\t-3.04878048780488\n731964800\t2\tMEXICO\tSpanish, Castilian\tUSA\tPROVIDENCE\t2.36753100338219\t0.0\n731960962\t2\tISRAEL\tArabic\tEGY\tSINAI\t0.0\t-3.81944444444445\n731962967\t2\tYEMEN\tArabic\tYEM\tYEMEN\t2.38805970149254\t0.0\n731964518\t2\tUNITED STATES\tSpanish, Castilian\tHLH\tHOSPITAL\t0.0\t-3.65591397849462\n731962878\t2\tGERMANY\tRussian\tRUS\tRUSSIAN\t0.0\t-5.58139534883721\n731962529\t2\tUKRAINE\tUkrainian\tCVL\tSETTLEMENT\t0.0\t-5.9010152284264\n731962858\t2\tCANADA\tFrench\tCAN\tOTTAWA\t0.0\t-2.75229357798165\n731962446\t2\tPERU\tSpanish, Castilian\tCRM\tCRIMINAL\t0.0\t-2.15517241379311\n731962419\t2\tPORTUGAL\tPortuguese\tPRT\tPORTUGAL\t0.0\t-2.99714557564224\n731961283\t2\tSYRIA\tFrench\tSYRMIL\tSYRIAN\t0.0\t-6.48464163822526\n731964449\t2\tARGENTINA\tSpanish, Castilian\tMIL\tCAPTAIN\t0.0\t-6.89655172413793\n731962854\t2\tGAZA STRIP\tArabic\tEGY\tCAIRO\t0.0\t-1.05263157894737\n731962962\t2\tVENEZUELA\tSpanish, Castilian\tGOV\tADMINISTRATION\t0.0\t-1.07991360691145\n731962817\t2\tNETHERLANDS\tArabic\tAUT\tVIENNA\t0.0\t-4.11522633744856\n731964571\t2\tIRAN\tArabic\tIRNGOV\tIRAN\t0.0\t-1.97368421052632\n731964312\t2\tBRAZIL\tPortuguese\tBRA\tBRAZIL\t0.46801872074883\t0.0\n731964525\t2\tUNITED STATES\tPolish\tGOV\tPRESIDENT\t0.0\t-4.57413249211356\n731961326\t2\tUKRAINE\tRussian\tSET\tSETTLER\t0.0\t-0.71428571428572\n731964589\t2\tCHILE\tSpanish, Castilian\tJUD\tPUBLIC PROSECUTOR\t0.0\t-5.60747663551402\n731964829\t2\tYEMEN\tArabic\tYEM\tYEMEN\t0.0\t-1.16883116883117\n731961282\t2\tSYRIA\tFrench\tREB\tREBEL\t0.0\t-6.48464163822526\n731962820\t2\tRUSSIA\tRussian\tMIL\tMILITARY\t0.0\t-1.96319018404908\n731964755\t2\tSYRIA\tArabic\tDEU\tMUNICH\t0.0\t-4.78547854785479\n731964765\t2\tJORDAN\tSpanish, Castilian\tJOR\tJORDAN\t0.0\t-7.50294114413256\n731962747\t2\tPOLAND\tPolish\tGOVGOV\tMINIST\t0.0\t-0.49261083743842\n731964723\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t4.13223140495868\t0.0\n731964233\t2\tALGERIA\tArabic\tDZA\tALGERIA\t0.0\t-2.97397769516729\n731960745\t2\tRUSSIA\tFrench\tCVL\tCIVILIAN\t0.0\t-6.25\n731962816\t2\tAUSTRIA\tArabic\tAUT\tVIENNA\t0.0\t-4.11522633744856\n731960758\t2\tGRENADA\tCatalan\tESP\tCATALONIA\t0.39113428943938\t0.0\n731960896\t2\tPOLAND\tFrench\tCRM\tCRIMINAL\t0.0\t-6.59824046920821\n731964341\t2\tCONGO, DEMOCRATIC REPUBLIC OF THE\tFrench\tCHRCTH\tCATHOLIC\t0.0\t-2.12765957446808\n731964674\t2\tHONDURAS\tGerman\tNGOXFM\tOXFAM\t0.0\t-1.99004975124379\n731961270\t2\tQATAR\tArabic\tQAT\tQATAR\t4.1958041958042\t0.0\n731961408\t2\tCZECH REPUBLIC\tSpanish, Castilian\tVEN\tVENEZUELAN\t0.0\t-2.71186440677967\n731961091\t2\tISRAEL\tArabic\tISR\tISRAEL\t0.0\t-3.73395565927655\n731964599\t2\tBRAZIL\tPortuguese\tLAB\tWORKER\t0.0\t-1.49700598802396\n731964653\t2\tIRAQ\tRussian\tMIL\tMILITARY\t0.0\t-2.28136882129277\n731961382\t2\tIRAQ\tRussian\tUKR\tKHARKOV\t0.0\t-5.10204081632653\n731962443\t2\tEGYPT\tArabic\tARE\tABU DHABI\t2.93159609120521\t0.0\n731962569\t2\tEGYPT\tArabic\tEGY\tEGYPT\t0.0\t-2.08695652173913\n731962819\t2\tCHILE\tSpanish, Castilian\tMIL\tMILITARY REPRESENTATIVE\t1.63934426229508\t0.0\n731964234\t2\tSYRIA\tArabic\tDZA\tALGERIAN\t0.0\t-6.17529880478087\n731962774\t2\tCZECH REPUBLIC\tCzech\tLEG\tSENATOR\t0.0642673521850896\t0.0\n731964445\t2\tSPAIN\tPortuguese\tESP\tSPANISH\t2.4822695035461\t0.0\n731964291\t2\tUNITED STATES\tRussian\tUSA\tUNITED STATES\t0.0\t-3.8412832418742\n731964789\t2\tISRAEL\tRussian\tPSEREB\tHAMAS\t0.0\t-2.54777070063694\n731962443\t2\tEGYPT\tArabic\tLAB\tEMPLOYEE\t2.93159609120521\t0.0\n731962951\t2\tIRAN\tSpanish, Castilian\tUSAGOV\tTHE WHITE HOUSE\t0.0\t-1.07913669064748\n731964818\t2\tCUBA\tSpanish, Castilian\tUSAOPP\tORLANDO\t0.0\t-5.80645161290323\n731962578\t2\tSUDAN\tArabic\tSDN\tSUDAN\t0.0\t-1.46443514644351\n731964616\t2\tLEBANON\tArabic\tUSAELI\tDAVID SATTER\t0.0\t-5.05050505050505\n731962899\t2\tRUSSIA\tAlbanian\tRUSMIL\tRUSSIAN\t0.0\t-5.15505436971405\n731962668\t2\tJAPAN\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-0.49019607843137\n731962885\t2\tRUSSIA\tArabic\tBUS\tCOMPANIES\t0.0\t-5.07936507936508\n731962723\t2\tIRAN\tPersian\tIRN\tIRAN\t0.0\t-5.75657894736842\n731962403\t2\tITALY\tItalian\tITA\tITALY\t2.48447204968944\t0.0\n731964560\t2\tIRAN\tArabic\tGOV\tEMBASSY\t0.0\t-2.24137931034483\n731962882\t2\tGERMANY\tAlbanian\tRUSCVL\tRUSSIAN\t0.0\t-5.15505436971405\n731964210\t2\tIRAN\tFrench\tPSE\tPALESTINIAN\t0.0\t-6.50406504065041\n731962542\t2\tTURKEY\tArabic\tDEU\tGERMANY\t0.0\t-3.53982300884956\n731961124\t2\tMEXICO\tSpanish, Castilian\tJUD\tPUBLIC PROSECUTOR\t0.0\t-8.05687203791469\n731962379\t2\tBRAZIL\tPortuguese\tCVL\tTOURIST\t1.02564102564103\t0.0\n731960914\t2\tCROATIA\tHungarian\tEDU\tSCHOOL\t0.0\t-3.41321713870734\n731960796\t2\tSUDAN\tFrench\tREB\tREBEL\t0.0\t-9.28571428571429\n731964767\t2\tJORDAN\tSpanish, Castilian\tSYRREF\tSYRIAN\t0.0\t-7.50294114413256\n731961342\t2\tTURKEY\tArabic\tSYRMIL\tSYRIA\t0.0\t-1.20918984280532\n731960847\t2\tRUSSIA\tRussian\tBUS\tCOMPANY\t0.0\t-5.02136752136752\n731964291\t2\tUNITED STATES\tRussian\tAFR\tAFRICA\t0.0\t-3.8412832418742\n731960875\t2\tMEXICO\tSpanish, Castilian\tCOP\tDEPUTY\t0.0\t-4.6583850931677\n731960861\t2\tCHINA\tSpanish, Castilian\tCHN\tCHINA\t0.0\t-3.16973415132925\n731964773\t2\tTAIWAN\tKorean\tTWN\tTAIWAN\t0.0\t-2.23880597014925\n731960839\t2\tEGYPT\tArabic\tBUS\tINVESTOR\t0.0\t-1.45985401459854\n731962575\t2\tEGYPT\tArabic\tEGY\tCAIRO\t0.0\t-0.2710027100271\n731960790\t2\tEGYPT\tArabic\tOMN\tMUSCAT\t3.64963503649636\t0.0\n731962905\t2\tRUSSIA\tFrench\tTUN\tTUNISIAN\t3.2258064516129\t0.0\n731964534\t2\tMEXICO\tSpanish, Castilian\tPTY\tPRESIDENTIAL CANDIDATE\t1.3986013986014\t0.0\n731962716\t2\tGERMANY\tAlbanian\tDEU\tMUNICH\t0.0\t-6.29590766002098\n731964274\t2\tNETHERLANDS\tModern Greek (since 1453–)\tNLD\tNETHERLANDS\t6.39653937333529\t0.0\n731961103\t2\tCHINA\tFrench\tISR\tISRAELI\t0.0\t-8.61538461538466\n731961399\t2\tUNITED STATES\tSerbian\tUSA\tWASHINGTON\t2.57234726688103\t0.0\n731964751\t2\tSWEDEN\tSpanish, Castilian\tSWE\tSWEDEN\t0.85470085470086\t0.0\n731964731\t2\tRUSSIA\tRussian\tRUS\tRUSSIA\t3.3003300330033\t-1.91693290734824\n731964398\t2\tGERMANY\tSerbian\tCVL\tENGINEER\t0.0\t-1.04166666666667\n731960855\t2\tSYRIA\tCatalan\tCAN\tCANADA\t0.0\t-2.9126213592233\n731960740\t2\tTURKEY\tTurkish\tCVL\tCITIZEN\t0.0\t-3.75\n731961173\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tMED\tMAGAZINE\t0.0\t-8.64230461456388\n731961285\t2\tUNITED STATES\tSpanish, Castilian\tREL\tSAINT\t1.37931034482759\t0.0\n731960904\t2\tTURKEY\tTurkish\tCVL\tCITIZEN\t0.0\t-3.75\n731962847\t2\tUNITED STATES\tKorean\tPRK\tNORTH KOREA\t0.17094017094017\t0.0\n731964398\t2\tGERMANY\tSerbian\tDEU\tGERMAN\t0.0\t-1.04166666666667\n731961121\t2\tLEBANON\tArabic\tJORELI\tHASSAN\t0.0\t0.0\n731964528\t2\tMEXICO\tSpanish, Castilian\tMEX\tOAXACA\t0.0\t-2.16606498194946\n731964270\t2\tFINLAND\tRussian\tMIL\tNAVY\t0.0\t-1.73564753004006\n731960741\t2\tTURKEY\tTurkish\tCVL\tCITIZEN\t0.0\t-3.75\n731964824\t2\tVENEZUELA\tSpanish, Castilian\tOPP\tMAIN OPPOSITION\t0.0\t-2.57731958762887\n731961202\t2\tCHILE\tSpanish, Castilian\tMEXGOV\tMEXICO\t5.6390977443609\t0.0\n731964318\t2\tUNITED ARAB EMIRATES\tIndonesian\tBUS\tCOMPANY\t0.0\t-0.39682539682539\n731961263\t2\tRUSSIA\tItalian\tPTY\tPOLITICIAN\t0.0\t-0.520381613183011\n731964673\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tNGA\tNIGERIAN\t0.0\t-13.7931034482759\n731964511\t2\tUNITED KINGDOM\tCzech\tGOV\tKINGDOM\t0.0\t-3.74331550802139\n731962689\t2\tPERU\tSpanish, Castilian\tGOV\tGOVERNMENT\t0.0\t-2.95857988165681\n731964679\t2\tCHINA\tCzech\tOPP\tTHE OPPOSITION\t0.0759301442672697\t0.0\n731964515\t2\tGERMANY\tSpanish, Castilian\tGOV\tKINGDOM\t0.0\t-4.08163265306123\n731964301\t2\tBELARUS\tUkrainian\tUKR\tDONBAS\t0.0\t-1.16731517509728\n731961403\t2\tUNITED STATES\tFrench\tUSAGOV\tHILLARY CLINTON\t0.0\t-1.94518125552609\n731964323\t2\tGERMANY\tRussian\tBUS\tBUSINESS\t0.8695652173913\t0.0\n731962370\t1\tPAKISTAN\tUrdu\tPAK\tPAKISTAN\t5.86080586080586\t0.0\n731962945\t2\tGERMANY\tGerman\tUSA\tUNITED STATES\t1.75953079178886\t0.0\n731961272\t2\tQATAR\tArabic\tOMN\tMUSCAT\t4.1958041958042\t0.0\n731960885\t2\tRUSSIA\tRussian\tCVL\tCITIZEN\t0.0\t-5.40746382330541\n731960778\t2\tFRANCE\tFrench\tLAB\tEMPLOYEE\t0.0\t-2.48508946322068\n731961155\t2\tITALY\tCzech\tGOV\tPRESIDENT\t0.0\t-1.15340253748558\n731962804\t2\tUNITED KINGDOM\tSpanish, Castilian\tMED\tCORRESPONDENT\t0.0\t-1.28755364806867\n731961252\t2\tGAZA STRIP\tFrench\tPSE\tGAZA\t0.0\t-8.54472630173569\n731961316\t2\tBELARUS\tUkrainian\tRUS\tRUSSIA\t3.62116991643454\t0.0\n731962935\t2\tnull\tSpanish, Castilian\tJPN\tSAGA\t0.0\t-0.53981106612686\n731962834\t2\tISRAEL\tArabic\tISR\tISRAEL\t0.0\t-4.33212996389892\n731964346\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tCOP\tPOLICE\t0.0\t-1.50862068965518\n731962887\t2\tGERMANY\tRussian\tRUSMED\tRUSSIAN\t0.0\t-5.58139534883721\n731962735\t2\tnull\tSpanish, Castilian\tJPN\tSAGA\t0.0\t-0.53981106612686\n731964438\t2\tEGYPT\tArabic\tEGY\tCAIRO\t0.0\t-5.32544378698225\n731964624\t2\tLATVIA\tLatvian\tMEDMED\tJOURNALIST\t0.0\t-8.09399477806789\n731961294\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tROU\tROMANIA\t0.89086859688196\t0.0\n731964750\t2\tFRANCE\tFrench\tSWE\tSTOCKHOLM\t0.0\t-4.90693739424704\n731960834\t2\tSYRIA\tRomanian, Moldavian, Moldovan\tBUS\tBANK\t0.0\t-9.1254752851711\n731961079\t2\tCHINA\tFrench\tIRN\tIRANIAN\t0.0\t-6.25\n731964508\t2\tAFGHANISTAN\tFrench\tGOV\tAUTHORITIES\t0.0\t-4.90693739424704\n731960873\t2\tSWITZERLAND\tGerman\tCOP\tPRISON\t0.0\t-2.75229357798165\n731961119\t2\tSYRIA\tArabic\tJORELI\tHASSAN\t0.0\t-1.81818181818181\n731962566\t2\tUNITED ARAB EMIRATES\tArabic\tEDU\tUNIVERSITY\t5.07042253521127\t0.0\n731961084\t2\tIRAQ\tArabic\tMOSSUN\tSUNNI\t0.0\t-2.4\n731962880\t2\tEGYPT\tRussian\tCHRCTH\tCATHOLIC\t0.0\t-2.9038112522686\n731961165\t2\tSWEDEN\tSpanish, Castilian\tSWE\tSWEDEN\t1.27659574468085\t0.0\n731960858\t2\tCHINA\tFrench\tCVL\tHIKER\t0.0\t-4.0\n731964594\t2\tITALY\tSpanish, Castilian\tITA\tSICILY\t0.0\t-3.55125100887813\n731962920\t2\tnull\tSpanish, Castilian\tURY\tURUGUAY\t4.29447852760736\t0.0\n731962906\t2\tCYPRUS\tModern Greek (since 1453–)\tTUR\tTURKEY\t3.67647058823529\t0.0\n731964500\t2\tGERMANY\tAlbanian\tGOV\tGOVERNMENT\t1.36840504789418\t0.0\n731961200\t2\tCHILE\tSpanish, Castilian\tMEXGOV\tMEXICO\t5.6390977443609\t0.0\n731962377\t2\tCOSTA RICA\tSpanish, Castilian\tCRI\tCOSTA RICA\t3.07692307692308\t0.0\n731962840\t2\tPERU\tSpanish, Castilian\tVEN\tVENEZUELAN\t0.0\t-6.83252550956248\n731964476\t2\tUNITED KINGDOM\tCzech\tGBR\tBRITON\t0.0\t-3.90591713403765\n731960922\t2\tGERMANY\tGerman\tDEU\tLEIPZIG\t0.0\t0.0\n731964574\t2\tISRAEL\tUkrainian\tISR\tJERUSALEM\t0.0\t-13.25125398996809\n731964521\t2\tSOUTH KOREA\tKorean\tGOV\tGOVERNOR\t2.51937984496124\t0.0\n731962939\t2\tnull\tPersian\tUSA\tA US\t0.0\t-3.36231884057971\n731964820\t2\tVENEZUELA\tSpanish, Castilian\tVEN\tVENEZUELA\t0.0\t-3.55828220858895\n731962585\t2\tGERMANY\tGerman\tUSA\tUNITED STATES\t1.75953079178886\t0.0\n731962661\t2\tSPAIN\tFrench\tESP\tMADRID\t2.79589934762348\t-1.09489051094891\n731962692\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tGOV\tMINIST\t1.28799587841319\t0.0\n731960783\t2\tUNITED KINGDOM\tTurkish\tMED\tMEDIA\t0.0\t0.0\n731960838\t2\tRUSSIA\tRussian\tCVL\tPOPULATION\t1.15473441108545\t0.0\n731962404\t2\tUKRAINE\tUkrainian\tJUD\tJUDGE\t0.0\t-5.9010152284264\n731962725\t2\tIRAN\tPersian\tLEG\tPARLIAMENT\t0.0\t-5.75657894736842\n731962972\t2\tEGYPT\tArabic\tMIL\tMILITARY\t0.0\t-5.25700934579439\n731964784\t2\tYEMEN\tArabic\tIRN\tIRANIAN\t0.0\t-1.16883116883117\n731964706\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t0.71428571428571\t0.0\n731964231\t2\tAUSTRIA\tPolish\tCVL\tMIGRANT\t1.50943396226416\t0.0\n731962790\t2\tISRAEL\tArabic\tMDVGOV\tMALE\t3.43796711509716\t0.0\n731960830\t2\tUNITED STATES\tPolish\tBUS\tCOMPANY\t2.18281036834924\t0.0\n731961091\t2\tISRAEL\tArabic\tEGY\tNASSER\t0.0\t-3.73395565927655\n731960997\t2\tFRANCE\tFrench\tFRA\tFRANCE\t0.0\t-2.6\n731964309\t2\tFRANCE\tPortuguese\tBRA\tBRAZIL\t1.71606864274571\t0.0\n731962895\t2\tEGYPT\tArabic\tEGY\tCAIRO\t0.0\t-1.46443514644351\n731961035\t2\tnull\tSpanish, Castilian\tGOV\tATTORNEY GENERAL\t0.0\t-5.17241379310345\n731961009\t2\tINDIA\tPunjabi, Panjabi\tGOV\tCHIEF MINISTER\t4.58333333333333\t0.0\n731964542\t2\tMEXICO\tSpanish, Castilian\tGRCMED\tARGOS\t0.0\t-4.8780487804878\n731964596\t2\tKUWAIT\tTurkish\tKWT\tKUWAIT\t0.0\t-0.5524861878453\n731962501\t2\tECUADOR\tSpanish, Castilian\tCOP\tPRISON\t0.0\t-12.5714285714285\n731964637\t2\tUNITED STATES\tArabic\tMED\tNEWSPAPER\t0.0\t-11.2403100775194\n731962823\t2\tLIBYA\tArabic\tLBYMIL\tLIBYAN\t2.83553875236295\t0.0\n731960743\t2\tBRAZIL\tPortuguese\tCVL\tCITIZEN\t1.31492439184747\t0.0\n731964565\t2\tIRAN\tRussian\tIRN\tIRANIAN\t0.0\t-2.28136882129277\n731964298\t2\tUNITED STATES\tArabic\tAUSCVL\tAUSTRALIAN\t0.0\t-7.89473684210526\n731964503\t2\tBELARUS\tGerman\tGOV\tMAYOR\t0.0\t-3.31491712707182\n731964704\t2\tMEXICO\tSpanish, Castilian\tPTY\tPRESIDENTIAL CANDIDATE\t0.71428571428571\t0.0\n731962969\t2\tTURKEY\tArabic\tYEM\tYEMEN\t0.0\t-0.2710027100271\n731961366\t2\tSYRIA\tPersian\tUKR\tUKRAINE\t0.0\t-5.73108008817046\n731962681\t2\tLIBYA\tSpanish, Castilian\tOPPUAF\tOPPOSITION FORCES\t0.0\t-2.66808964781216\n731962449\t2\tAUSTRALIA\tArabic\tAUS\tSOUTH AUSTRALIA\t0.0\t-8.59375\n731960985\t2\tITALY\tItalian\tEUR\tEUROPE\t0.74971164936562\t0.0\n731961064\t2\tINDONESIA\tIndonesian\tIDNGOV\tINDONESIA\t0.75187969924812\t0.0\n731960845\t2\tNORTH KOREA\tSlovak\tPRK\tNORTH KOREA\t0.0\t-1.97775030902348\n731964393\t2\tCYPRUS\tIndonesian\tEGY\tEGYPT\t0.0\t-9.55882352941181\n731962960\t2\tVENEZUELA\tSpanish, Castilian\tPER\tPERU\t0.0\t0.0\n731960756\t2\tEGYPT\tArabic\tEGYBUS\tEGYPT\t0.38022813688212\t0.0\n731962913\t2\tUKRAINE\tSerbian\tUKR\tUKRAINE\t7.11462450592886\t0.0\n731961365\t2\tCHINA\tFrench\tUAF\tTERRORIST\t0.0\t-1.73160173160174\n731964413\t2\tALGERIA\tArabic\tDZA\tALGERIAN\t1.55440414507772\t0.0\n731962525\t2\tJORDAN\tArabic\tCVL\tCITIZEN\t3.43796711509716\t0.0\n731961190\t2\tISRAEL\tArabic\tMED\tSPOKESMAN\t0.0\t-2.91970802919708\n731961210\t2\tSRI LANKA\tSinhalese, Sinhala\tMIL\tCAPTAIN\t0.29411764705882\t0.0\n731964558\t2\tYEMEN\tArabic\tIRN\tIRAN\t0.0\t-0.99009900990099\n731962662\t2\tFRANCE\tFrench\tESP\tMADRID\t0.0\t-1.09489051094891\n731964375\t2\tALGERIA\tArabic\tCVL\tCITIZEN\t0.0\t-1.56794425087108\n731964325\t2\tGERMANY\tSpanish, Castilian\tHINAST700\tYOGA\t0.0\t-0.2\n731964272\t2\tMACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF\tCroatian\tMKD\tMACEDONIA\t0.0\t-0.81967213114754\n731964697\t2\tPORTUGAL\tPortuguese\tAGO\tANGOLA\t1.79775280898876\t0.0\n731961157\t2\tnull\tArabic\tMED\tJOURNALIST\t0.0\t0.0\n731962947\t2\tUNITED STATES\tSpanish, Castilian\tUSAGOV\tTHE WHITE HOUSE\t0.0\t-1.07913669064748\n731961356\t2\tSYRIA\tArabic\tTUR\tTURKISH\t0.0\t-1.20918984280532\n731962484\t2\tJORDAN\tArabic\tMOS\tISLAMIC\t3.43796711509716\t0.0\n731961247\t2\tPOLAND\tArabic\tPOL\tPOLAND\t0.0\t-4.40251572327044\n731961212\t2\tSWEDEN\tSwedish\tSWE\tSWEDEN\t0.0\t-2.60086695565188\n731962609\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tDEU\tBAVARIA\t0.24721878862794\t0.0\n731962618\t2\tUNITED KINGDOM\tArabic\tQAT\tQATAR\t0.0\t-4.0\n731964433\t2\tMEXICO\tIndonesian\tEGY\tEGYPT\t0.0\t-9.55882352941181\n731960893\t2\tSWEDEN\tSwedish\tCOP\tPOLICE\t0.0\t-2.60086695565188\n731964317\t2\tEGYPT\tArabic\tBUS\tCOMPANY\t0.0\t0.0\n731964416\t2\tRUSSIA\tRussian\tEDU\tSTUDENT\t3.3003300330033\t0.0\n731962748\t2\tPOLAND\tPolish\tJUD\tJUDGE\t0.0\t-0.49261083743842\n731960977\t2\tUNITED STATES\tGerman\tELI\tACTOR\t42.24515557927921\t0.0\n731961070\t2\tINDIA\tHindi\tIND\tLUCKNOW\t0.0\t-8.91472868217054\n731960953\t2\tUNITED STATES\tRussian\tMED\tTELEVISION\t0.0\t-3.17460317460318\n731964462\t2\tUKRAINE\tRussian\tFINMED\tFINLAND\t0.0\t0.0\n731960954\t2\tNORWAY\tNorwegian\tNOR\tTRONDHEIM\t1.70648464163822\t0.0\n731964554\t2\tHUNGARY\tLatvian\tHUNLEG\tHUNGARY\t0.0\t-6.79611650485437\n731962785\t2\tRUSSIA\tDanish\tMDV\tMALE\t0.0\t-14.75076750459797\n731960912\t2\tBRAZIL\tPortuguese\tBRA\tBRAZIL\t5.22875816993464\t0.0\n731962943\t2\tUNITED STATES\tArabic\tRUS\tMOSCOW\t0.0\t-5.07936507936508\n731961236\t2\tCHINA\tFrench\tSYR\tSYRIAN\t0.0\t-6.48464163822526\n731964729\t2\tRUSSIA\tRussian\tCVL\tTRAVELER\t3.21027287319422\t0.0\n731962516\t2\tUNITED STATES\tSpanish, Castilian\tCUBGOV\tCUBAN\t0.0\t-3.9817504933783896\n731960874\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tCOP\tPRISON\t0.0\t-2.96442687747035\n731964509\t2\tGERMANY\tRussian\tGOV\tPRESIDENT\t0.8695652173913\t0.0\n731962780\t2\tnull\tCzech\tLEG\tSENATOR\t0.12928248222366\t0.0\n731961365\t2\tCHINA\tFrench\tMIL\tMILITARY AUTHORITIES\t0.0\t-1.73160173160174\n731964458\t2\tUNITED STATES\tArabic\tIRN\tIRAN\t0.0\t-1.08303249097473\n731962463\t2\tBRAZIL\tPortuguese\tHTI\tHAITI\t0.0\t-5.813097866078\n731961271\t2\tQATAR\tArabic\tOMN\tMUSCAT\t4.1958041958042\t0.0\n731962541\t2\tGERMANY\tTurkish\tDEU\tGERMANY\t0.0\t-8.33333333333333\n731961297\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tHLH\tDOCTOR\t1.07627515208236\t0.0\n731962935\t2\tnull\tSpanish, Castilian\tUSA\tDAKOTA\t0.0\t-0.53981106612686\n731964654\t2\tEGYPT\tArabic\tMIL\tMILITARY\t0.0\t-6.77083333333333\n731962876\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tRUS\tRUSSIA\t1.28799587841319\t0.0\n731962520\t2\tRUSSIA\tRussian\tCVL\tVILLAGE\t0.0\t-3.07692307692307\n731962857\t2\tUNITED STATES\tGerman\tPTY\tPOLITICIAN\t0.0\t-7.32833237160992\n731960886\t2\tGERMANY\tGerman\tDEU\tBAVARIA\t0.0\t-0.67453625632378\n731960847\t2\tRUSSIA\tRussian\tRUS\tRUSSIAN\t0.0\t-5.02136752136752\n731962782\t2\tnull\tSerbian\tSCGSRB\tSERBIA\t10.6312292358804\t0.0\n731961104\t2\tISRAEL\tFrench\tPSEREB\tHAMAS\t0.0\t-9.05660377358491\n731961289\t2\tUNITED STATES\tUkrainian\tLEG\tREPRESENTATIVES\t4.54545454545454\t0.0\n731962890\t2\tSAUDI ARABIA\tArabic\tSAU\tSAUDI ARABIA\t0.0\t-4.34782608695652\n731960870\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tCOP\tPOLICE\t0.0\t-5.69777043765483\n731962481\t2\tUNITED STATES\tGerman\tBUS\tEMPLOYER\t0.0\t-7.32833237160992\n731964748\t2\tSUDAN\tArabic\tSPY\tINTELLIGENCE\t0.0\t-1.16550116550116\n731964326\t2\tTURKEY\tTurkish\tMIL\tBRIGADIER GENERAL\t4.28571428571429\t0.0\n731964600\t2\tGERMANY\tSpanish, Castilian\tBUS\tBANK\t0.0\t-0.2\n731964284\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tUAF\tMILITIA\t0.0\t-13.7931034482759\n731964436\t2\tEGYPT\tArabic\tETH\tETHIOPIA\t0.0\t-1.16550116550116\n731962408\t2\tMEXICO\tSpanish, Castilian\tLEG\tSENATE\t5.71428571428571\t0.0\n731962933\t2\tUNITED STATES\tSpanish, Castilian\tUSA\tUNITED STATES\t0.0\t-1.07913669064748\n731962808\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICAN\t0.0\t-5.62435270390137\n731962874\t2\tAZERBAIJAN\tnull\tRUS\tMOSCOW\t0.0\t-5.30973451327433\n731964808\t2\tPORTUGAL\tPortuguese\tPRT\tPORTUGUESE\t2.79027902790279\t0.0\n731962917\t2\tGERMANY\tModern Greek (since 1453–)\tBLR\tMINSK\t0.0\t-0.33670033670034\n731961259\t2\tCHINA\tFrench\tPSE\tGAZA\t0.0\t-9.05660377358491\n731964687\t2\tISRAEL\tUkrainian\tGOV\tDEPUTY PRIME MINISTER\t0.0\t-13.25125398996809\n731962949\t2\tRUSSIA\tFrench\tUSAGOV\tTHE WHITE HOUSE\t0.0\t-6.10687022900763\n731964313\t2\tLATVIA\tLatvian\tBUS\tBANK\t0.0\t-2.38532110091743\n731964452\t2\tETHIOPIA\tArabic\tETH\tETHIOPIA\t0.0\t-1.16550116550116\n731964687\t2\tISRAEL\tUkrainian\tPOL\tWARSAW\t0.0\t-13.25125398996809\n731961379\t2\tUKRAINE\tUkrainian\tGOV\tADMINISTRATION\t3.62116991643454\t0.0\n731961101\t2\tISRAEL\tFrench\tPSE\tGAZA\t0.0\t-8.13464235624123\n731962437\t2\tGREECE\tModern Greek (since 1453–)\tGRC\tGREEK\t0.0\t-1.14942528735632\n731961288\t2\tVENEZUELA\tSpanish, Castilian\tCOP\tPRISON\t0.0\t-1.24378109452736\n731961320\t2\tIRAQ\tArabic\tCVL\tVILLAGE\t0.0\t-7.18954248366013\n731962562\t2\tUNITED STATES\tGerman\tUSA\tUNITED STATES\t0.0\t-7.32833237160992\n731964746\t2\tnull\tSpanish, Castilian\tSET\tSETTLER\t0.0\t-5.30973451327434\n731962873\t2\tUKRAINE\tRussian\tRUS\tRUSSIAN\t0.0\t-1.79640718562874\n731961349\t2\tSYRIA\tArabic\tSYRMIL\tSYRIAN\t0.0\t-6.09418282548477\n731964523\t2\tGERMANY\tArabic\tLAB\tUNIONS\t0.0\t-2.6431718061674\n731960801\t2\tTURKEY\tArabic\tSYR\tSYRIAN\t0.0\t-1.20918984280532\n731961217\t2\tUNITED STATES\tFrench\tUSAGOV\tTHE WHITE HOUSE\t0.45045045045045\t0.0\n731962382\t2\tGERMANY\tRussian\tCVL\tCIVILIAN\t0.0\t-7.10900473933649\n731961351\t2\tIRAQ\tArabic\tTKM\tTURKMENISTAN\t0.0\t-4.44444444444444\n731964301\t2\tBELARUS\tUkrainian\tBLR\tBELARUS\t0.0\t-1.16731517509728\n731964211\t2\tKUWAIT\tArabic\tKWT\tKUWAIT\t2.75229357798165\t0.0\n731964764\t2\tTURKEY\tAlbanian\tSYRMIL\tSYRIAN\t5.63380281690141\t0.0\n731961104\t2\tISRAEL\tFrench\tISR\tISRAEL\t0.0\t-9.05660377358491\n731962903\t2\tISRAEL\tArabic\tSYRMIL\tSYRIAN\t0.0\t-4.33212996389892\n731961389\t2\tUNITED STATES\tFrench\tUSA\tUNITED STATES\t0.0\t-0.62208398133748\n731962480\t2\tPAKISTAN\tGerman\tUSA\tUNITED STATES\t0.0\t-7.32833237160992\n731962460\t2\tBRAZIL\tPortuguese\tBRA\tMANAUS\t0.0\t-6.41891891891892\n731964612\t2\tCANADA\tFrench\tGOV\tGOVERNMENT\t0.31796502384737\t0.0\n731964311\t2\tBRAZIL\tSpanish, Castilian\tHLH\tHOSPITAL\t0.0\t-8.21529745042493\n731962616\t2\tUNITED KINGDOM\tSlovak\tELI\tACTOR\t0.49875311720699\t0.0\n731960915\t2\tBELARUS\tThai\tLAB\tEMPLOYEE\t0.213675213675209\t0.0\n731961270\t2\tQATAR\tArabic\tOMN\tMUSCAT\t4.1958041958042\t0.0\n731964327\t2\tINDIA\tIndonesian\tSEA\tSOUTHEAST ASIA\t0.0\t-2.17391304347826\n731961261\t2\tISRAEL\tRussian\tPSEUAF\tPALESTINIAN\t0.0\t-5.38116591928251\n731961254\t2\tRUSSIA\tRussian\tPSE\tPALESTINIAN\t0.0\t-5.38116591928251\n731962893\t2\tSUDAN\tArabic\tEGY\tEGYPT\t0.0\t-1.46443514644351\n731962566\t2\tUNITED ARAB EMIRATES\tArabic\tEDUEDU\tSTUDENT\t5.07042253521127\t0.0\n731961341\t2\tSYRIA\tFrench\tSYR\tSYRIAN\t0.0\t-6.25\n731964501\t2\tVENEZUELA\tSpanish, Castilian\tGOV\tKINGDOM\t0.0\t-3.55828220858895\n731960975\t2\tUNITED STATES\tGerman\tELI\tACTOR\t42.24515557927921\t0.0\n731962905\t2\tRUSSIA\tFrench\tTUNGOV\tTUNISIAN\t3.2258064516129\t0.0\n731962866\t2\tRUSSIA\tRussian\tREL\tPRIEST\t0.0\t-9.81976654420706\n731960925\t2\tUKRAINE\tRussian\tGOV\tPRESIDENT\t0.0\t-2.92397660818713\n731962942\t2\tRUSSIA\tArabic\tRUS\tMOSCOW\t0.0\t-5.07936507936508\n731964387\t2\tJORDAN\tSpanish, Castilian\tREF\tREFUGEE\t0.0\t-7.50294114413256\n731964441\t2\tEGYPT\tArabic\tEGY\tEGYPT\t5.15695067264574\t0.0\n731964462\t2\tUKRAINE\tRussian\tFIN\tFINNISH\t0.0\t0.0\n731962751\t2\tRUSSIA\tRussian\tJUD\tPROSECUTOR\t0.0\t-7.47663551401869\n731960982\t2\tSPAIN\tSpanish, Castilian\tESP\tSPANISH\t0.0\t-2.71186440677967\n731964543\t2\tINDIA\tHindi\tHIN\tHINDU\t0.0\t-3.01204819277108\n731964813\t2\tUNITED STATES\tSpanish, Castilian\tUSAGOV\tTHE WHITE HOUSE\t0.0\t-1.32231404958678\n731964777\t2\tALGERIA\tArabic\tUAF\tTERRORIST\t0.0\t-3.19634703196347\n731962746\t2\tMAURITIUS\tSpanish, Castilian\tGOV\tMINIST OF EXTERNAL RELATIONS\t0.0\t-5.17241379310345\n731961224\t2\tCHINA\tFrench\tCHNMIL\tCHINA\t0.0\t-5.249343832021\n731962661\t2\tSPAIN\tFrench\tGOV\tPRIME MINISTER\t2.79589934762348\t-1.09489051094891\n731961223\t2\tCANADA\tFrench\tMRT\tMAURITANIA\t0.0\t-1.01449275362319\n731964512\t2\tUNITED KINGDOM\tCzech\tGOV\tKINGDOM\t0.0\t-3.74331550802139\n731962764\t2\tMEXICO\tSpanish, Castilian\tLEG\tSENATE\t5.71428571428571\t0.0\n731961094\t2\tEGYPT\tArabic\tISR\tISRAELI\t0.0\t-3.73395565927655\n731961231\t2\tQATAR\tArabic\tOMN\tMUSCAT\t4.1958041958042\t0.0\n731961336\t2\tLEBANON\tArabic\tSYR\tSYRIA\t0.0\t-1.95167286245353\n731961110\t2\tISRAEL\tSwedish\tISREDU\tJERUSALEM\t0.0\t-2.60086695565188\n731964644\t2\tMEXICO\tGerman\tMEX\tMEXICO\t0.0\t-0.37593984962406\n731962652\t2\tJAPAN\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-2.54777070063694\n731961256\t2\tCHINA\tFrench\tPSEREB\tHAMAS\t0.0\t-9.05660377358491\n731962849\t2\tPORTUGAL\tPortuguese\tPRT\tPORTUGAL\t0.0\t-2.99714557564224\n731962414\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICAN\t0.0\t-0.27155465037339\n731964460\t2\tITALY\tItalian\tITA\tITALIAN\t0.35385704175513\t0.0\n731964619\t2\tLATVIA\tLatvian\tLVAMED\tLATVIA\t0.0\t-5.09803921568627\n731964731\t2\tRUSSIA\tRussian\tEDU\tSTUDENT\t3.3003300330033\t-1.91693290734824\n731962956\t2\tJAPAN\tSpanish, Castilian\tVEN\tVENEZUELA\t0.0\t-2.54777070063694\n731962928\t2\tUNITED STATES\tGerman\tUSA\tUNITED STATES\t0.0\t-7.32833237160992\n731961133\t2\tSYRIA\tArabic\tLBN\tLEBANON\t0.0\t-1.95167286245353\n731964382\t2\tMEXICO\tSpanish, Castilian\tCVL\tTOURIST\t0.0\t-1.54990700557966\n731964381\t2\tCOLOMBIA\tSpanish, Castilian\tCVL\tCITIZEN\t0.0\t-2.51046025104603\n731962795\t2\tEGYPT\tArabic\tMED\tJOURNALIST\t0.0\t-5.25700934579439\n731962845\t2\tVENEZUELA\tSpanish, Castilian\tPERGOV\tPERU\t0.0\t-1.07991360691145\n731960957\t2\tIRAQ\tArabic\tIRQEDU\tBAGHDAD\t0.0\t-2.4\n731962372\t2\tUNITED ARAB EMIRATES\tArabic\tAREGOV\tUNITED ARAB EMIRATES\t4.08163265306123\t0.0\n731964449\t2\tARGENTINA\tSpanish, Castilian\tESP\tSPANIARD\t0.0\t-6.89655172413793\n731964221\t2\tOMAN\tArabic\tBUS\tCOMPANY\t2.22222222222222\t0.0\n731961236\t2\tCHINA\tFrench\tOPP\tACTIVIST\t0.0\t-6.48464163822526\n731964220\t2\tFRANCE\tPortuguese\tBRAGOV\tSAO PAULO\t1.71606864274571\t0.0\n731962867\t2\tRUSSIA\tRussian\tGOV\tMINIST\t0.0\t-9.81976654420706\n731962394\t2\tUNITED STATES\tSpanish, Castilian\tGOV\tGOVERNOR\t0.0\t-0.53879310344827\n731964254\t2\tHUNGARY\tLatvian\tHUNLEG\tHUNGARY\t0.0\t-6.79611650485437\n731962745\t2\tUKRAINE\tUkrainian\tCVL\tSETTLEMENT\t0.0\t-5.9010152284264\n731964435\t2\tRWANDA\tArabic\tEGY\tLUXOR\t2.96296296296297\t0.0\n731961379\t2\tUKRAINE\tUkrainian\tUKR\tDONBAS\t3.62116991643454\t0.0\n731962966\t2\tPERU\tSpanish, Castilian\tVENGOV\tVENEZUELA\t0.0\t0.0\n731964740\t2\tALBANIA\tFrench\tALB\tALBANIAN\t0.0\t-2.75229357798165\n731962786\t2\tSAUDI ARABIA\tArabic\tGOV\tGOVERNMENT\t6.17977528089888\t0.0\n731961054\t2\tnull\tModern Greek (since 1453–)\tLEG\tPARLIAMENT\t0.0\t-8.87445887445887\n731960732\t2\tCANADA\tSpanish, Castilian\tCAN\tCANADA\t0.0\t-0.43859649122807\n731964209\t2\tALGERIA\tArabic\tGOV\tMINIST\t1.55440414507772\t0.0\n731961153\t2\tBRAZIL\tPortuguese\tLEG\tCONGRESS\t0.0\t-2.41691842900302\n731960855\t2\tSYRIA\tCatalan\tCANGOV\tCANADIAN\t0.0\t-2.9126213592233\n731964510\t2\tCOLOMBIA\tSpanish, Castilian\tCVL\tCITIZEN\t0.0\t-2.51046025104603\n731964581\t2\tITALY\tItalian\tEURCVL\tEUROPEAN\t0.35385704175513\t0.0\n731964676\t2\tOMAN\tArabic\tOMN\tOMAN\t2.90178571428572\t0.0\n731964423\t2\tINDIA\tTamil\tEDU\tCOLLEGE\t2.09302325581396\t0.0\n731964253\t2\tMEXICO\tSpanish, Castilian\tHND\tTEGUCIGALPA\t0.0\t0.0\n731962591\t2\tFRANCE\tFrench\tFRA\tFRENCH\t2.79589934762348\t0.0\n731961165\t2\tSWEDEN\tSpanish, Castilian\tLEG\tCHAMBER\t1.27659574468085\t0.0\n731964640\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t0.0\t-1.54990700557966\n731962557\t2\tUNITED ARAB EMIRATES\tArabic\tEDUEDU\tSTUDENT\t5.07042253521127\t0.0\n731964751\t2\tSWEDEN\tSpanish, Castilian\tPTY\tPRESIDENTIAL CANDIDATE\t0.85470085470086\t0.0\n731960818\t2\tSAUDI ARABIA\tArabic\tARE\tUNITED ARAB EMIRATES\t0.0\t-0.89686098654708\n731961006\t2\tINDIA\tPunjabi, Panjabi\tGOV\tCHIEF MINISTER\t4.58333333333333\t0.0\n731964740\t2\tALBANIA\tFrench\tSCGSRB\tSERBIA\t0.0\t-2.75229357798165\n731961230\t2\tEGYPT\tArabic\tOMN\tMUSCAT\t3.64963503649636\t0.0\n731964569\t2\tTURKEY\tTurkish\tIRN\tIRAN\t0.0\t-1.18085767557489\n731962861\t2\tMEXICO\tSpanish, Castilian\tGOV\tSECRETARIAT\t1.99778024417315\t0.0\n731961183\t2\tSOUTH KOREA\tKorean\tCVL\tCITIZEN\t0.0\t0.0\n731961343\t2\tSYRIA\tArabic\tSYRMIL\tSYRIA\t0.0\t-6.09418282548477\n731962565\t2\tUNITED ARAB EMIRATES\tArabic\tEDU\tUNIVERSITY\t5.07042253521127\t0.0\n731961318\t2\tRUSSIA\tPersian\tRUSLEG\tRUSSIA\t0.0\t-5.73108008817046\n731964421\t2\tALGERIA\tArabic\tEDU\tLECTURER\t0.0\t-2.6431718061674\n731960724\t2\tnull\tSerbian\tALB\tALBANIAN\t7.03275529865125\t0.0\n731961301\t2\tTOGO\tFrench\tRUS\tRUSSIAN\t0.0\t-1.94518125552609\n731964797\t2\tUKRAINE\tRussian\tRUS\tRUSSIAN\t3.21027287319422\t0.0\n731962461\t2\tBRAZIL\tPortuguese\tBRA\tMANAUS\t0.0\t-6.41891891891892\n731962431\t2\tMAURITANIA\tArabic\tAFR\tAFRICA\t0.33444816053511\t0.0\n731962803\t2\tUNITED KINGDOM\tSpanish, Castilian\tMED\tCORRESPONDENT\t0.0\t-1.28755364806867\n731962946\t2\tUNITED STATES\tSpanish, Castilian\tUSAGOV\tUNITED STATES\t0.93457943925234\t0.0\n731962603\t2\tGERMANY\tRussian\tEUR\tEUROPE\t0.0\t-3.71134020618557\n731960945\t2\tRUSSIA\tRussian\tEDU\tSCHOOL\t2.98438934802571\t0.0\n731960893\t2\tSWEDEN\tSwedish\tSWE\tSWEDEN\t0.0\t-2.60086695565188\n731962683\t2\tPOLAND\tPolish\tPOL\tPOLAND\t0.0\t-7.32758620689655\n731964817\t2\tnull\tRussian\tUSAMED\tREUTERS\t0.0\t-8.00263318454769\n731964794\t2\tUKRAINE\tRussian\tUKRGOV\tUKRAINE\t3.21027287319422\t0.0\n731964429\t2\tUNITED STATES\tSpanish, Castilian\tEDU\tSTUDENTS AND TEACHER\t0.0\t-1.32231404958678\n731962703\t2\tRUSSIA\tRussian\tHLH\tDOCTOR\t0.0\t-8.06783430636642\n731964477\t2\tUNITED KINGDOM\tArabic\tGBR\tUNITED KINGDOM\t0.0\t-2.24137931034483\n731962546\t2\tLEBANON\tArabic\tEDU\tUNIVERSITY\t0.0\t-1.12359550561797\n731961167\t2\tnull\tSinhalese, Sinhala\tLKAELI\tRANIL WICKREMASINGHE\t0.0\t-1.29032258064516\n731961368\t2\tUKRAINE\tPersian\tUKR\tUKRAINE\t0.0\t-5.73108008817046\n731960742\t2\tRUSSIA\tFrench\tCVL\tCIVILIAN\t0.0\t-6.25\n731962926\t2\tSAUDI ARABIA\tArabic\tUSA\tUNITED STATES\t0.72639225181598\t0.0\n731961229\t2\tTURKEY\tTurkish\tNLD\tDUTCH\t2.35294117647058\t0.0\n731961138\t2\tGERMANY\tSwedish\tLEG\tPARLIAMENT\t0.0\t-2.60086695565188\n731964685\t2\tINDIA\tHindi\tPAK\tPAKISTAN\t2.81329923273657\t0.0\n731962502\t2\tURUGUAY\tSpanish, Castilian\tCOP\tPOLICE\t0.0\t-7.54716981132076\n731960755\t2\tGERMANY\tArabic\tEGY\tSINAI\t0.0\t-2.69709543568465\n731962916\t2\tRUSSIA\tRussian\tAGR\tFARMER\t0.0\t0.0\n731964766\t2\tJORDAN\tSpanish, Castilian\tJOR\tJORDANIAN\t0.0\t-7.50294114413256\n731962477\t2\tGERMANY\tGerman\tIRNBUS\tIRAN\t0.0\t-4.34782608695652\n731962455\t2\tGERMANY\tModern Greek (since 1453–)\tBLR\tMINSK\t0.0\t-0.33670033670034\n731960768\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tHLH\tDOCTOR\t1.07627515208236\t0.0\n731964592\t2\tSWITZERLAND\tGerman\tJUD\tPROSECUTOR\t0.0\t-0.13123359580052\n731961077\t2\tGERMANY\tCatalan\tIRN\tIRAN\t0.0\t-2.44444444444445\n731962473\t2\tPAKISTAN\tGerman\tBUS\tEMPLOYER\t0.0\t-7.32833237160992\n731961208\t2\tSPAIN\tGerman\tMIL\tNAVAL\t0.78226857887875\t0.0\n731964706\t2\tMEXICO\tSpanish, Castilian\tPTY\tPRESIDENTIAL CANDIDATE\t0.71428571428571\t0.0\n731964357\t2\tINDONESIA\tIndonesian\tCRM\tCRIMINAL\t0.0\t-9.07715582450835\n731960949\t2\tEL SALVADOR\tSpanish, Castilian\tCHRCTH\tCATHOLIC\t0.0\t-1.66666666666667\n731962506\t2\tVENEZUELA\tSpanish, Castilian\tOPP\tPOLITICAL PRISONER\t0.0\t-11.5523465703971\n731964438\t2\tEGYPT\tArabic\tJORELI\tHASSAN\t0.0\t-5.32544378698225\n731962957\t2\tVENEZUELA\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-2.54777070063694\n731964782\t2\tALGERIA\tArabic\tUAF\tTERRORIST\t1.55440414507772\t0.0\n731964502\t2\tCUBA\tSpanish, Castilian\tGOV\tGOVERNMENT\t0.0\t-1.13636363636363\n731961191\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t0.0\t-1.80180180180181\n731964741\t2\tnull\tFrench\tSCGSRB\tSERBIA\t0.0\t-2.75229357798165\n731960992\t2\tFRANCE\tArabic\tEGY\tEGYPT\t0.0\t-2.66272189349113\n731964223\t2\tSENEGAL\tFrench\tBUS\tCOMPANY\t0.0\t-2.55905511811024\n731961344\t2\tTURKEY\tArabic\tTUR\tTURKISH\t0.0\t-1.20918984280532\n731964437\t2\tEGYPT\tArabic\tJORELI\tHASSAN\t0.0\t-5.32544378698225\n731962644\t2\tISRAEL\tArabic\tGOV\tPRESIDENT\t0.0\t-1.90023752969121\n731961164\t2\tRUSSIA\tPersian\tLEG\tPARLIAMENT\t0.0\t-5.10067114093959\n731960878\t2\tUKRAINE\tRussian\tCOP\tDEPUTY\t1.17416829745597\t0.0\n731961237\t2\tSYRIA\tFrench\tSYR\tSYRIAN\t0.0\t-6.48464163822526\n731961214\t2\tTURKEY\tArabic\tTUR\tTURKISH\t0.0\t-1.20918984280532\n731962381\t2\tFRANCE\tFrench\tCVL\tCIVILIAN\t0.0\t-5.43840177580467\n731961190\t2\tISRAEL\tArabic\tPSE\tGAZA\t0.0\t-2.91970802919708\n731961211\t2\tNIGERIA\tFrench\tNGA\tNIGERIAN\t0.0\t-5.249343832021\n731962478\t2\tRUSSIA\tArabic\tRUSGOV\tRUSSIAN\t0.0\t-5.07936507936508\n731961067\t2\tKENYA\tItalian\tIGOUNODEVWBK\tWORLD BANK\t0.0\t-2.33502538071066\n731964527\t2\tGERMANY\tAlbanian\tGOV\tGOVERNMENT\t1.36840504789418\t0.0\n731960753\t2\tSAUDI ARABIA\tArabic\tEGY\tNASSER\t0.0\t-0.2020202020202\n731962563\t2\tUNITED STATES\tGerman\tUSA\tCOLORADO\t0.0\t-7.32833237160992\n731962432\t2\tBANGLADESH\tBengali\tAGR\tFARMER\t9.09090909090909\t0.0\n731961290\t2\tEGYPT\tArabic\tREL\tRELIGION\t0.0\t-8.14070351758796\n731962439\t2\tALBANIA\tGerman\tALBLEG\tALBANIA\t2.32558139534884\t0.0\n731962549\t2\tUNITED STATES\tPortuguese\tEDU\tUNIVERSITY\t5.3531876192456105\t0.0\n731960901\t2\tRUSSIA\tSpanish, Castilian\tCRM\tCRIMINAL\t0.0\t-7.03125\n731964230\t2\tMEXICO\tSpanish, Castilian\tCVL\tTOURIST\t0.0\t-1.54990700557966\n731961240\t2\tPOLAND\tArabic\tPOL\tPOLISH\t0.0\t-4.40251572327044\n731960914\t2\tCROATIA\tHungarian\tCVL\tLANDOWNER\t0.0\t-3.41321713870734\n731962556\t2\tSYRIA\tArabic\tEDU\tUNIVERSITY\t0.0\t-3.53982300884956\n731961043\t2\tSAUDI ARABIA\tRussian\tSAUGOV\tSAUDI\t0.0\t-6.72645739910314\n731962743\t2\tCANADA\tSpanish, Castilian\tCRM\tCRIMINAL\t0.0\t-3.71621621621621\n731962692\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tGOVBUS\tMINISTRY\t1.28799587841319\t0.0\n731962559\t2\tFRANCE\tFrench\tFRAGOV\tLAURENT WAUQUIEZ\t0.0\t-3.26086956521739\n731964651\t2\tMEXICO\tSpanish, Castilian\tMEXOPP\tMEXICO\t0.0\t-6.42201834862386\n731962781\t2\tIRAN\tPersian\tIRNLEG\tIRAN\t0.0\t-5.75657894736842\n731961339\t2\tIRAQ\tArabic\tPTY\tPOLITICIAN\t0.0\t-0.51282051282051\n731962970\t2\tLEBANON\tArabic\tTUR\tTURKISH\t0.0\t-1.79573512906846\n731960711\t2\tUNITED STATES\tKorean\tCHN\tCHINA\t4.47284345047924\t0.0\n731961005\t2\tINDIA\tPunjabi, Panjabi\tGOV\tCHIEF MINISTER\t4.58333333333333\t0.0\n731961412\t2\tTANZANIA\tArabic\tYEM\tYEMEN\t5.77645480462853\t0.0\n731961175\t2\tCONGO, DEMOCRATIC REPUBLIC OF THE\tFrench\tMED\tMEDIA\t0.0\t-1.60427807486631\n731964523\t2\tGERMANY\tArabic\tGOV\tMINIST\t0.0\t-2.6431718061674\n731960959\t2\tISRAEL\tArabic\tEGY\tNASSER\t0.0\t-3.73395565927655\n731960795\t2\tPARAGUAY\tSpanish, Castilian\tPTY\tPOLITICIAN\t0.0\t-2.4340770791075\n731962395\t2\tCZECH REPUBLIC\tCzech\tGOV\tGOVERNMENT\t0.0642673521850896\t0.0\n731960943\t2\tRUSSIA\tRussian\tEDU\tSCHOOL\t0.0\t-0.63795853269538\n731964728\t2\tRUSSIA\tHindi\tRUS\tRUSSIA\t0.0\t-10.8433734939759\n731964372\t2\tUNITED KINGDOM\tSpanish, Castilian\tCVL\tSCIENTIST\t0.0\t-1.19305856832972\n731964708\t2\tSWEDEN\tSpanish, Castilian\tSWE\tSWEDEN\t0.85470085470086\t0.0\n731964227\t2\tFRANCE\tPortuguese\tCOPGOV\tDEPUTY\t1.71606864274571\t0.0\n731961350\t2\tTURKEY\tArabic\tSYR\tSYRIAN\t0.0\t-1.20918984280532\n731961357\t2\tSYRIA\tArabic\tTUR\tTURKISH\t0.0\t-1.20918984280532\n731962560\t2\tUNITED STATES\tDanish\tEDU\tSCHOOL\t0.0\t-14.75076750459797\n731962664\t2\tSUDAN\tArabic\tGOV\tMINIST\t0.0\t-2.48447204968944\n731961096\t2\tPOLAND\tFrench\tISR\tISRAELI\t0.0\t-6.59824046920821\n731964678\t2\tCANADA\tFrench\tOPP\tACTIVIST\t1.1182108626198\t0.0\n731960811\t2\tANGOLA\tModern Greek (since 1453–)\tAFR\tAFRICA\t0.48899755501222\t0.0\n731962765\t2\tMEXICO\tSpanish, Castilian\tLEG\tSENATE\t5.71428571428571\t0.0\n731962653\t2\tUNITED ARAB EMIRATES\tArabic\tGOV\tMINIST\t3.75275938189845\t0.0\n731964645\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t0.71428571428571\t0.0\n731962894\t2\tSUDAN\tArabic\tSDN\tKHARTOUM\t0.0\t-1.46443514644351\n731964482\t2\tAUSTRIA\tAlbanian\tGOV\tGOVERNMENT\t1.36840504789418\t0.0\n731964594\t2\tITALY\tSpanish, Castilian\tJUD\tJUDGE\t0.0\t-3.55125100887813\n731962528\t2\tYEMEN\tArabic\tBUS\tCOMPANY\t5.5921052631579\t0.0\n731964580\t2\tnull\tItalian\tEUR\tEUROPEAN\t0.0\t-5.61797752808989\n731962830\t2\tNICARAGUA\tSpanish, Castilian\tHND\tHONDURAS\t0.308641975308642\t0.0\n731964322\t2\tARGENTINA\tSpanish, Castilian\tESP\tSPANIARD\t3.24786324786325\t0.0\n731964564\t2\tISRAEL\tGerman\tIRN\tIRANIAN\t0.0\t-5.60747663551402\n731964249\t2\tIRAN\tArabic\tGOV\tPRESIDENT\t0.0\t-1.97368421052632\n731961150\t2\tBELGIUM\tFrench\tBEL\tBELGIUM\t1.05448154657293\t0.0\n731962588\t2\tFRANCE\tFrench\tESPGOV\tSPANISH\t2.79589934762348\t0.0\n731960919\t2\tSPAIN\tSpanish, Castilian\tCVLGOV\tCOMMUNITY\t0.0\t-1.75824175824176\n731960827\t2\tSAUDI ARABIA\tArabic\tBUS\tCOMPANY\t5.75539568345324\t0.0\n731964347\t2\tINDIA\tHindi\tCOP\tPOLICE\t2.51798561151079\t0.0\n731961178\t2\tRUSSIA\tRussian\tMED\tWRITER\t0.0\t-0.64020486555698\n731964690\t2\tPOLAND\tPolish\tISR\tISRAEL\t0.0\t-4.0719696969697\n731961080\t2\tCHINA\tFrench\tCHN\tCHINA\t0.0\t-6.25\n731961307\t2\tRUSSIA\tGerman\tMOS\tISLAMIC\t0.0\t-5.24590163934427\n731961149\t2\tAFGHANISTAN\tPersian\tLEG\tPARLIAMENT\t0.0\t-5.10067114093959\n731964319\t2\tEGYPT\tArabic\tBUS\tTRADER\t0.0\t-0.4582951420715\n731964805\t2\tUNITED STATES\tSpanish, Castilian\tUSA\tUNITED STATES\t0.0\t-3.51966873706004\n731964786\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tUAF\tMILITIA\t0.0\t-13.7931034482759\n731962853\t2\tISRAEL\tArabic\tPSEREB\tHAMAS\t0.0\t-1.05263157894737\n731962476\t2\tGERMANY\tGerman\tBUS\tCOMPANY\t0.0\t-4.34782608695652\n731960971\t2\tISRAEL\tArabic\tEGY\tNASSER\t0.0\t-3.73395565927655\n731962956\t2\tJAPAN\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-2.54777070063694\n731961367\t2\tUKRAINE\tPersian\tUKR\tUKRAINE\t0.0\t-5.73108008817046\n731964513\t2\tUNITED STATES\tSpanish, Castilian\tCVL\tIMMIGRANT\t0.0\t-3.98481973434535\n731961393\t2\tUNITED STATES\tGerman\tELI\tACTOR\t44.004686371068075\t0.0\n731962689\t2\tPERU\tSpanish, Castilian\tVEN\tVENEZUELAN\t0.0\t-2.95857988165681\n731964690\t2\tPOLAND\tPolish\tPOL\tPOLAND\t0.0\t-4.0719696969697\n731961335\t2\tISRAEL\tArabic\tSYR\tSYRIA\t0.0\t-1.95167286245353\n731962680\t2\tJORDAN\tArabic\tGOV\tPRESIDENT\t3.43796711509716\t0.0\n731960911\t2\tBRAZIL\tPortuguese\tCVL\tNEIGHBORHOOD\t5.22875816993464\t0.0\n731964665\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tMIL\tARMY\t0.0\t-13.7931034482759\n731964326\t2\tTURKEY\tTurkish\tBUS\tBUSINESS\t4.28571428571429\t0.0\n731961155\t2\tITALY\tCzech\tLEG\tCONGRESS\t0.0\t-1.15340253748558\n731964287\t2\tNETHERLANDS\tArabic\tcre\tCREE\t0.0\t-6.13207547169811\n731962677\t2\tnull\tPortuguese\tMED\tWEB SITE\t0.0\t-6.50406504065041\n731962518\t2\tMEXICO\tSpanish, Castilian\tCVL\tRESIDENTS\t0.0\t-5.73394495412844\n731961196\t2\tMEXICO\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-7.33944954128441\n731961206\t2\tRUSSIA\tRussian\tMIL\tMILITARY\t0.0\t-0.68493150684931\n731961290\t2\tEGYPT\tArabic\tMOS\tISLAM\t0.0\t-8.14070351758796\n731960913\t2\tRUSSIA\tRussian\tCVL\tTHE POOR\t1.13519091847265\t0.0\n731962822\t2\tLIBYA\tArabic\tMILMIL\tGENERALISSIMO\t2.83553875236295\t0.0\n731962433\t2\tINDIA\tHindi\tAGR\tFARMER\t0.0\t-1.76211453744493\n731962714\t2\tMOROCCO\tFrench\tIGOUNO\tTHE UN\t0.0\t-4.60526315789473\n731962798\t2\tCOLOMBIA\tSpanish, Castilian\tCOL\tBARRANQUILLA\t0.0\t-6.06060606060606\n731960952\t2\tCONGO\tFrench\tLEG\tGENERAL ASSEMBLY\t0.0\t-2.98507462686567\n731964698\t2\tANGOLA\tPortuguese\tAGO\tLUANDA\t1.79775280898876\t0.0\n731962896\t2\tEGYPT\tArabic\tEGY\tCAIRO\t0.0\t-1.46443514644351\n731964222\t2\tNICARAGUA\tSpanish, Castilian\tBUS\tCOMPANY\t3.97350993377483\t0.0\n731961230\t2\tEGYPT\tArabic\tEGY\tEGYPT\t3.64963503649636\t0.0\n731964498\t2\tBRAZIL\tPortuguese\tGOV\tFIREFIGHTER\t0.0\t-2.54452926208652\n731961032\t2\tRUSSIA\tRussian\tGOV\tGOVERNANCE\t0.0\t-5.40746382330541\n731964349\t2\tSWEDEN\tSpanish, Castilian\tCOP\tSECURITY FORCE\t0.0\t-4.45544554455446\n731964333\t2\tARGENTINA\tSpanish, Castilian\tCHE\tSWITZERLAND\t0.0\t-6.89655172413793\n731962632\t2\tVENEZUELA\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-2.54777070063694\n731964747\t2\tETHIOPIA\tArabic\tETH\tETHIOPIAN\t0.0\t-1.16550116550116\n731964756\t2\tSYRIA\tArabic\tTUR\tTURKISH\t0.0\t-3.83693045563549\n731961380\t2\tnull\tRussian\tUKR\tKHARKOV\t0.0\t-0.55555555555556\n731961376\t2\tUKRAINE\tRussian\tUKR\tCRIMEA\t1.17416829745597\t-2.4390243902439\n731962522\t2\tUNITED ARAB EMIRATES\tArabic\tCVL\tPOPULATION\t0.0\t-0.24570024570025\n731964611\t2\tINDONESIA\tIndonesian\tLEG\tPARLIAMENT\t0.0\t-9.07715582450835\n731961030\t2\tIRAN\tSpanish, Castilian\tGOV\tREGIME\t0.0\t-5.76131687242798\n731964579\t2\tITALY\tItalian\tEUR\tEUROPEAN\t0.35385704175513\t0.0\n731960924\t2\tGERMANY\tPersian\tDEU\tMUNICH\t0.0\t-2.96774193548387\n731960947\t2\tRUSSIA\tRussian\tEDU\tEDUCATIONAL INSTITUTION\t0.0\t-0.63795853269538\n731964487\t2\tUNITED STATES\tSpanish, Castilian\tGOV\tGOVERNMENT\t0.0\t-3.51966873706004\n731961415\t2\tYEMEN\tArabic\tYEMGOV\tYEMENI\t5.52147239263803\t0.0\n731962826\t2\tMAURITANIA\tArabic\tMRT\tMAURITANIA\t0.33444816053511\t0.0\n731962944\t2\tISRAEL\tArabic\tUSAELI\tDAVID SATTER\t0.0\t-3.84153661464586\n731960814\t2\tnull\tFrench\tAFR\tAFRICA\t0.0\t-2.80373831775701\n731961031\t2\tnull\tSinhalese, Sinhala\tGOV\tGOVERNMENT\t0.0\t-2.69230769230769\n731960784\t2\tCONGO, DEMOCRATIC REPUBLIC OF THE\tFrench\tMED\tMEDIA\t0.0\t-1.60427807486631\n731960988\t2\tIRAN\tArabic\tIRN\tIRAN\t0.0\t-2.7027027027027\n731964733\t2\tSYRIA\tRussian\tUAF\tTERRORIST\t0.0\t-8.52390852390851\n731962543\t2\tSLOVAKIA\tCzech\tDMAREL\tDOMINICA\t0.0\t0.0\n731962469\t2\tGUATEMALA\tSpanish, Castilian\tBUS\tCOMPANY\t0.617283950617284\t0.0\n731962573\t2\tEGYPT\tArabic\tEDU\tSTUDENT\t0.0\t-5.25700934579439\n731960791\t2\tBOLIVIA\tSpanish, Castilian\tOPP\tPRISONER\t0.0\t-5.4862842892768\n731962637\t2\tPORTUGAL\tPortuguese\tGOV\tPRIME MINISTER\t0.0\t-2.99714557564224\n731964789\t2\tISRAEL\tRussian\tUAFMIL\tFIGHTER\t0.0\t-2.54777070063694\n731964720\t2\tBAHRAIN\tArabic\tREL\tPREACHER\t0.0\t-1.5\n731964760\t2\tSYRIA\tBosnian\tSYRGOV\tDAMASCUS\t2.38095238095238\t0.0\n731964235\t2\tSYRIA\tArabic\tDZA\tALGERIAN\t0.0\t-6.17529880478087\n731964788\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tNGA\tNIGERIAN\t0.0\t-13.7931034482759\n731961030\t2\tIRAN\tSpanish, Castilian\tLEG\tPARLIAMENT\t0.0\t-5.76131687242798\n731964302\t2\tTURKEY\tSpanish, Castilian\tBOL\tBOLIVIA\t0.0\t-8.57142857142859\n731961268\t2\tIRAQ\tArabic\tQAT\tQATAR\t0.0\t-5.51415797317437\n731961369\t2\tnull\tUkrainian\tUKR\tKYIV\t2.12765957446809\t0.0\n731962824\t2\tMOROCCO\tFrench\tMLI\tMALI\t0.0\t-4.60526315789473\n731962885\t2\tRUSSIA\tArabic\tRUSGOV\tRUSSIAN\t0.0\t-5.07936507936508\n731964525\t2\tUNITED STATES\tPolish\tLEG\tCONGRESS\t0.0\t-4.57413249211356\n731961048\t2\tUKRAINE\tUkrainian\tUKR\tDONBAS\t3.62116991643454\t0.0\n731964509\t2\tGERMANY\tRussian\tBUS\tBUSINESS\t0.8695652173913\t0.0\n731964705\t2\tMEXICO\tSpanish, Castilian\tPTY\tPRESIDENTIAL CANDIDATE\t1.3986013986014\t0.0\n731961264\t2\tBELGIUM\tFrench\tPTY\tPOLITICAL PARTY\t1.05448154657293\t0.0\n731964639\t2\tnull\tRussian\tMEDBUS\tWEBSITE\t0.0\t-3.38600451467269\n731964633\t2\tGERMANY\tAlbanian\tMED\tNEWSPAPER\t1.36840504789418\t0.0\n731962619\t2\tGAMBIA, THE\tFrench\tGMB\tGAMBIA\t2.58620689655173\t0.0\n731962942\t2\tRUSSIA\tArabic\tUSA\tUNITED STATES\t0.0\t-5.07936507936508\n731964600\t2\tGERMANY\tSpanish, Castilian\tLAB\tWORKER\t0.0\t-0.2\n731962668\t2\tJAPAN\tSpanish, Castilian\tJPN\tNAGASAKI\t0.0\t-0.49019607843137\n731960738\t2\tUNITED STATES\tFrench\tCOP\tPOLICE\t0.0\t-3.00429184549356\n731962674\t2\tSAUDI ARABIA\tArabic\tMDV\tMALE\t6.17977528089888\t0.0\n731962554\t2\tFRANCE\tFrench\tEDU\tUNIVERSITY\t2.79589934762348\t0.0\n731960923\t2\tGERMANY\tArabic\tDEU\tGERMANY\t0.0\t-0.94235033259424\n731964402\t2\tGERMANY\tSpanish, Castilian\tDEU\tGERMANY\t0.0\t-4.08163265306123\n731964698\t2\tANGOLA\tPortuguese\tPRT\tPORTUGUESE\t1.79775280898876\t0.0\n731962717\t2\tISRAEL\tAlbanian\tDEU\tMUNICH\t0.0\t-6.29590766002098\n731964448\t2\tITALY\tSpanish, Castilian\tGOV\tMINIST\t1.08191653786708\t0.0\n731961162\t2\tUNITED STATES\tUkrainian\tREL\tSAINT\t4.54545454545454\t0.0\n731961238\t2\tPERU\tSpanish, Castilian\tPER\tPERU\t0.0\t-3.16973415132925\n731964417\t2\tRUSSIA\tRussian\tEDU\tSTUDENT\t3.21027287319422\t0.0\n731961311\t2\tSYRIA\tArabic\tRUS\tRUSSIA\t0.0\t-1.20918984280532\n731964300\t2\tBELARUS\tRussian\tBLR\tBELARUSIAN\t3.21027287319422\t0.0\n731961120\t2\tEGYPT\tArabic\tJORELI\tHASSAN\t0.0\t-1.81818181818181\n731961225\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tHLH\tNANNY\t0.0\t-5.20673813169985\n731961056\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tHLH\tDOCTOR\t1.07627515208236\t0.0\n731960851\t2\tSYRIA\tPersian\tBUSMIL\tCOMPANY\t0.0\t-5.73108008817046\n731960864\t2\tNIGERIA\tFrench\tNGA\tNIGERIA\t0.0\t-5.249343832021\n731961401\t2\tUNITED STATES\tGerman\tUSAELI\tUNITED STATES\t44.004686371068075\t0.0\n731961171\t2\tUNITED KINGDOM\tArabic\tMED\tNEWSPAPER\t0.0\t0.0\n731964785\t2\tIRAN\tArabic\tUAF\tFIGHTER\t0.0\t-1.16883116883117\n731964493\t2\tOMAN\tArabic\tGOV\tGOVERNMENT\t2.90178571428572\t0.0\n731962528\t2\tYEMEN\tArabic\tCVL\tCOMMUNITY\t5.5921052631579\t0.0\n731960850\t2\tSYRIA\tPersian\tBUSMIL\tCOMPANY\t0.0\t-5.73108008817046\n731962552\t2\tUNITED ARAB EMIRATES\tArabic\tEDU\tUNIVERSITY\t5.07042253521127\t0.0\n731961226\t2\tCHINA\tFrench\tNGA\tNIGERIAN\t0.0\t-5.249343832021\n731964471\t2\tAFGHANISTAN\tArabic\tIRN\tTEHRAN\t0.0\t-3.22580645161291\n731960950\t2\tRUSSIA\tFrench\tEURMIL\tEUROPEAN\t0.0\t-1.4336917562724\n731962893\t2\tSUDAN\tArabic\tSDN\tSUDAN\t0.0\t-1.46443514644351\n731962660\t2\tSPAIN\tFrench\tGOV\tPRIME MINISTER\t0.0\t-1.09489051094891\n731961413\t2\tYEMEN\tArabic\tYEM\tYEMEN\t5.52147239263803\t0.0\n731964582\t2\tJORDAN\tSpanish, Castilian\tJOR\tJORDANIAN\t0.0\t-7.50294114413256\n731964688\t2\tPOLAND\tUkrainian\tPOL\tWARSAW\t0.0\t-13.25125398996809\n731962386\t2\tEGYPT\tArabic\tEGY\tEGYPT\t0.0\t-2.08695652173913\n731964758\t2\tNETHERLANDS\tArabic\tcre\tCREE\t0.0\t-6.13207547169811\n731961267\t2\tQATAR\tSpanish, Castilian\tESP\tSPANISH\t0.0\t-2.71186440677967\n731964528\t2\tMEXICO\tSpanish, Castilian\tGOV\tAUTHORITIES\t0.0\t-2.16606498194946\n731964431\t2\tEGYPT\tIndonesian\tEGY\tEGYPT\t0.0\t-9.55882352941181\n731964759\t2\tSYRIA\tBosnian\tSYRGOV\tDAMASCUS\t2.38095238095238\t0.0\n731961033\t2\tISRAEL\tSpanish, Castilian\tMED\tPUBLICATION\t0.0\t-1.34048257372654\n731962515\t2\tBRAZIL\tPortuguese\tBRA\tBRAZIL\t0.0\t-5.813097866078\n731961340\t2\tIRAQ\tArabic\tPTY\tPOLITICIAN\t0.0\t-0.51282051282051\n731961199\t2\tUNITED STATES\tSpanish, Castilian\tUSA\tUNITED STATES\t2.37154150197629\t0.0\n731964648\t2\tMEXICO\tSpanish, Castilian\tREL\tSAINT\t4.13223140495868\t0.0\n731961039\t2\tUKRAINE\tRussian\tGOV\tGOVERNMENT\t0.0\t-2.16216216216216\n731961034\t2\tMEXICO\tSpanish, Castilian\tGOV\tATTORNEY GENERAL\t0.0\t-4.6583850931677\n731962756\t2\tLEBANON\tArabic\tLBN\tLEBANON\t0.0\t-3.84153661464586\n731964730\t2\tRUSSIA\tRussian\tCVL\tTRAVELER\t3.21027287319422\t0.0\n731961349\t2\tSYRIA\tArabic\tMIL\tMILITARY\t0.0\t-6.09418282548477\n731964660\t2\tEGYPT\tArabic\tKWT\tKUWAIT\t10.4602510460251\t0.0\n731960714\t1\tUNITED STATES\tKorean\tEDU\tSTUDENT\t0.0\t-5.78778135048231\n731961082\t2\tIRAN\tArabic\tJORELI\tHASSAN\t0.0\t-1.81818181818181\n731961044\t2\tVENEZUELA\tSpanish, Castilian\tGOV\tMINIST OF THE PRESIDENCY\t0.0\t-4.30622009569378\n731960823\t2\tBELARUS\tUkrainian\tBLR\tMINSK\t3.62116991643454\t0.0\n731960988\t2\tIRAN\tArabic\tEUR\tEUROPEAN\t0.0\t-2.7027027027027\n731964788\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tUAF\tMILITIA\t0.0\t-13.7931034482759\n731961194\t2\tMEXICO\tSpanish, Castilian\tMEX\tMEXICO\t0.0\t-0.29673590504451\n731960933\t2\tIRAQ\tRussian\tCOP\tPRISON\t0.0\t-5.10204081632653\n731960900\t2\tCOLOMBIA\tSpanish, Castilian\tJUD\tJUDGE\t0.0\t-6.5015479876161\n731962797\t2\tFINLAND\tFrench\tMED\tMEDIA\t1.57992565055762\t0.0\n731960882\t2\tINDIA\tHindi\tCOP\tPOLICE\t0.0\t-8.91472868217054\n731960979\t2\tSPAIN\tCatalan\tESP\tCATALONIA\t0.39113428943938\t0.0\n731961346\t2\tTURKEY\tArabic\tUSA\tUNITED STATES\t0.0\t-1.20918984280532\n731964439\t2\tGERMANY\tArabic\tEGY\tEGYPT\t0.0\t-2.77410832232496\n731964590\t2\tALGERIA\tArabic\tJUD\tJUDICIARY\t0.0\t-4.78927203065134\n731961184\t2\tSOUTH KOREA\tKorean\tMED\tWEBSITE\t0.0\t0.0\n731961145\t2\tCONGO, DEMOCRATIC REPUBLIC OF THE\tFrench\tLEG\tCONGRESS\t1.05448154657293\t0.0\n731960881\t2\tINDIA\tHindi\tCOP\tPOLICE\t0.0\t-8.91472868217054\n731962562\t2\tUNITED STATES\tGerman\tEDU\tSCHOOL\t0.0\t-7.32833237160992\n731960789\t2\tTURKEY\tTurkish\tNLD\tDUTCH\t2.35294117647058\t0.0\n731964363\t2\tINDONESIA\tIndonesian\tIDN\tINDONESIA\t0.0\t-9.07715582450835\n731964268\t2\tCOLOMBIA\tSpanish, Castilian\tMEX\tMEXICO\t0.0\t-5.35279805352798\n731962452\t2\tUNITED STATES\tBengali\tGOV\tPRESIDENT\t3.09278350515464\t0.0\n731961089\t2\tIRAN\tArabic\tISR\tISRAEL\t0.0\t-13.07981230698668\n731964334\t2\tSWITZERLAND\tSpanish, Castilian\tCHE\tSWITZERLAND\t0.0\t-6.89655172413793\n731964808\t2\tPORTUGAL\tPortuguese\tUSA\tAMERICAN\t2.79027902790279\t0.0\n731961039\t2\tUKRAINE\tRussian\tREF\tDISPLACED PERSON\t0.0\t-2.16216216216216\n731962611\t2\tFRANCE\tFrench\tEDU\tSTUDENT\t0.0\t-3.26086956521739\n731961324\t2\tCHINA\tFrench\tSDN\tSUDAN\t0.0\t-4.52830188679245\n731960844\t2\tGERMANY\tArabic\tMIL\tARMY\t0.0\t-2.66272189349113\n731961251\t2\tPARAGUAY\tSpanish, Castilian\tPRY\tPARAGUAYAN\t0.0\t-2.4340770791075\n731964568\t2\tSAUDI ARABIA\tSpanish, Castilian\tMIL\tMILITARY\t0.0\t-4.08163265306123\n731962853\t2\tISRAEL\tArabic\tEGY\tEGYPT\t0.0\t-1.05263157894737\n731964761\t2\tSYRIA\tPortuguese\tTUR\tTURKEY\t0.0\t-10.5691056910569\n731964243\t2\tPERU\tSpanish, Castilian\tGOV\tPRESIDENT\t0.0\t-4.5978886380540995\n731962936\t2\tUNITED STATES\tDanish\tUSA\tFLORIDA\t0.0\t-14.75076750459797\n731964702\t2\tGUINEA-BISSAU\tFrench\tPTY\tPOLITICIAN\t0.0\t-2.91153415453528\n731961298\t2\tSYRIA\tArabic\tRUS\tRUSSIA\t0.0\t-1.20918984280532\n731964570\t2\tIRAN\tTurkish\tIRN\tIRAN\t0.0\t-1.18085767557489\n731962830\t2\tNICARAGUA\tSpanish, Castilian\tNIC\tNICARAGUA\t0.308641975308642\t0.0\n731961227\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tHLH\tNANNY\t0.0\t-5.20673813169985\n731962628\t2\tUNITED STATES\tSpanish, Castilian\tGOV\tSECRETARY OF THE ECONOMY\t0.93457943925234\t0.0\n731960923\t2\tGERMANY\tSerbian\tDEU\tGERMANY\t0.0\t-1.04166666666667\n731962955\t2\tVENEZUELA\tSpanish, Castilian\tCVL\tCONSTITUENT\t0.0\t-11.5523465703971\n731964422\t2\tGERMANY\tArabic\tEDU\tLECTURER\t0.0\t-2.6431718061674\n731964823\t2\tVENEZUELA\tSpanish, Castilian\tVEN\tCARACAS\t0.0\t-2.57731958762887\n731964289\t2\tnull\tFrench\tAFR\tAFRICA\t0.0\t-2.91153415453528\n731961393\t2\tUNITED STATES\tGerman\tUSA\tUNITED STATES\t44.004686371068075\t0.0\n731962461\t2\tBRAZIL\tPortuguese\tCOP\tPRISON\t0.0\t-6.41891891891892\n731960747\t2\tGERMANY\tSpanish, Castilian\tDEU\tGERMANY\t0.19193857965451\t0.0\n731962714\t2\tMOROCCO\tFrench\tMLI\tMALI\t0.0\t-4.60526315789473\n731964225\t2\tFRANCE\tSpanish, Castilian\tCHL\tCHILE\t0.0\t-6.08974358974359\n731962726\t2\tIRAN\tPersian\tMOS\tIMAM\t0.0\t-5.75657894736842\n731964455\t2\tPORTUGAL\tPortuguese\tEUR\tEUROPEAN\t1.57303370786517\t0.0\n731964711\t2\tGERMANY\tArabic\tQAT\tDOHA\t0.0\t-3.84245917387128\n731961168\t2\tSWEDEN\tSwedish\tMDV\tMALE\t0.0\t-2.60086695565188\n731964552\t2\tHONDURAS\tSpanish, Castilian\tHND\tHONDURAN\t1.58730158730159\t0.0\n731961286\t2\tnull\tRussian\tREL\tBISHOP\t0.0\t-2.26209048361934\n731964732\t2\tRUSSIA\tRussian\tRUS\tRUSSIAN\t0.0\t-2.60416666666667\n731962468\t2\tUNITED ARAB EMIRATES\tArabic\tBUS\tBANK\t0.0\t-9.87124463519315\n731961388\t2\tCONGO\tFrench\tUSA\tUNITED STATES\t0.0\t-0.62208398133748\n731962844\t2\tPERU\tSpanish, Castilian\tPER\tLIMA\t0.0\t0.0\n731961259\t2\tCHINA\tFrench\tPSEREB\tHAMAS\t0.0\t-9.05660377358491\n731964536\t2\tGREECE\tArabic\tUSA\tUNITED STATES\t0.0\t-6.51629072681704\n731964516\t2\tFRANCE\tSpanish, Castilian\tDEU\tGERMANY\t0.0\t-4.08163265306123\n731960846\t2\tNORTH KOREA\tSlovak\tPRKBUS\tNORTH KOREAN\t0.0\t-1.97775030902348\n731961047\t2\tUKRAINE\tRussian\tUKR\tCRIMEA\t1.17416829745597\t-2.4390243902439\n731961117\t2\tITALY\tItalian\tITA\tCAMPANIA\t0.0\t-5.2896725440806\n731960816\t2\tGREECE\tModern Greek (since 1453–)\tAGO\tANGOLA\t0.48899755501222\t0.0\n731962839\t2\tPERU\tSpanish, Castilian\tPER\tLIMA\t3.32409972299169\t0.0\n731962931\t2\tUNITED STATES\tGerman\tEDU\tUNIVERSITY\t0.0\t-7.32833237160992\n731961232\t2\tQATAR\tArabic\tQAT\tQATAR\t4.1958041958042\t0.0\n731961202\t2\tCHILE\tSpanish, Castilian\tCHL\tCHILE\t5.6390977443609\t0.0\n731964240\t2\tEGYPT\tIndonesian\tEGYMIL\tEGYPT\t0.0\t-9.55882352941181\n731964775\t2\tAFGHANISTAN\tFrench\tAFG\tKABUL\t0.0\t-4.90693739424704\n731961227\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tNGAHLH\tNIGERIAN\t0.0\t-5.20673813169985\n731960883\t2\tCHINA\tFrench\tCOP\tPOLICE\t0.0\t-3.68271954674221\n731964686\t2\tPAKISTAN\tHindi\tPAK\tPAKISTAN\t2.81329923273657\t0.0\n731960727\t2\tPERU\tSpanish, Castilian\tBUS\tCOMPANY\t0.0\t-0.91743119266055\n731964665\t2\tNIGERIA\tRomanian, Moldavian, Moldovan\tUAF\tMILITIA\t0.0\t-13.7931034482759\n731960989\t2\tYEMEN\tArabic\tIRN\tIRAN\t0.0\t-2.7027027027027\n731960762\t2\tFRANCE\tSpanish, Castilian\tGOV\tCHANCELLERY\t0.0\t-4.73282442748092\n731964790\t2\tBELARUS\tRussian\tUKR\tUKRAINIAN\t3.28947368421052\t0.0\n731964458\t2\tUNITED STATES\tArabic\tEUR\tEUROPEAN\t0.0\t-1.08303249097473\n731961045\t2\tSLOVAKIA\tCzech\tGOV\tKING\t0.22720817949446\t0.0\n731962818\t2\tFRANCE\tArabic\tMIL\tMILITARY\t0.0\t-0.828157349896481\n731964666\t2\tIRAN\tArabic\tYEM\tYEMEN\t0.0\t-1.16883116883117\n731964666\t2\tIRAN\tArabic\tMIL\tARMED FORCES\t0.0\t-1.16883116883117\n731964469\t2\tFRANCE\tSpanish, Castilian\tDEU\tGERMANY\t0.0\t-4.08163265306123\n731964300\t2\tBELARUS\tRussian\tGOV\tPRESIDENT\t3.21027287319422\t0.0\n731964784\t2\tYEMEN\tArabic\tUAF\tFIGHTER\t0.0\t-1.16883116883117\n731964360\t2\tINDONESIA\tIndonesian\tCRM\tCRIMINAL\t0.0\t-9.07715582450835\n731964825\t2\tYEMEN\tArabic\tYEM\tYEMEN\t0.0\t-1.16883116883117\n731960733\t2\tFRANCE\tSpanish, Castilian\tCHN\tCHINA\t0.0\t0.0\n731962672\t2\tBRAZIL\tSpanish, Castilian\tLAB\tWORKER\t0.0\t-4.18118466898954\n731962755\t2\tEGYPT\tArabic\tLBN\tBEIRUT\t0.0\t-1.79573512906846\n731964803\t2\tCHINA\tRussian\tUSA\tAMERICAN\t0.0\t-3.8412832418742\n731964544\t2\tINDIA\tHindi\tHIN\tHINDU\t0.0\t-3.01204819277108\n731961383\t2\tIRAQ\tRussian\tLAB\tWORKER\t0.0\t-5.10204081632653\n731961306\t2\tRUSSIA\tPersian\tMIL\tMILITARY\t0.0\t-5.73108008817046\n731961374\t2\tBELARUS\tUkrainian\tUKR\tDONBAS\t3.62116991643454\t0.0\n731961131\t2\tFRANCE\tFrench\tLAB\tEMPLOYEE\t0.0\t-2.48508946322068\n731962799\t2\tMEXICO\tSpanish, Castilian\tMED\tWEBSITE\t0.0\t-0.27155465037339\n731964443\t2\tEGYPT\tIndonesian\tEGYMIL\tEGYPT\t0.0\t-9.55882352941181\n731960918\t2\tSPAIN\tSpanish, Castilian\tCVLGOV\tCOMMUNITY\t0.0\t-1.75824175824176\n731964242\t2\tSAUDI ARABIA\tArabic\tGOV\tGOVERNMENT\t8.24742268041237\t0.0\n731961186\t2\tnull\tRussian\tGOV\tPRESIDENT\t1.45348837209302\t0.0\n731960993\t2\tEGYPT\tArabic\tFRA\tFRANCE\t0.0\t-2.66272189349113\n731961049\t2\tISRAEL\tCatalan\tGOV\tPRIME MINISTER\t0.0\t-2.44444444444445\n731962805\t2\tBELARUS\tRussian\tMED\tMEDIA\t0.0\t-9.23913043478261\n731962778\t2\tALBANIA\tGerman\tALB\tALBANIA\t2.32558139534884\t0.0\n731962606\t2\tUKRAINE\tRussian\tUKR\tUKRAINE\t0.0\t-6.90537084398977\n731960730\t2\tEGYPT\tArabic\tBUS\tCOMPANIES\t0.96774193548387\t0.0\n731964603\t2\tGERMANY\tArabic\tGOV\tMINIST\t0.0\t-2.6431718061674\n731962589\t2\tFRANCE\tFrench\tESP\tMALAGA\t2.79589934762348\t0.0\n731962617\t2\tQATAR\tArabic\tGBR\tBRITISH\t0.0\t-4.0\n731964635\t2\tVENEZUELA\tSpanish, Castilian\tMED\tMEDIA\t0.0\t-0.31948881789137\n731960887\t2\tKENYA\tItalian\tGOV\tMINIST\t0.0\t-2.33502538071066\n731962651\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tBUS\tCOMPANY\t0.0\t-5.43478260869565\n731962575\t2\tEGYPT\tArabic\tMOSSHI300\tISMAILI\t0.0\t-0.2710027100271\n731964412\t2\tALGERIA\tArabic\tDZA\tALGERIAN\t1.55440414507772\t0.0\n731960980\t2\tVENEZUELA\tCatalan\tESP\tVALENCIA\t1.34831460674158\t0.0\n731961385\t2\tSPAIN\tRussian\tUKRMIL\tUKRAINIAN\t0.0\t-7.51445086705202\n731964578\t2\tITALY\tSpanish, Castilian\tITA\tCALABRIA\t0.0\t-3.55125100887813\n731960998\t2\tUNITED KINGDOM\tGerman\tGBR\tBRITISH\t0.0\t-1.97044334975369\n731961062\t2\tUNITED STATES\tArabic\tHLH\tHOSPITAL\t0.0\t-3.61663652802894\n731964376\t2\tBRAZIL\tPortuguese\tCVL\tRESIDENTS\t0.0\t-2.54452926208652\n731962496\t2\tPORTUGAL\tPortuguese\tCOP\tPOLICE\t0.0\t-2.99714557564224\n731961142\t2\tBRAZIL\tPortuguese\tLEG\tCONGRESS\t2.21674876847291\t0.0\n731964797\t2\tUKRAINE\tRussian\tUKRGOV\tUKRAINE\t3.21027287319422\t0.0\n731964545\t2\tUNITED STATES\tRussian\tHLH\tDOCTOR\t0.0\t-2.35849056603774\n731962884\t2\tRUSSIA\tItalian\tRUSCVL\tRUSSIAN\t0.0\t-1.17647058823529\n731961027\t2\tINDONESIA\tIndonesian\tGOV\tGOVERNMENT\t0.75187969924812\t0.0\n731962742\t2\tRUSSIA\tRussian\tJUD\tPROSECUTOR\t0.0\t-7.47663551401869\n731964386\t2\tNICARAGUA\tSpanish, Castilian\tCVL\tVILLAGE\t0.0\t-0.74626865671642\n731961197\t2\tMEXICO\tSpanish, Castilian\tMEXLEG\tMEXICO\t3.27272727272727\t0.0\n731961026\t2\tINDONESIA\tIndonesian\tGOV\tGOVERNMENT\t0.75187969924812\t0.0\n731961121\t2\tLEBANON\tArabic\tLBN\tLEBANESE\t0.0\t0.0\n731961282\t2\tSYRIA\tFrench\tSYR\tSYRIAN\t0.0\t-6.48464163822526\n731960889\t2\tUNITED STATES\tCzech\tCOP\tPOLICE\t0.22720817949446\t0.0\n731962766\t2\tPOLAND\tPolish\tLEG\tPARLIAMENT\t0.0\t-0.49261083743842\n731962431\t2\tMAURITANIA\tArabic\tMRT\tNOUAKCHOTT\t0.33444816053511\t0.0\n731961239\t2\tPERU\tSpanish, Castilian\tCHNBUS\tCHINESE\t0.0\t-3.16973415132925\n731964401\t2\tFRANCE\tSpanish, Castilian\tFRA\tFRANCE\t0.0\t-4.08163265306123\n731964214\t2\tRUSSIA\tFrench\tRUS\tRUSSIA\t0.0\t-6.50406504065041\n731964473\t2\tUNITED KINGDOM\tModern Greek (since 1453–)\tGBR\tLONDON\t6.39653937333529\t0.0\n731962627\t2\tBANGLADESH\tBengali\tGOV\tPRESIDENT\t2.32804232804233\t0.0\n731964550\t2\tUNITED STATES\tSpanish, Castilian\tUSAGOV\tUNITED STATES\t0.0\t-3.65591397849462\n731961329\t2\tNORTH KOREA\tSlovak\tPRK\tNORTH KOREA\t0.0\t-1.97132616487455\n731964232\t2\tGERMANY\tArabic\tDEU\tMUNICH\t0.0\t-3.84245917387128\n731964241\t2\tARGENTINA\tSpanish, Castilian\tESP\tSPANIARD\t3.24786324786325\t0.0\n731960774\t2\tGERMANY\tCatalan\tIRN\tIRAN\t0.0\t-2.44444444444445\n731962858\t2\tCANADA\tFrench\tPTY\tPOLITICIAN\t0.0\t-2.75229357798165\n731960894\t2\tSWEDEN\tSwedish\tSWE\tSWEDEN\t0.0\t-2.60086695565188\n731964467\t2\tFRANCE\tFrench\tFRA\tFRANCE\t0.0\t-4.90693739424704\n731964807\t2\tUNITED STATES\tSpanish, Castilian\tUSA\tUNITED STATES\t0.0\t-7.60233918128655\n731962749\t2\tPOLAND\tPolish\tGOVGOV\tMINIST\t0.0\t-0.49261083743842\n731964763\t2\tSYRIA\tBosnian\tSYR\tSYRIA\t2.63157894736842\t0.0\n731961377\t2\tUKRAINE\tUkrainian\tUKR\tUKRAINE\t0.0\t-4.92424242424242\n731964510\t2\tCOLOMBIA\tSpanish, Castilian\tGOV\tAUTHORITIES\t0.0\t-2.51046025104603\n731960792\t2\tBOLIVIA\tSpanish, Castilian\tOPP\tPRISONER\t0.0\t-5.4862842892768\n731964801\t2\tUNITED STATES\tSpanish, Castilian\tUSA\tUNITED STATES\t0.0\t0.0\n731962567\t2\tEGYPT\tArabic\tEGY\tEGYPT\t0.0\t-5.25700934579439\n731962470\t2\tQATAR\tArabic\tBUS\tBANK\t0.0\t-2.23152022315202\n731962622\t2\tDJIBOUTI\tCzech\tGOV\tPRESIDENT\t0.0\t0.0\n731962642\t2\tBANGLADESH\tBengali\tGOV\tGOVERNMENT\t0.0\t-0.6423982869379\n731960858\t2\tCHINA\tFrench\tCHE\tSWITZERLAND\t0.0\t-4.0\n731962842\t2\tVENEZUELA\tSpanish, Castilian\tVEN\tVENEZUELA\t0.0\t0.0\n731964470\t2\tFRANCE\tFrench\tGBR\tLONDON\t0.0\t0.0\n731964488\t2\tSAUDI ARABIA\tArabic\tGOV\tGOVERNMENT\t8.24742268041237\t0.0\n731962832\t2\tVENEZUELA\tSpanish, Castilian\tOPP\tTHE OPPOSITION\t0.0\t-3.53356890459364\n731964371\t2\tMEXICO\tSpanish, Castilian\tCVL\tTOURIST\t0.0\t-1.54990700557966\n731960835\t2\tSOUTH KOREA\tKorean\tBUS\tBUSINESS\t2.30414746543778\t0.0\n731964373\t2\tUNITED KINGDOM\tCzech\tCVL\tMIGRANT\t0.0\t-3.74331550802139\n731964262\t2\tnull\tAlbanian\tJUD\tPROSECUTOR\t0.0\t-2.80504908835904\n731962804\t2\tUNITED KINGDOM\tSpanish, Castilian\tUSACVL\tAMERICAN\t0.0\t-1.28755364806867\n731961281\t2\tMEXICO\tSpanish, Castilian\tLEG\tSENATOR\t0.0\t-2.68456375838926\n731960984\t2\tSPAIN\tSpanish, Castilian\tVEN\tVENEZUELAN\t0.0\t-2.71186440677967\n731962900\t2\tSYRIA\tAlbanian\tSYR\tSYRIA\t0.0\t-5.15505436971405\n731964486\t2\tSYRIA\tRussian\tGOV\tGOVERNMENT\t0.0\t-3.8412832418742\n731962623\t2\tEGYPT\tRussian\tGOV\tPRESIDENT\t0.0\t-2.9038112522686\n731962948\t2\tRUSSIA\tFrench\tUSAGOV\tTHE WHITE HOUSE\t0.0\t-6.10687022900763\n731962436\t2\tALBANIA\tModern Greek (since 1453–)\tALB\tALBANIAN\t0.0\t-1.14942528735632\n731960720\t2\tSRI LANKA\tSinhalese, Sinhala\tMIL\tCAPTAIN\t0.0\t-5.60344827586207\n731962914\t2\tUKRAINE\tBosnian\tUKR\tUKRAINE\t1.91387559808614\t0.0\n731964224\t2\tBRAZIL\tPortuguese\tBUS\tSERVER\t0.0\t-3.07692307692307\n731964759\t2\tSYRIA\tBosnian\tSYR\tSYRIA\t2.38095238095238\t0.0\n731964667\t2\tNEW ZEALAND\tPortuguese\tMILCOP\tMILITARY POLICE\t0.0\t0.0\n731964781\t2\tALGERIA\tArabic\tUAF\tTERRORIST\t2.70595309681299\t-0.78125\n731962917\t2\tGERMANY\tModern Greek (since 1453–)\tUKR\tUKRAINE\t0.0\t-0.33670033670034\n731964752\t2\tAFGHANISTAN\tFrench\tSWEGOV\tSWEDEN\t0.0\t-4.90693739424704\n731964605\t2\tHUNGARY\tLatvian\tLEG\tPARLIAMENT\t0.0\t-6.79611650485437\n731961163\t2\tAFGHANISTAN\tPersian\tLEG\tPARLIAMENT\t0.0\t-5.10067114093959\n731962371\t2\tPERU\tSpanish, Castilian\tAGR\tFARMER\t5.60747663551402\t0.0\n731964602\t2\tAUSTRIA\tArabic\tGOV\tMINIST\t0.0\t-2.6431718061674\n731960843\t2\tLATVIA\tRussian\tBUS\tBANK\t0.0\t-11.39935459536482\n731961158\t2\tALBANIA\tAlbanian\tMKD\tMACEDONIA\t3.90243902439024\t0.0\n731961280\t2\tMEXICO\tSpanish, Castilian\tLEG\tSENATOR\t0.0\t-2.68456375838926\n731961384\t2\tSPAIN\tRussian\tUKR\tUKRAINIAN\t0.0\t-7.51445086705202\n731961109\t2\tISRAEL\tPersian\tISR\tISRAEL\t0.0\t-2.0746887966805\n731964802\t2\tUNITED STATES\tRussian\tBUS\tCOMPANY\t0.0\t-3.01724137931035\n731962901\t2\tRUSSIA\tAlbanian\tRUSMIL\tRUSSIAN\t0.0\t-5.15505436971405\n731962944\t2\tISRAEL\tArabic\tISR\tISRAEL\t0.0\t-3.84153661464586\n731960815\t2\tGREECE\tModern Greek (since 1453–)\tCOP\tDEPUTY\t0.48899755501222\t0.0\n731964691\t2\tSOUTH KOREA\tKorean\tPRK\tGYEONGSANG\t2.51937984496124\t0.0\n731960987\t2\tIRAN\tArabic\tEUR\tEUROPEAN\t0.0\t-2.7027027027027\n731964336\t2\tCHINA\tSpanish, Castilian\tCHN\tCHINA\t0.0\t0.0\n731964251\t2\tINDIA\tHindi\tHIN\tHINDU\t0.0\t-3.01204819277108\n731961046\t2\tTURKEY\tCatalan\tTURREF\tTURKEY\t0.0\t-2.9126213592233\n731964672\t2\tRUSSIA\tSpanish, Castilian\tMOSCVL\tMUSLIM\t0.0\t-3.35689045936396\n731964526\t2\tSPAIN\tSpanish, Castilian\tMED\tPUBLICATION\t0.0\t-1.13759479956663\n731964760\t2\tSYRIA\tBosnian\tSYRMIL\tSYRIAN\t2.38095238095238\t0.0\n731961174\t2\tUNITED STATES\tTurkish\tMED\tMEDIA\t0.0\t0.0\n731962679\t2\tCHILE\tSpanish, Castilian\tGOV\tDIPLOMAT\t1.63934426229508\t0.0\n731962624\t2\tINDONESIA\tIndonesian\tGOV\tGOVERNMENT\t0.0\t-1.75675675675676\n731961391\t2\tUNITED STATES\tFrench\tUSA\tUNITED STATES\t0.0\t-0.62208398133748\n731964209\t2\tALGERIA\tArabic\tDZA\tORAN\t1.55440414507772\t0.0\n731960913\t2\tRUSSIA\tRussian\tBUS\tPRODUCER\t1.13519091847265\t0.0\n731962852\t2\tJORDAN\tArabic\tJOR\tJORDAN\t0.0\t-5.6\n731964754\t2\tGERMANY\tArabic\tDEU\tMUNICH\t0.0\t-4.78547854785479\n731964353\t2\tBRAZIL\tPortuguese\tBRA\tSAO PAULO\t1.71606864274571\t0.0\n731964426\t2\tUNITED STATES\tLatvian\tEDU\tSTUDENT\t0.0\t-2.64900662251655\n731962761\t2\tALBANIA\tGerman\tLEG\tPARLIAMENT\t2.32558139534884\t0.0\n731964785\t2\tIRAN\tArabic\tIRN\tIRANIAN\t0.0\t-1.16883116883117\n731962691\t2\tROMANIA\tRomanian, Moldavian, Moldovan\tGOV\tMINIST\t1.28799587841319\t0.0\n731964321\t2\tSPAIN\tSpanish, Castilian\tESP\tSPANIARD\t3.24786324786325\t0.0\n731964748\t2\tSUDAN\tArabic\tETH\tETHIOPIAN\t0.0\t-1.16550116550116\n731964816\t2\tUNITED STATES\tPolish\tUSAGOV\tUNITED STATES\t0.0\t-4.57413249211356\n731962591\t2\tFRANCE\tFrench\tESP\tMALAGA\t2.79589934762348\t0.0\n731961008\t2\tUNITED STATES\tModern Greek (since 1453–)\tGOV\tMAYOR\t3.09810671256454\t0.0\n731964335\t2\tUNITED STATES\tSpanish, Castilian\tCHN\tCHINA\t0.0\t0.0\n731961020\t2\tCHINA\tArabic\tGOV\tMINISTRY\t0.0\t-1.2216404886562\n731964409\t2\tALGERIA\tArabic\tDZA\tALGERIA\t0.0\t-2.97397769516729\n731964228\t2\tIRAN\tRussian\tCOPGOVMIL\tDEPUTY\t0.0\t-2.28136882129277\n731962592\t2\tFRANCE\tFrench\tFRA\tFRENCH\t2.79589934762348\t0.0\n731964656\t2\tTURKEY\tTurkish\tBUS\tBUSINESS\t4.28571428571429\t0.0\n731964266\t2\tSAUDI ARABIA\tArabic\tMED\tMEDIA\t3.69318181818182\t0.0\n731962418\t2\tFRANCE\tFrench\tPOL\tWARSAW\t0.0\t-5.14354066985646\n731964520\t2\tIRAN\tArabic\tGOV\tPRESIDENT\t0.0\t-1.97368421052632\n731961339\t2\tIRAQ\tArabic\tSYR\tSYRIAN\t0.0\t-0.51282051282051\n731962485\t2\tCANADA\tFrench\tMNCGBRHLH\tGLAXOSMITHKLINE\t8.03815663742582\t0.0\n731964418\t2\tRUSSIA\tRussian\tEDU\tSTUDENT\t0.0\t-1.91693290734824\n731960883\t2\tCHINA\tFrench\tCHE\tBERN\t0.0\t-3.68271954674221\n731964779\t2\tALGERIA\tArabic\tGOVMIL\tAUTHORITIES\t0.0\t-5.90219224283305\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 1000 rows. Learn more about \u003cstrong\u003ezeppelin.spark.maxResult\u003c/strong\u003e\u003c/div\u003e"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://localhost:4040/jobs/job?id\u003d321",
+            "http://localhost:4040/jobs/job?id\u003d322",
+            "http://localhost:4040/jobs/job?id\u003d323",
+            "http://localhost:4040/jobs/job?id\u003d324",
+            "http://localhost:4040/jobs/job?id\u003d326",
+            "http://localhost:4040/jobs/job?id\u003d325",
+            "http://localhost:4040/jobs/job?id\u003d327",
+            "http://localhost:4040/jobs/job?id\u003d328",
+            "http://localhost:4040/jobs/job?id\u003d329",
+            "http://localhost:4040/jobs/job?id\u003d330",
+            "http://localhost:4040/jobs/job?id\u003d331",
+            "http://localhost:4040/jobs/job?id\u003d332",
+            "http://localhost:4040/jobs/job?id\u003d333",
+            "http://localhost:4040/jobs/job?id\u003d334",
+            "http://localhost:4040/jobs/job?id\u003d335"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151584830_-535757844",
+      "id": "20190122-110624_1076105341",
+      "dateCreated": "2019-01-22 11:06:24.830",
+      "dateStarted": "2019-01-22 11:29:31.371",
+      "dateFinished": "2019-01-22 11:29:39.306",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151695149_-879926273",
+      "id": "20190122-110815_1651662524",
+      "dateCreated": "2019-01-22 11:08:15.149",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "gdeltDatasetEngineering_EvMen_query3",
+  "id": "2DZVW5CBG",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
