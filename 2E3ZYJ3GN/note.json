@@ -1,0 +1,1013 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Creation of RDD from Data\nDans ce notebook nous allons charger les données dans des RDD",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.391",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreation of RDD from Data\u003c/h2\u003e\n\u003cp\u003eDans ce notebook nous allons charger les données dans des RDD\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105388_-725011572",
+      "id": "20181212-102323_67420128",
+      "dateCreated": "2019-01-22 10:08:25.388",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md Les fichiers sont stockés compressés, on a besoin d\u0027un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0027on les lit depuis S3:",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.392",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eLes fichiers sont stockés compressés, on a besoin d\u0026rsquo;un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0026rsquo;on les lit depuis S3:\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105392_-392012840",
+      "id": "20181212-102329_808049084",
+      "dateCreated": "2019-01-22 10:08:25.392",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data_path \u003d \"/Users/jean-baptiste/Documents/Cours/INF728_NoSQL/Projet/data\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.393",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "data_path: String \u003d /Users/jean-baptiste/Documents/Cours/INF728_NoSQL/Projet/data\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105393_-1824996708",
+      "id": "20190122-093133_1845500535",
+      "dateCreated": "2019-01-22 10:08:25.393",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\n\n\ndef RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n       case (name: String, content: PortableDataStream) \u003d\u003e\n          val zis \u003d new ZipInputStream(content.open)\n          Stream.continually(zis.getNextEntry).\n                takeWhile(_ !\u003d null).\n                flatMap { _ \u003d\u003e\n                    val br \u003d new BufferedReader(new InputStreamReader(zis))\n                    Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                }\n    }\n    return resultRDD\n}\n// Export Events\nval eventsRDD \u003d RDDDownloader(data_path + \"/events/*.export.CSV.zip\")\nval mentionsRDD \u003d RDDDownloader(data_path + \"/mentions/*.CSV.zip\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:27:51.265",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\nRDDDownloader: (fileName: String)org.apache.spark.rdd.RDD[String]\neventsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[506] at flatMap at \u003cconsole\u003e:59\nmentionsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[508] at flatMap at \u003cconsole\u003e:59\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105393_2147070503",
+      "id": "20171217-232457_1732696781",
+      "dateCreated": "2019-01-22 10:08:25.393",
+      "dateStarted": "2019-01-22 10:27:51.318",
+      "dateFinished": "2019-01-22 10:27:53.711",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val cachedEvents \u003d eventsRDD.cache // RDD\nval cachedMentions \u003d mentionsRDD.cache",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:27:57.835",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "cachedEvents: eventsRDD.type \u003d MapPartitionsRDD[506] at flatMap at \u003cconsole\u003e:59\ncachedMentions: mentionsRDD.type \u003d MapPartitionsRDD[508] at flatMap at \u003cconsole\u003e:59\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105394_-1903647304",
+      "id": "20190107-102856_946427568",
+      "dateCreated": "2019-01-22 10:08:25.394",
+      "dateStarted": "2019-01-22 10:27:57.877",
+      "dateFinished": "2019-01-22 10:27:58.603",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Event(GLOBALEVENTID: Int,\nSQLDATE: String,\nMonthYear: String,\nYear: Int,\nFractionDate: Double,\nActor1Code: String,\nActor1Name: String,\nActor1CountryCode: String,\nActor1KnownGroupCode: String,\nActor1EthnicCode: String,\nActor1Religion1Code: String,\nActor1Religion2Code: String,\nActor1Type1Code: String,\nActor1Type2Code: String,\nActor1Type3Code: String,\nActor2Code: String,\nActor2Name: String,\nActor2CountryCode: String,\nActor2KnownGroupCode: String,\nActor2EthnicCode: String,\nActor2Religion1Code: String,\nActor2Religion2Code: String,\nActor2Type1Code: String,\nActor2Type2Code: String,\nActor2Type3Code: String,\nIsRootEvent: Int,\nEventCode: String,\nEventBaseCode: String,\nEventRootCode: String,\nQuadClass: Int,\nGoldsteinScale: Double,\nNumMentions: Int,\nNumSources: Int,\nNumArticles: Int,\nAvgTone: Double,\nActor1Geo_Type: Int,\nActor1Geo_FullName: String,\nActor1Geo_CountryCode: String,\nActor1Geo_ADM1Code: String,\nActor1Geo_ADM2Code: String,\nActor1Geo_Lat: Double,\nActor1Geo_Long: Double,\nActor1Geo_FeatureID: String,\nActor2Geo_Type: Int,\nActor2Geo_FullName: String,\nActor2Geo_CountryCode: String,\nActor2Geo_ADM1Code: String,\nActor2Geo_ADM2Code: String,\nActor2Geo_Lat: Double,\nActor2Geo_Long: Double,\nActor2Geo_FeatureID: String,\nActionGeo_Type: Int,\nActionGeo_FullName: String,\nActionGeo_CountryCode: String,\nActionGeo_ADM1Code: String,\nActionGeo_ADM2Code: String,\nActionGeo_Lat: Double,\nActionGeo_Long: Double,\nActionGeo_FeatureID: String,\nDATEADDED: String,\nSOURCEURL: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:28:01.652",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Event\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105394_1670278884",
+      "id": "20190107-095023_1048093380",
+      "dateCreated": "2019-01-22 10:08:25.394",
+      "dateStarted": "2019-01-22 10:28:01.689",
+      "dateFinished": "2019-01-22 10:28:02.529",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Mention(GLOBALEVENTID: Int,\nEventTimeDate: String,\nMentionTimeDate: String,\nMentionType: Int,\nMentionSourceName: String,\nMentionIdentifier: String,\nSentenceID: Int,\nActor1CharOffset: Int,\nActor2CharOffset: Int,\nActionCharOffset: Int,\nInRawText: Int,\nConfidence: Int,\nMentionDocLen: Int,\nMentionDocTone: Double,\nMentionDocTranslationInfo: String)//,\n//Extras: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.395",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Mention\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105395_1046028976",
+      "id": "20190122-093120_1753376525",
+      "dateCreated": "2019-01-22 10:08:25.395",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.text.SimpleDateFormat\n\ndef toDouble(s : String): Double \u003d if (s.isEmpty) 0 else s.toDouble\ndef toInt(s : String): Int \u003d if (s.isEmpty) 0  else s.toInt\ndef toBigInt(s : String): BigInt \u003d if (s.isEmpty) BigInt(0) else BigInt(s)\n \nval inputFormat_ymd \u003d new SimpleDateFormat(\"yyyyMMdd\")\nval outputFormat_ymd \u003d new SimpleDateFormat(\"yyyy-MM-dd\")\n\nval inputFormat_ym \u003d new SimpleDateFormat(\"yyyyMM\")\nval outputFormat_ym \u003d new SimpleDateFormat(\"yyyy-MM\")\n\nval inputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyyMMddhhmmss\")\nval outputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyy-MM-dd hh:mm:ss\")\n    \ndef parse_date(s : String, inputFormat : SimpleDateFormat, outputFormat : SimpleDateFormat):\n    String \u003d if (s.isEmpty) s else  outputFormat.format(inputFormat.parse(s))   \n\n\ncachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDS.createOrReplaceTempView(\"events\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:28:13.045",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.text.SimpleDateFormat\ntoDouble: (s: String)Double\ntoInt: (s: String)Int\ntoBigInt: (s: String)BigInt\ninputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@ef87e460\noutputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@f67a0200\ninputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d55c4fe0\noutputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d62d344d\ninputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@88c7dd60\noutputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@e863f5a0\nparse_date: (s: String, inputFormat: java.text.SimpleDateFormat, outputFormat: java.text.SimpleDateFormat)String\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105395_1786344910",
+      "id": "20190121-175524_598037471",
+      "dateCreated": "2019-01-22 10:08:25.395",
+      "dateStarted": "2019-01-22 10:28:13.078",
+      "dateFinished": "2019-01-22 10:28:18.847",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val ds1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDS\n\nval ds2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDS\n\nval ds3 \u003d ds1.union(ds2)\nds3.createOrReplaceTempView(\"mentions\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:28:20.547",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "ds1: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds2: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds3: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105396_-1583473948",
+      "id": "20190122-093356_682030381",
+      "dateCreated": "2019-01-22 10:08:25.396",
+      "dateStarted": "2019-01-22 10:28:20.595",
+      "dateFinished": "2019-01-22 10:28:23.143",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var events \u003d cachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDF()\n\nevents \u003d events.withColumn(\"SQLDate_date\",$\"SQLDATE\".cast(\"date\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:28:25.363",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 59 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 60 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105397_-230845881",
+      "id": "20190121-175556_1570822517",
+      "dateCreated": "2019-01-22 10:08:25.397",
+      "dateStarted": "2019-01-22 10:28:25.399",
+      "dateFinished": "2019-01-22 10:28:26.820",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var df1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDF()\n\nvar df2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDF()\n\nvar mentions \u003d df1.union(df2).toDF()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:20:43.701",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "df1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\ndf2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nmentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105397_-317854697",
+      "id": "20190122-093506_992271553",
+      "dateCreated": "2019-01-22 10:08:25.397",
+      "dateStarted": "2019-01-22 10:20:43.733",
+      "dateFinished": "2019-01-22 10:20:45.915",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Preprocess on the events and mentions DF ",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.398",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003ePreprocess on the events and mentions DF\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105397_-1320784298",
+      "id": "20190121-165005_1391737556",
+      "dateCreated": "2019-01-22 10:08:25.397",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ## Cameo translation",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.398",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCameo translation\u003c/h2\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105398_-1403733503",
+      "id": "20190121-165029_321139741",
+      "dateCreated": "2019-01-22 10:08:25.398",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val Cameolocation \u003d \"/opt/zeppelin/NoSQL_Project/CameoFolder\"\nval file_Country \u003d \"CAMEO.country.txt\"\nval file_Ethnic \u003d \"CAMEO.ethnic.txt\"\nval file_Eventcodes \u003d \"CAMEO.eventcodes.txt\"\nval file_Knowngroup \u003d \"CAMEO.knowngroup.txt\"\nval file_Religion \u003d \"CAMEO.religion.txt\"\nval file_Type \u003d \"CAMEO.type.txt\"\nval file_Quad \u003d \"CAMEO.QuadClass.txt\"\nval file_GeoType \u003d \"CAMEO.GeoType.txt\"\nval file_FIPSCountryCode \u003d \"CAMEO.FIPSCountyCode.txt\"\nval file_Language \u003d \"CAMEO.language.txt\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:48:06.907",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Cameolocation: String \u003d /opt/zeppelin/NoSQL_Project/CameoFolder\nfile_Country: String \u003d CAMEO.country.txt\nfile_Ethnic: String \u003d CAMEO.ethnic.txt\nfile_Eventcodes: String \u003d CAMEO.eventcodes.txt\nfile_Knowngroup: String \u003d CAMEO.knowngroup.txt\nfile_Religion: String \u003d CAMEO.religion.txt\nfile_Type: String \u003d CAMEO.type.txt\nfile_Quad: String \u003d CAMEO.QuadClass.txt\nfile_GeoType: String \u003d CAMEO.GeoType.txt\nfile_FIPSCountryCode: String \u003d CAMEO.FIPSCountyCode.txt\nfile_Language: String \u003d CAMEO.language.txt\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105398_888716498",
+      "id": "20190121-165124_2136866161",
+      "dateCreated": "2019-01-22 10:08:25.398",
+      "dateStarted": "2019-01-22 10:48:06.946",
+      "dateFinished": "2019-01-22 10:48:09.689",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// creation of the mapping dataset\nval country_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Country)\n\nval ethnic_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Ethnic)\n\nval eventCodes_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Eventcodes)\n\nval group_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Knowngroup)\n\nval religion_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Religion)\n\nval type_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Type)\n\nval quad_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Quad)\n    \nval geoType_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_GeoType)\n    \nval FIPS_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_FIPSCountryCode)\n    \nval language_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Language)\n    \n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:48:11.866",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "country_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nethnic_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\neventCodes_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngroup_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nreligion_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ntype_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nquad_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngeoType_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nFIPS_transco: org.apache.spark.sql.DataFrame \u003d [LABEL: string, CODE: string]\nlanguage_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://137.194.93.233:4040/jobs/job?id\u003d174",
+            "http://137.194.93.233:4040/jobs/job?id\u003d175",
+            "http://137.194.93.233:4040/jobs/job?id\u003d176",
+            "http://137.194.93.233:4040/jobs/job?id\u003d177",
+            "http://137.194.93.233:4040/jobs/job?id\u003d178",
+            "http://137.194.93.233:4040/jobs/job?id\u003d179",
+            "http://137.194.93.233:4040/jobs/job?id\u003d180",
+            "http://137.194.93.233:4040/jobs/job?id\u003d181",
+            "http://137.194.93.233:4040/jobs/job?id\u003d182",
+            "http://137.194.93.233:4040/jobs/job?id\u003d183"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105399_1662605300",
+      "id": "20190121-165205_570025735",
+      "dateCreated": "2019-01-22 10:08:25.399",
+      "dateStarted": "2019-01-22 10:48:11.916",
+      "dateFinished": "2019-01-22 10:48:16.380",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "language_transco.show()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:41:18.454",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+--------------------+\n|CODE|               LABEL|\n+----+--------------------+\n| aar|                Afar|\n| abk|              Abkhaz|\n| ace|  Acehnese, Achinese|\n| ach|               Acoli|\n| ada|             Adangme|\n| ady|      Adyghe, Adygei|\n| afa|Afro-Asiatic lang...|\n| afh|            Afrihili|\n| afr|           Afrikaans|\n| ain|                Ainu|\n| aka|                Akan|\n| akk|            Akkadian|\n| alb|            Albanian|\n| ale|               Aleut|\n| alg|Algonquian languages|\n| alt|      Southern Altai|\n| amh|             Amharic|\n| ang|English, Old (ca....|\n| anp|              Angika|\n| apa|    Apache languages|\n+----+--------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548149064636_855203007",
+      "id": "20190122-102424_2071015387",
+      "dateCreated": "2019-01-22 10:24:24.636",
+      "dateStarted": "2019-01-22 10:41:18.481",
+      "dateFinished": "2019-01-22 10:41:18.961",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events \u003d events.join(country_transco, events(\"Actor1CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor1CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\nevents \u003d events.join(country_transco, events(\"Actor2CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor2CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\n\nevents \u003d events.join(ethnic_transco, events(\"Actor1EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor1EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\nevents \u003d events.join(ethnic_transco, events(\"Actor2EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor2EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\n\nevents \u003d events.join(eventCodes_transco, events(\"EventCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventBaseCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventBaseCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventRootCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventRootCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\n\nevents \u003d events.join(group_transco, events(\"Actor1KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor1KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\nevents \u003d events.join(group_transco, events(\"Actor2KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor2KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\n\nevents \u003d events.join(religion_transco, events(\"Actor1Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor1Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\n\nevents \u003d events.join(type_transco, events(\"Actor1Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\n\nevents \u003d events.join(quad_transco, events(\"QuadClass\")\u003d\u003d\u003dquad_transco(\"CODE\"), \"left\").withColumn(\"QuadClassType\", col(\"LABEL\")).drop(quad_transco.columns: _*)\n\nevents \u003d events.join(geoType_transco, events(\"Actor1Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"Actor2Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"ActionGeo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\n\nevents \u003d events.join(FIPS_transco, events(\"Actor1Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"Actor2Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"ActionGeo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:48:28.982",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105400_1889594591",
+      "id": "20190121-165736_1049734185",
+      "dateCreated": "2019-01-22 10:08:25.400",
+      "dateStarted": "2019-01-22 10:48:29.016",
+      "dateFinished": "2019-01-22 10:48:50.832",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\nmentions \u003d mentions.join(language_transco, mentions(\"MentionDocTranslationInfo\")\u003d\u003d\u003dlanguage_transco(\"CODE\"), \"left\").withColumn(\"Language\", col(\"LABEL\")).drop(language_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:49:00.679",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "mentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 14 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105401_1920236982",
+      "id": "20190122-094703_2016048028",
+      "dateCreated": "2019-01-22 10:08:25.401",
+      "dateStarted": "2019-01-22 10:49:00.715",
+      "dateFinished": "2019-01-22 10:49:01.214",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.402",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 235.533,
+              "optionOpen": false
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nSQLDATE\nMonthYear\nYear\nFractionDate\nActor1Code\nActor1Name\nActor1CountryCode\nActor1KnownGroupCode\nActor1EthnicCode\nActor1Religion1Code\nActor1Religion2Code\nActor1Type1Code\nActor1Type2Code\nActor1Type3Code\nActor2Code\nActor2Name\nActor2CountryCode\nActor2KnownGroupCode\nActor2EthnicCode\nActor2Religion1Code\nActor2Religion2Code\nActor2Type1Code\nActor2Type2Code\nActor2Type3Code\nIsRootEvent\nEventCode\nEventBaseCode\nEventRootCode\nQuadClass\nGoldsteinScale\nNumMentions\nNumSources\nNumArticles\nAvgTone\nActor1Geo_Type\nActor1Geo_FullName\nActor1Geo_CountryCode\nActor1Geo_ADM1Code\nActor1Geo_ADM2Code\nActor1Geo_Lat\nActor1Geo_Long\nActor1Geo_FeatureID\nActor2Geo_Type\nActor2Geo_FullName\nActor2Geo_CountryCode\nActor2Geo_ADM1Code\nActor2Geo_ADM2Code\nActor2Geo_Lat\nActor2Geo_Long\nActor2Geo_FeatureID\nActionGeo_Type\nActionGeo_FullName\nActionGeo_CountryCode\nActionGeo_ADM1Code\nActionGeo_ADM2Code\nActionGeo_Lat\nActionGeo_Long\nActionGeo_FeatureID\nDATEADDED\nSOURCEURL\nSQLDate_date\nActor1CountryName\nActor2CountryName\nActor1EthnicName\nActor2EthnicName\nEventCodeDesc\nEventBaseCodeDesc\nEventRootCodeDesc\nActor1KnownGroupName\nActor2KnownGroupName\nActor1Religion1Name\nActor1Religion2Name\nActor2Religion1Name\nActor2Religion2Name\nActor1Type1Name\nActor1Type2Name\nActor1Type3Name\nActor2Type1Name\nActor2Type2Name\nActor2Type3Name\nQuadClassType\nActor1Geo_Name\nActor2Geo_Name\nActionGeo_Name\nActor1Geo_CountryName\nActor2Geo_CountryName\nActionGeo_CountryName\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105402_-700619488",
+      "id": "20190121-172121_428905243",
+      "dateCreated": "2019-01-22 10:08:25.402",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "mentions.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:25.403",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nEventTimeDate\nMentionTimeDate\nMentionType\nMentionSourceName\nMentionIdentifier\nSentenceID\nActor1CharOffset\nActor2CharOffset\nActionCharOffset\nInRawText\nConfidence\nMentionDocLen\nMentionDocTone\nMentionDocTranslationInfo\nLanguage\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105402_-1083311694",
+      "id": "20190122-095247_714216003",
+      "dateCreated": "2019-01-22 10:08:25.402",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 1",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:08:43.005",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 1\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148105403_1715710958",
+      "id": "20190121-111706_406896183",
+      "dateCreated": "2019-01-22 10:08:25.403",
+      "dateStarted": "2019-01-22 10:08:43.012",
+      "dateFinished": "2019-01-22 10:08:43.029",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.sql.functions._\nimport org.apache.spark.sql.sources._\n\nval mentions_bis \u003d mentions.select($\"GLOBALEVENTID\", $\"MentionIdentifier\", $\"Language\").distinct\nval events_bis \u003d events.select($\"GLOBALEVENTID\", $\"SQLDATE\", $\"ActionGeo_CountryName\").where(\"ActionGeo_CountryName is not null\")\nval df_fin \u003d events_bis.join(mentions_bis, Seq(\"GLOBALEVENTID\"), \"inner\")\n\ndf_fin.createOrReplaceTempView(\"table_query_1\")\n\nprint(df_fin.count())",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:49:13.307",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.functions._\nimport org.apache.spark.sql.sources._\nmentions_bis: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [GLOBALEVENTID: int, MentionIdentifier: string ... 1 more field]\nevents_bis: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [GLOBALEVENTID: int, SQLDATE: string ... 1 more field]\ndf_fin: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 3 more fields]\n5848"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://137.194.93.233:4040/jobs/job?id\u003d184",
+            "http://137.194.93.233:4040/jobs/job?id\u003d185",
+            "http://137.194.93.233:4040/jobs/job?id\u003d186",
+            "http://137.194.93.233:4040/jobs/job?id\u003d187",
+            "http://137.194.93.233:4040/jobs/job?id\u003d188",
+            "http://137.194.93.233:4040/jobs/job?id\u003d189",
+            "http://137.194.93.233:4040/jobs/job?id\u003d190",
+            "http://137.194.93.233:4040/jobs/job?id\u003d191",
+            "http://137.194.93.233:4040/jobs/job?id\u003d192",
+            "http://137.194.93.233:4040/jobs/job?id\u003d194",
+            "http://137.194.93.233:4040/jobs/job?id\u003d193",
+            "http://137.194.93.233:4040/jobs/job?id\u003d195",
+            "http://137.194.93.233:4040/jobs/job?id\u003d196"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148152489_-1980819914",
+      "id": "20190122-100912_1114063253",
+      "dateCreated": "2019-01-22 10:09:12.489",
+      "dateStarted": "2019-01-22 10:49:13.333",
+      "dateFinished": "2019-01-22 10:49:37.937",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(sql(\"\"\"select * from table_query_1\"\"\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 10:50:28.093",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "GLOBALEVENTID\tSQLDATE\tActionGeo_CountryName\tMentionIdentifier\tLanguage\n731957797\t2018-02-18\tJAPAN\thttp://www.hellenicshippingnews.com/the-quiet-king-of-japanese-shipbuilding-expands-its-empire/\tEnglish\n731958118\t2018-02-18\tRUSSIA\thttp://galacticconnection.com/overthrowing-other-peoples-governments-the-master-list-of-u-s-regime-changes/\tEnglish\n731958572\t2018-02-18\tJAMAICA\thttps://sflcn.com/oldest-living-jamaican-state-georgia-110-not/\tEnglish\n731959505\t2017-02-18\tTHAILAND\thttps://www.bangkokpost.com/news/general/1414391/park-chief-puts-wildlife-first\tEnglish\n731959580\t2018-02-18\tSYRIA\thttp://mwcnews.net/news/middle-east/70543-isil-widows-sentenced.html\tEnglish\n731959612\t2018-02-18\tISRAEL\thttp://www.brightonandhovenews.org/2018/02/18/labour-expels-controversial-brighton-member/\tEnglish\n731959735\t2018-02-18\tCANADA\thttp://www.monitor.co.ug/News/National/Nakaseke--Shs1-6b-fruit-processing-plant--/688334-4310366-11j4593/\tEnglish\n731959924\t2018-02-18\tSRI LANKA\thttps://slantedhall.wordpress.com/2018/02/18/inspirational-talk-on-adlam-an-african-alphabet-adventure/\tEnglish\n731960044\t2018-02-18\tTURKEY\thttps://www.reuters.com/article/mideast-crisis-syria-turkey-afrin/turkey-denies-allegation-of-chemical-attack-in-syria-idUSL8N1Q80LU\tEnglish\n731960384\t2018-02-18\tOCEANS\thttp://psuvanguard.com/no-peace-in-sight-for-syria/\tEnglish\n731960853\t2018-02-18\tCANADA\thttp://www.economiahoy.mx/economia-eAm-mexico/noticias/8946966/02/18/Aumenta-posibilidad-de-modernizar-el-TLCAN-antes-de-julio.html\tSpanish, Castilian\n731961089\t2018-02-18\tIRAN\thttps://www.almasryalyoum.com/news/details/1260940\tArabic\n731961089\t2018-02-18\tIRAN\thttp://www.almasryalyoum.com/news/details/1260940\tArabic\n731961089\t2018-02-18\tIRAN\thttp://www.mansheet.net/Akhbar-Arbyh/1659113/%D8%B9%D9%85%D8%B1%D9%88-%D8%A3%D8%AF%D9%8A%D8%A8-%D9%8A%D9%88%D8%AC%D9%87-%D8%B1%D8%B3%D8%A7%D9%84%D8%A9-%D8%A5%D9%84%D9%89-%D8%A3%D9%85%D9%8A%D8%B1-%D9%82%D8%B7%D8%B1-%D9%81%D9%8A%D8%AF%D9%8A%D9%88\tArabic\n731961731\t2018-02-18\tMALAYSIA\thttp://nripress.com/dozens-trapped-inside-cable-cars-for-hours-in-malaysia/\tEnglish\n731961894\t2018-02-18\tHAITI\thttps://tendancecoatesy.wordpress.com/2018/02/18/haiti-oxfam-in-defence-of-mary-beard-contre-priyamvada-gopal/\tEnglish\n731962276\t2018-02-18\tMEXICO\thttp://www.nationalgeographic.com.au/history/what-was-this-2000-year-old-parrot-mummy-doing-in-mexico.aspx\tEnglish\n731962355\t2018-02-18\tZIMBABWE\thttp://www.enca.com/africa/tsvangirai-s-son-anoints-chamisa\tEnglish\n731962465\t2018-02-18\tUNITED ARAB EMIRATES\thttp://www.emaratalyoum.com/life/cinema/2018-02-19-1.1072657\tArabic\n731962541\t2018-02-18\tGERMANY\thttps://www.haberler.com/basbakan-yildirim-almanya-donusu-ucakta-10579057-haberi/\tTurkish\n731962543\t2018-02-18\tSLOVAKIA\thttps://www.novinky.cz/komentare/463763-ocima-sasi-mitrofanova-vlci-a-kozy-v-hradci-kralove.html\tCzech\n731962566\t2018-02-18\tUNITED ARAB EMIRATES\thttp://www.alittihad.ae/details.php?id\u003d12390\u0026y\u003d2018\tArabic\n731962573\t2018-02-18\tEGYPT\thttp://al-akhbar.com/node/291039\tArabic\n731962721\t2018-02-18\tIRAN\thttp://news.gooya.com/2018/02/post-12160.php\tPersian\n731962723\t2018-02-18\tIRAN\thttp://news.gooya.com/2018/02/post-12160.php\tPersian\n731962896\t2018-02-18\tEGYPT\thttp://al-akhbar.com/node/291040\tArabic\n731962913\t2018-02-18\tUKRAINE\thttps://www.blic.rs/vesti/svet/belorusija-spremna-da-posalje-mirovnjake-u-donbas/k79486h\tBosnian\n731962913\t2018-02-18\tUKRAINE\thttps://rs.sputniknews.com/evropa/201802181114605761-belorusija-mirovnjaci-donbas/\tSerbian\n731962971\t2018-02-18\tTURKEY\thttp://www.ammonnews.net/article/356807\tArabic\n731964528\t2018-02-18\tMEXICO\thttp://www.hidrocalidodigital.com/nacional/articulo.php?idnota\u003d136399\tSpanish, Castilian\n731964816\t2018-02-18\tUNITED STATES\thttps://www.polskieradio.pl/130/4428/Artykul/2033578\tPolish\n731957775\t2018-02-18\tOMAN\thttps://learningenglish.voanews.com/a/mars-in-earth-tests-in-deserts-of-oman/4254234.html\tEnglish\n731957819\t2018-02-18\tUNITED KINGDOM\thttp://www.macleans.ca/opinion/gerald-stanleys-trial-highlights-the-colonialism-of-canadian-media/\tEnglish\n731957846\t2018-02-18\tCHINA\thttp://www.telegraph.co.uk/business/2018/02/18/mps-stop-arcadia-sale-fix-pension-deficit/\tEnglish\n731958438\t2018-02-18\tUKRAINE\thttp://galacticconnection.com/overthrowing-other-peoples-governments-the-master-list-of-u-s-regime-changes/\tEnglish\n731959911\t2018-02-18\tRUSSIA\thttp://www.telegraph.co.uk/news/2018/02/18/labour-mps-deny-spys-claims-paid-10k-czech-secret-service-threw/\tEnglish\n731960264\t2018-02-18\tUNITED STATES\thttps://www.deccanchronicle.com/entertainment/hollywood/190218/no-legal-evidence-of-jennifer-anniston-justin-theroux-marriage.html\tEnglish\n731960378\t2018-02-18\tUNITED STATES\thttps://www.therussophile.org/best-of-tomdispatch-tom-engelhardt-through-the-gates-of-hell.html\tEnglish\n731960477\t2018-02-18\tTHAILAND\thttps://www.bangkokpost.com/news/general/1414291/ties-forged-in-brotherhood\tEnglish\n731960527\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/Magazines/PeoplePower/Tracing-the-origin-goons-Ugandan-politics/689844-4309112-ylcg5j/\tEnglish\n731960711\t2017-02-18\tUNITED STATES\tHTTP://www.yonhapnews.co.kr/economy/2018/02/18/0302000000AKR20180218052600003.HTML?template\u003d5566\tKorean\n731960725\t2018-02-18\tARGENTINA\thttps://argentina.as.com/argentina/2018/02/18/futbol/1518991341_718941.html\tSpanish, Castilian\n731960833\t2018-02-18\tLATVIA\thttp://www.bursa.ro/./guvernatorul-bancii-nationale-din-letonia-arestat-de-agentia-anti-coruptie-341057\u0026s\u003dbanci_asigurari\u0026articol\u003d341057.html\tRomanian, Moldavian, Moldovan\n731960833\t2018-02-18\tLATVIA\thttp://www.bursa.ro/guvernatorul-bancii-nationale-din-letonia-arestat-de-agentia-anti-coruptie-341057\u0026s\u003dbanci_asigurari\u0026articol\u003d341057.html\tRomanian, Moldavian, Moldovan\n731961216\t2018-02-18\tUNITED STATES\thttps://www.radiofarda.com/a/Russia-Syria-deaths-creeping-anger-Kremlin-silence-mercenaries/29046942.html\tPersian\n731961641\t2018-02-18\tSWITZERLAND\thttps://www.finews.asia/finance/26466-switzerland-crypto-finma-foundations\tEnglish\n731961776\t2018-02-18\tIRAN\thttp://www.xinhuanet.com/english/2018-02/19/c_136984058.htm\tEnglish\n731961801\t2018-02-18\tUNITED KINGDOM\thttp://www.scoop.co.nz/stories/PO1802/S00198/lord-mayor-of-london-visits-new-zealand.htm\tEnglish\n731961876\t2018-02-18\tHUNGARY\thttps://dailynewshungary.com/orbans-keynote-speech-hungary-comes-first/\tEnglish\n731961916\t2018-02-18\tHAITI\thttps://tendancecoatesy.wordpress.com/2018/02/18/haiti-oxfam-in-defence-of-mary-beard-contre-priyamvada-gopal/\tEnglish\n731961982\t2018-02-18\tCAMBODIA\thttp://www.khmertimeskh.com/50109247/un-country-team-promote-cambodian-model-fight-political-human-rights-porn/\tEnglish\n731962741\t2018-02-18\tURUGUAY\thttps://www.elobservador.com.uy/el-asesino-la-cajera-la-blanqueada-es-el-hombre-mas-buscado-del-pais-n1172732\tSpanish, Castilian\n731962861\t2018-02-18\tMEXICO\thttp://www.publico.es/politica/rebelion-mujeres-psoe-sanchez-no-apoyar-valenciano-liderar-grupo-socialista-europeo.html\tSpanish, Castilian\n731962909\t2018-02-18\tTURKEY\thttp://www.ammonnews.net/article/356807\tArabic\n731964209\t2018-02-17\tALGERIA\thttp://www.annasronline.com/index.php/2014-08-09-10-34-08/90077-2018-02-18-20-21-33\tArabic\n731964338\t2018-02-18\tEGYPT\thttps://www.la-croix.com/Journal/Essentiels-Religion-2018-02-19-1100914780\tFrench\n731964666\t2018-02-18\tIRAN\thttp://www.albayan.ae/one-world/arabs/2018-02-19-1.3189977\tArabic\n731964786\t2018-02-18\tNIGERIA\thttps://www.ziare-pe-net.ro/stiri/cel-putin-19-persoane-au-fost-ucise-si-70-au-fost-ranite-intr-un-atentat-in-nord-estul-nigeriei-5788079.html\tRomanian, Moldavian, Moldovan\n731957760\t2018-02-18\tAUSTRALIA\thttp://www.smh.com.au/wa-news/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957760\t2018-02-18\tAUSTRALIA\thttp://www.watoday.com.au/wa-news/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957760\t2018-02-18\tAUSTRALIA\thttps://www.theage.com.au/national/western-australia/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957760\t2018-02-18\tAUSTRALIA\thttps://www.brisbanetimes.com.au/national/western-australia/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957769\t2018-02-18\tAUSTRIA\thttp://en.europeonline-magazine.eu/1st-leadhungarys-orban-threatens-to-close-ngos-helping-asylum-seekersby-gregor-mayer-dpa_626994.html\tEnglish\n731958140\t2018-02-18\tAUSTRALIA\thttps://www.katherinetimes.com.au/story/5234540/new-science-to-treat-pfas/?cs\u003d1837\tEnglish\n731958585\t2018-02-18\tUNITED STATES\thttp://www.kob.com/news/duckworth-using-pregnancy-to-educate-male-dominated-senate/4793529/?cat\u003d649\tEnglish\n731958586\t2018-02-18\tUNITED STATES\thttp://www.kob.com/news/duckworth-using-pregnancy-to-educate-male-dominated-senate/4793529/?cat\u003d649\tEnglish\n731959557\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270227/tragedy-as-al-shabaab-terrorists-end-lovebirds-dreams\tEnglish\n731959602\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270220/no-wearing-of-jungle-uniforms-in-urban-and-non-operational-areas-police-told\tEnglish\n731959602\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270220/ig-boinnet-officers-to-stop-wearing-jungle-uniforms-outside-operation-zones\tEnglish\n731959647\t2018-02-18\tSOUTH AFRICA\thttp://www.monitor.co.ug/Magazines/Life/Jacob-Zuma-cheerful-dancing-and-controversial-president-/689856-4308712-usr47d/\tEnglish\n731959657\t2018-02-18\tCAMBODIA\thttp://www.daily-mail.co.zm/farmers-to-benefit-from-climate-fund/\tEnglish\n731959672\t2018-02-18\tAUSTRALIA\thttp://www.westernadvocate.com.au/story/5235031/hey-there-delilaah-a-strong-bathurst-debut-for-muscats-filly/?cs\u003d116\tEnglish\n731959681\t2018-02-18\tAUSTRALIA\thttps://www.bigrigs.com.au/news/whats-the-hall-without/3338974/\tEnglish\n731959731\t2018-02-18\tCANADA\thttp://www.monitor.co.ug/News/National/Nakaseke--Shs1-6b-fruit-processing-plant--/688334-4310366-11j4593/\tEnglish\n731960284\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/Magazines/PeoplePower/Tracing-the-origin-goons-Ugandan-politics/689844-4309112-ylcg5j/\tEnglish\n731960496\t2018-02-18\tSYRIA\thttp://psuvanguard.com/no-peace-in-sight-for-syria/\tEnglish\n731960800\t2018-02-18\tUKRAINE\thttps://dnews.dn.ua/news/667087\tRussian\n731961017\t2018-02-18\tGERMANY\thttps://www.jungewelt.de/artikel/327488.kommen-fahrverbote-f%C3%BCr-dieselfahrzeuge.html\tGerman\n731961070\t2018-02-18\tINDIA\thttps://www.amarujala.com/uttar-pradesh/barabanki/crime/man-shoot-father-in-law-and-wife\tHindi\n731961392\t2018-02-18\tUNITED STATES\thttps://us.as.com/us/2018/02/18/mlb/1518992539_272058.html\tSpanish, Castilian\n731961672\t2018-02-18\tUNITED STATES\thttps://www.azcentral.com/story/news/local/arizona/2018/02/18/police-third-arizona-student-arrested-2-days-after-bringing-gun-school/349574002/\tEnglish\n731961739\t2018-02-18\tFRANCE\thttp://dailynews.co.tz/final/index.php/columnist/55948-reminiscences-of-the-algerian-revolution-martyr-day\tEnglish\n731961903\t2018-02-18\tIRAN\thttp://www.eurasiareview.com/18022018-un-rights-chief-urges-iran-to-halt-executions-of-juveniles-on-death-row/\tEnglish\n731961920\t2018-02-18\tIRELAND\thttp://www.thejournal.ie/inside-mountjoy-prison-3853842-Feb2018/\tEnglish\n731962034\t2018-02-18\tRUSSIA\thttp://www.gulf-times.com/story/582163/The-social-media-threat-to-society-and-security\tEnglish\n731962122\t2018-02-18\tNEW ZEALAND\thttp://www.scoop.co.nz/stories/PA1802/S00157/million-dollar-mouse-monitoring-phase-begins.htm\tEnglish\n731962198\t2018-02-18\tSUDAN\thttps://ibsintelligence.com/ibs-journal/full-steam-ahead-path-solutions/\tEnglish\n731962438\t2018-02-18\tALBANIA\thttp://www.zeit.de/news/2018-02/18/albanien-albaniens-regierungschef-schlaegt-gemeinsamen-praesidenten-mit-kosovo-vor-18234803\tGerman\n731964356\t2018-02-18\tIRAN\thttps://www.trend.az/iran/politics/2862483.html\tRussian\n731964431\t2018-02-18\tEGYPT\thttp://global.liputan6.com/read/3298400/19-2-1978-baku-tembak-militer-mesir-vs-siprus-di-bandara-larnaca\tIndonesian\n731964441\t2018-02-18\tEGYPT\thttp://almasalla.travel/%D8%A7%D9%88%D8%B1%D9%86%DA%86-%D8%AA%D8%AD%D8%B5%D9%84-%D8%B9%D9%84%D9%8A-%D8%AC%D8%A7%D8%A6%D8%B2%D8%A9-%D8%A3%D8%B3%D8%B1%D8%B9-%D8%B4%D8%A8%D9%83%D8%A9-4g-%D9%81%D9%8A-%D9%85%D8%B5%D8%B1-%D9%85/\tArabic\n731964801\t2018-02-18\tUNITED STATES\thttp://www.diez.hn/liganacionaldehonduras/1153369-498/motagua-estados_unidos-xolos_de_tijuana-liga_de_campeones-concacaf\tSpanish, Castilian\n731957770\t2018-02-18\tHUNGARY\thttp://en.europeonline-magazine.eu/1st-leadhungarys-orban-threatens-to-close-ngos-helping-asylum-seekersby-gregor-mayer-dpa_626994.html\tEnglish\n731957834\t2018-02-18\tRUSSIA\thttps://dailytimes.com.pk/204507/pakistan-russia-set-hold-key-talks-week/\tEnglish\n731957871\t2018-02-18\tAUSTRALIA\thttps://www.news-mail.com.au/news/tragedy-haunts-repeat-offender/3338967/\tEnglish\n731958056\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/article/2018-02-19-analysis-turning-vicious-into-a-virtuous-circle/\tEnglish\n731958131\t2018-02-18\tUNITED STATES\thttps://www.inquisitr.com/4791382/todd-hoffman-shocks-fans-leaving-gold-rush-parker-schnabel-and-tony-beets-react-to-shocking-news/\tEnglish\n731958169\t2018-02-18\tSYRIA\thttp://www.watertowndailytimes.com/national/netanyahu-to-iran-do-not-test-israels-resolve-20180218\tEnglish\n731958259\t2018-02-18\tUNITED STATES\thttps://www.lmtonline.com/neighborhood/pasadena/news/article/Pasadena-chamber-sees-record-growth-despite-Harvey-12623544.php\tEnglish\n731958522\t2018-02-18\tUNITED STATES\thttps://www.wwaytv3.com/2018/02/18/north-carolina-house-leader-creating-school-safety-panel-2/\tEnglish\n731959800\t2018-02-18\tUNITED STATES\thttp://www.benningtonbanner.com/stories/man-admits-assaulting-woman,532371\tEnglish\n731959887\t2018-02-18\tUNITED STATES\thttp://www.roanoke.com/news/wire_headlines/just-a-few-states-have-gun-laws-targeting-threatening-people/article_4ea7d8bc-6982-51a9-ba2d-b57175a46949.html\tEnglish\n731959988\t2018-02-18\tSWEDEN\thttp://indianexpress.com/article/cities/mumbai/magnetic-maharashtra-kraftsmala-to-boost-gender-equality-and-equity-in-state-5069270/\tEnglish\n731960154\t2018-02-18\tZIMBABWE\thttps://www.herald.co.zw/army-fatigues-land-duo-in-trouble/\tEnglish\n731960503\t2018-02-18\tTANZANIA\thttps://www.nation.co.ke/news/Water-scarcity-bites-counties-as-dry-spell-persists/1056-4310442-vspiq0z/\tEnglish\n731960717\t2018-02-17\tISRAEL\thttp://almoslim.net/news/285927\tArabic\n731960846\t2018-02-18\tNORTH KOREA\thttps://ondrejhalama.blog.sme.sk/c/476510/ako-vznikaju-vlastnicke-a-susedske-spory.html\tSlovak\n731961261\t2018-02-18\tISRAEL\thttps://iz.ru/710453/2018-02-19/palestinskie-boeviki-vtoroi-raz-za-sutki-obstreliali-iug-izrailia\tRussian\n731961450\t2018-02-18\tAFGHANISTAN\thttp://www.eurasiareview.com/18022018-afghanistan-president-ghanis-concept-of-national-issues-oped/\tEnglish\n731961655\t2018-02-18\tMALAYSIA\thttps://www.thestar.com.my/news/nation/2018/02/19/another-rm2mil-allocated-to-tawp/\tEnglish\n731961736\t2018-02-18\tGREECE\thttps://www.eveningsun.com/story/news/2018/02/18/german-police-probe-stalker-who-sent-100-pizzas-german-lawyer/349525002/\tEnglish\n731961988\t2018-02-18\tCAMBODIA\thttp://www.khmertimeskh.com/50109247/un-country-team-promote-cambodian-model-fight-political-human-rights-porn/\tEnglish\n731962508\t2018-02-18\tCOSTA RICA\thttps://www.larepublica.net/noticia/carlos-alvarado-me-comprometo-dignificar-al-educador-costarricense\tSpanish, Castilian\n731964328\t2018-02-18\tCANADA\thttp://journalmetro.com/actualites/national/1410640/le-frapru-marchera-pour-le-logement-social/\tFrench\n731964571\t2018-02-18\tIRAN\thttps://www.alhadath.ps/article/74075/%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D8%AD%D8%AF%D8%AB-%D8%AD%D9%85%D8%A7%D8%B3-%D8%A8%D9%8A%D9%86-%D8%A3%D8%A8%D9%88-%D9%85%D8%A7%D8%B2%D9%86-%D9%88%D8%B7%D9%87%D8%B1%D8%A7%D9%86\tArabic\n731964663\t2018-02-18\tRUSSIA\thttp://www.aif.ru/society/history/ledovyy_pohod_alekseya_shchastnogo_podvig_i_tragediya_krasnogo_admirala\tRussian\n731964814\t2018-02-18\tUKRAINE\thttps://www.blic.rs/vesti/svet/belorusija-spremna-da-posalje-mirovnjake-u-donbas/k79486h\tBosnian\n731957991\t2018-02-18\tAUSTRALIA\thttp://www.macarthuradvertiser.com.au/story/5235557/mcdormand-beats-robbie-for-bafta-award/\tEnglish\n731957991\t2018-02-18\tAUSTRALIA\thttp://www.mailtimes.com.au/story/5235557/mcdormand-beats-robbie-for-bafta-award/\tEnglish\n731957991\t2018-02-18\tAUSTRALIA\thttp://www.stawelltimes.com.au/story/5235557/mcdormand-beats-robbie-for-bafta-award/\tEnglish\n731957991\t2018-02-18\tAUSTRALIA\thttp://www.westernadvocate.com.au/story/5235557/mcdormand-beats-robbie-for-bafta-award/\tEnglish\n731958092\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/article/2018-02-19-analysis-turning-vicious-into-a-virtuous-circle/\tEnglish\n731958385\t2018-02-18\tPHILIPPINES\thttps://www.sfgate.com/world/article/Filipino-maid-s-death-spotlights-plight-of-12623553.php\tEnglish\n731959776\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270229/alarm-over-defilers-and-rapists-on-the-prowl\tEnglish\n731960212\t2018-02-18\tVIETNAM\thttp://www.eyeonannapolis.net/2018/02/welcome-home-viet-nam-veterans/\tEnglish\n731960393\t2018-02-18\tRUSSIA\thttp://www.bizpacreview.com/2018/02/18/rush-shocks-chris-wallace-bold-immigration-proposal-ill-support-full-amnesty-just-one-condition-604340\tEnglish\n731960445\t2018-02-18\tSYRIA\thttps://www.swissinfo.ch/eng/car-bomb-in-syria-s-qamishli-kills-five-people---state-media/43909646\tEnglish\n731960793\t2018-02-18\tFRANCE\thttps://noticiassin.com/2018/02/aislado-de-los-demas-esta-recluso-en-la-carcel-de-spm-acusado-de-matar-a-su-pareja-y-tres-hijastros/\tSpanish, Castilian\n731960798\t2018-02-18\tUNITED STATES\thttps://www.fondsk.ru/news/2018/02/18/serbskaja-pravoslavnaja-cerkov-pod-udarom-45626.html\tRussian\n731961198\t2018-02-18\tMEXICO\thttp://www.omnia.com.mx/noticia/56837/meade-la-mejor-opcion-para-mexico-la-unica-para-los-chihuahuenses-pri\tSpanish, Castilian\n731961305\t2018-02-18\tSYRIA\thttp://www.alkhaleej.ae/alkhaleej/page/420ccfd2-eee1-4ce6-b349-87a2a3e25ed3\tArabic\n731961474\t2018-02-18\tUNITED STATES\thttp://blogs.discovermagazine.com/citizen-science-salon/2018/02/18/citizen-science-in-oakland-by-the-people-for-the-people/\tEnglish\n731961607\t2018-02-18\tUNITED STATES\thttp://abc7.com/travel/free-jetblue-flights-for-families-of-florida-shooting-victims/3104562/\tEnglish\n731961628\t2018-02-18\tCANADA\thttp://www.cbc.ca/news/canada/british-columbia/thousands-turn-out-in-downtown-vancouver-to-celebrate-lunar-new-year-1.4541427\tEnglish\n731961786\t2018-02-18\tUNITED KINGDOM\thttp://www.enca.com/life/oscar-wilde-biopic-hails-christ-like-gay-icon\tEnglish\n731962402\t2018-02-18\tUNITED STATES\thttp://www.ejecentral.com.mx/morena-avala-candidatura-del-terco-amlo-la-presidencia/\tSpanish, Castilian\n731962687\t2018-02-18\tGERMANY\thttps://censor.net.ua/photo_news/3051107/poroshenko_nagradil_ordenom_geroev_nebesnoyi_sotni_uchastnika_revolyutsii_dostoinstva_bilchuka_posmertno\tRussian\n731964301\t2018-02-18\tBELARUS\thttps://tsn.ua/politika/treba-cyu-pozhezhu-zagasiti-lukashenko-rozpoviv-pro-naslidki-viyni-na-donbasi-dlya-bilorusi-1111707.html\tUkrainian\n731964348\t2018-02-18\tUNITED STATES\thttp://banjarmasin.tribunnews.com/2018/02/19/nama-kapores-dicatut-minta-duit-biaya-mencari-korban-tenggelam-ke-pemilik-kapal-di-balikpapan\tIndonesian\n731964418\t2018-02-18\tRUSSIA\thttps://rueconomics.ru/307611-telekanal-dlya-studentov-nachnet-veshchanie-v-rossii\tRussian\n731964496\t2018-02-18\tIRAN\thttps://www.alhadath.ps/article/74075/%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D8%AD%D8%AF%D8%AB-%D8%AD%D9%85%D8%A7%D8%B3-%D8%A8%D9%8A%D9%86-%D8%A3%D8%A8%D9%88-%D9%85%D8%A7%D8%B2%D9%86-%D9%88%D8%B7%D9%87%D8%B1%D8%A7%D9%86\tArabic\n731964727\t2018-02-18\tCHINA\thttps://snportal.si/forum/viewtopic.php?t\u003d87218\tRussian\n731957590\t2018-02-18\tAUSTRIA\thttp://philamirror.info/2018/02/19/new-stamps-from-austria-33/\tEnglish\n731957789\t2018-02-18\tAUSTRIA\thttp://philamirror.info/2018/02/19/new-stamps-from-austria-33/\tEnglish\n731957823\t2018-02-18\tCANADA\thttp://www.chroniclejournal.com/news/national/angry-quebec-nurses-push-for-lower-patient-ratios-and-less/article_5d6eff51-0c58-50e2-90b7-10d26ad80703.html\tEnglish\n731958020\t2018-02-18\tSWITZERLAND\thttp://www.dailymail.co.uk/femail/article-5406339/I-hope-marry-man-turned-20-YEARS-ago.html\tEnglish\n731958103\t2018-02-18\tRUSSIA\thttp://www.watertowndailytimes.com/national/trump-blames-obama-and-democrats-for-failing-to-stop-russian-meddling-20180218\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttps://www.aol.co.uk/news/2018/02/18/britons-in-fatal-new-zealand-car-crash-named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.tivysideadvertiser.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.stourbridgenews.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.somersetcountygazette.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.sthelensstar.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttps://www.belfasttelegraph.co.uk/news/uk/britons-in-fatal-new-zealand-car-crash-named-36617236.html\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.southwalesargus.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.bucksfreepress.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.thisislancashire.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.bromsgroveadvertiser.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.dailymail.co.uk/wires/pa/article-5406795/Britons-fatal-New-Zealand-car-crash-named.html\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.wiltshiretimes.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.dorsetecho.co.uk/news/national/16031274.britons-in-fatal-new-zealand-car-crash-named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.lancashiretelegraph.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.surreycomet.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.redditchadvertiser.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.thisislocallondon.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.dudleynews.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.freepressseries.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.northwalespioneer.co.uk/news/national/16031274.Britons_in_fatal_New_Zealand_car_crash_named/\tEnglish\n731958357\t2018-02-18\tNEW ZEALAND\thttp://www.prestwichandwhitefieldguide.co.uk/news/national/16031274.britons-in-fatal-new-zealand-car-crash-named/\tEnglish\n731958416\t2018-02-18\tRUSSIA\thttps://dailytimes.com.pk/204507/pakistan-russia-set-hold-key-talks-week/\tEnglish\n731958541\t2018-02-18\tUNITED STATES\thttp://obituaries.pressrepublican.com/obituary/margaret-wachtmeister-1943-2018-1029500096\tEnglish\n731959697\t2018-02-18\tJAPAN\thttps://www.theautochannel.com/news/2018/02/18/511020-mazda-to-unveil-updated-mazda6-wagon-geneva-motor-show.html\tEnglish\n731959727\t2018-02-18\tINDIA\thttps://www.straight.com/news/1034361/justin-trudeau-prepares-meet-indian-politicians-linked-hardline-rashtriya-swayamsevak\tEnglish\n731959831\t2018-02-18\tINDIA\thttp://echoofindia.com/reflex-action/feasibility-factor-simultaneous-polls-137760\tEnglish\n731959910\t2018-02-18\tRUSSIA\thttp://www.telegraph.co.uk/news/2018/02/18/labour-mps-deny-spys-claims-paid-10k-czech-secret-service-threw/\tEnglish\n731960344\t2018-02-18\tINDIA\thttp://www.dailyexcelsior.com/fierce-gunfight-in-poonch-as-pak-tries-to-push-infiltrators-under-firing-cover/\tEnglish\n731960465\t2018-02-18\tRUSSIA\thttps://www.msn.com/en-gb/news/world/syrian-kurdish-official-deal-for-syrian-army-to-enter-afrin/ar-BBJi1Lq\tEnglish\n731960784\t2018-02-18\tCONGO, DEMOCRATIC REPUBLIC OF THE\thttps://laprosperiteonline.net/2018/02/18/orientation-pastorale/\tFrench\n731960961\t2018-02-18\tIRAQ\thttp://ahram.org.eg/News/202562/4/638332/%D9%82%D8%B6%D8%A7%D9%8A%D8%A7-%D9%88%D8%A7%D8%B1%D8%A7%D8%A1/%D9%85%D8%B5%D8%B1-%D9%88%D8%A5%D8%B9%D8%A7%D8%AF%D8%A9-%D8%A7%D9%84%D8%A5%D8%B9%D9%85%D8%A7%D8%B1-%D8%A8%D8%A7%D9%84%D8%B9%D8%B1%D8%A7%D9%82.aspx\tArabic\n731961504\t2018-02-18\tCHINA\thttps://www.thestar.com.my/news/nation/2018/02/19/guessing-game-hits-its-peak-teoh-to-contest-in-gelang-patah-parliament-dissolution-may-be-announced/\tEnglish\n731961554\t2018-02-18\tZIMBABWE\thttp://www.enca.com/africa/tsvangirai-s-son-anoints-chamisa\tEnglish\n731961613\t2018-02-18\tITALY\thttps://cointelegraph.com/news/bitgrail-vs-nano-who-is-responsible-for-the-150-million-theft\tEnglish\n731961729\t2018-02-18\tINDIA\thttps://tendancecoatesy.wordpress.com/2018/02/18/haiti-oxfam-in-defence-of-mary-beard-contre-priyamvada-gopal/\tEnglish\n731961811\t2018-02-18\tUNITED STATES\thttp://www.newsherald.com/news/20180218/week-in-weird\tEnglish\n731961897\t2018-02-18\tHUNGARY\thttps://www.power-technology.com/projects/paks-ii-nuclear-power-plant/\tEnglish\n731961922\t2018-02-18\tIRAN\thttp://www.foxnews.com/world/2018/02/18/iran-flier-texted-before-deadly-plane-crash-may-god-protect-us.html\tEnglish\n731962076\t2018-02-18\tMALAYSIA\thttps://www.thestar.com.my/news/nation/2018/02/19/human-trafficking-under-watch-our-efforts-in-tackling-the-issue-monitored-by-the-us-for-tip-report/\tEnglish\n731962340\t2018-02-18\tUNITED STATES\thttp://www.dailymail.co.uk/news/article-5406749/Podesta-calls-Trump-draft-dodger-Russia.html\tEnglish\n731962474\t2018-02-18\tJAPAN\thttp://www.noticierovenevision.net/noticias/economia/quevedo-se-reunio-con-el-presidente-de-banco-de-cooperacion-internacional-del-japon\tSpanish, Castilian\n731962736\t2018-02-18\tJAPAN\thttp://www.soychile.cl/Santiago/Politica/2018/02/18/517463/Bachelet-regresara-este-lunes-de-sus-vacaciones-y-prepara-su-ultima-gira.aspx\tSpanish, Castilian\n731962759\t2018-02-18\tLIBYA\thttp://www.alarab-news.com/ME-News/article-1899597.html\tArabic\n731962823\t2018-02-18\tLIBYA\thttp://www.alarab-news.com/ME-News/article-1899597.html\tArabic\n731962926\t2018-02-18\tSAUDI ARABIA\thttp://al-akhbar.com/node/291023\tArabic\n731964248\t2018-02-18\tALGERIA\thttp://www.annasronline.com/index.php/2014-08-09-10-34-08/90077-2018-02-18-20-21-33\tArabic\n731964308\t2018-02-18\tBRAZIL\thttps://www.correiodoestado.com.br/brasilmundo/policial-militar-de-folga-e-mais-duas-pessoas-sao-mortas-em-tiroteio/321811/\tPortuguese\n731964636\t2018-02-18\tUKRAINE\thttp://talks.su/news/v-zone-ato-dvoe-boevikov-podorvalis-na-sobstvennih-minah-20180218/\tRussian\n731964644\t2018-02-18\tMEXICO\thttp://www.kicker.de/news/fussball/intligen/intpokale/afc-champions-league-fb-1/2018/2/4206231/spielinfo_al-ahli-jeddah_al-jazira-abu-dhabi.html\tGerman\n731964669\t2018-02-18\tSYRIA\thttps://www.izh.kp.ru/daily/26796.5/3831216/\tRussian\n731964793\t2018-02-18\tBELARUS\thttps://tsn.ua/politika/treba-cyu-pozhezhu-zagasiti-lukashenko-rozpoviv-pro-naslidki-viyni-na-donbasi-dlya-bilorusi-1111707.html\tUkrainian\n731957586\t2018-02-18\tAUSTRALIA\thttp://www.timesrepublican.com/news/todays-news/2018/02/immortalized/\tEnglish\n731958040\t2018-02-18\tPORTUGAL\thttp://thepeoplesperson.com/2018/02/18/jose-mourinho-blasts-manchester-uniteds-paul-pogba-and-phil-jones-194657/\tEnglish\n731958678\t2018-02-18\tPAKISTAN\thttps://dailytimes.com.pk/204387/daldal-kay-paar-breath-fresh-air/\tEnglish\n731959743\t2018-02-18\tCANADA\thttp://www.njherald.com/20180218/heaviest-snow-missed-county-temps-on-upswing\tEnglish\n731959922\t2018-02-18\tUNITED KINGDOM\thttp://www.huffingtonpost.co.uk/entry/tuition-fees-theresa-may-debt_uk_5a89d94ae4b05c2bcacc217f\tEnglish\n731960119\t2018-02-18\tISRAEL\thttp://psuvanguard.com/no-peace-in-sight-for-syria/\tEnglish\n731960467\t2018-02-18\tTHAILAND\thttps://www.bangkokpost.com/news/general/1414291/ties-forged-in-brotherhood\tEnglish\n731960818\t2018-02-18\tSAUDI ARABIA\thttp://www.alkhaleej.ae/alkhaleej/page/1347bdb0-d9ce-4336-9f52-61fde66d4c7e\tArabic\n731960953\t2018-02-18\tUNITED STATES\thttp://argumenti.ru/society/2018/02/563875\tRussian\n731961225\t2018-02-18\tNIGERIA\thttp://evz.ro/povestea-asasinarii-mercur.html\tRomanian, Moldavian, Moldovan\n731961744\t2018-02-18\tBRAZIL\thttp://www.businessinsider.com/brazils-army-taking-over-security-in-rio-de-janeiro-2018-2\tEnglish\n731961831\t2018-02-18\tTURKEY\thttp://www.northwestgeorgianews.com/region/pair-who-broke-into-hundreds-of-firefighters-cars-across-counties/article_92a648ca-14f1-11e8-b04d-cfb60b41f072.html\tEnglish\n731962025\t2018-02-18\tUNITED STATES\thttp://www.beautifuldecay.com/2014/11/26/frank-magnottas-absurdist-surreal-pencil-drawings-inspired-americana/\tEnglish\n731962417\t2018-02-18\tMAURITANIA\thttps://www.saharamedias.net/%D8%AC%D9%88%D9%86-%D8%A3%D9%81%D8%B1%D9%8A%D9%83-%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3-%D8%A7%D9%84%D9%81%D8%B1%D9%86%D8%B3%D9%8A-%D9%81%D9%8A-%D8%B2%D9%8A%D8%A7%D8%B1%D8%A9-%D8%B1%D8%B3%D9%85%D9%8A/\tArabic\n731962655\t2018-02-18\tCHILE\thttp://www.mynet.com/haber/espanol/chile-indaga-500-casos-de-adopciones-ilegales-durante-la-dictadura-3745938-1\tSpanish, Castilian\n731964456\t2018-02-18\tITALY\thttp://www.italiannetwork.it/news.aspx?id\u003d51595\tItalian\n731957565\t2018-02-11\tUNITED STATES\thttp://www.chicagonow.com/opinionated-woman/2018/02/could-the-tragic-death-of-commander-paul-bauer-be-a-catalyst-to-help-heal-chicago/\tEnglish\n731957863\t2018-02-18\tUNITED STATES\thttps://www.wtvq.com/2018/02/18/knox-county-sheriff-investigating-school-threat/\tEnglish\n731958107\t2018-02-18\tUNITED STATES\thttp://abcnews.go.com/GMA/Culture/princess-kate-steps-green-british-academy-film-awards/story?id\u003d53185429\tEnglish\n731958120\t2018-02-18\tCANADA\thttp://www.chroniclejournal.com/news/national/angry-quebec-nurses-push-for-lower-patient-ratios-and-less/article_5d6eff51-0c58-50e2-90b7-10d26ad80703.html\tEnglish\n731958180\t2018-02-18\tPOLAND\thttp://www.newser.com/story/255541/swastiskas-scrawled-on-polish-embassy-in-israel.html\tEnglish\n731958432\t2018-02-18\tUKRAINE\thttps://www.theatlantic.com/international/archive/2018/02/russia-mueller-trump-indictment-obama/553679/\tEnglish\n731959948\t2018-02-18\tHAITI\thttp://thehayride.com/2018/02/crouere-anti-trump-mitt-romney-still-wants-president/\tEnglish\n731960042\t2018-02-18\tGAMBIA, THE\thttp://www.westernadvocate.com.au/story/5232253/whats-on/?cs\u003d146\tEnglish\n731960137\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270229/alarm-over-defilers-and-rapists-on-the-prowl\tEnglish\n731960308\t2018-02-18\tCAMBODIA\thttp://www.khmertimeskh.com/50109246/tackling-poverty-inequality-qa-oxfam/\tEnglish\n731960425\t2018-02-18\tSAUDI ARABIA\thttp://mwcnews.net/news/middle-east/70544-iran-denies-hegemon-plans.html\tEnglish\n731960488\t2018-02-18\tTHAILAND\thttps://www.bangkokpost.com/opinion/opinion/1414279/rethink-the-protest-ban\tEnglish\n731960913\t2018-02-18\tRUSSIA\thttps://iz.ru/707940/evgeniia-pertceva/zhizn-sol\tRussian\n731961058\t2018-02-18\tROMANIA\thttp://www.ziarelive.ro/stiri/vesti-pentru-medicii-de-familie-se-schimba-finantarea-serviciilor.html\tRomanian, Moldavian, Moldovan\n731961423\t2017-02-18\tSYRIA\thttp://www.jordantimes.com/news/local/iraq-working-full-capacity%E2%80%99-prepare-border-crossing-smooth-trade\tEnglish\n731961680\t2018-02-18\tUNITED STATES\thttp://www.newsherald.com/news/20180218/week-in-weird\tEnglish\n731962345\t2018-02-18\tMALAYSIA\thttps://www.thestar.com.my/news/nation/2018/02/19/human-trafficking-under-watch-our-efforts-in-tackling-the-issue-monitored-by-the-us-for-tip-report/\tEnglish\n731962598\t2018-02-18\tSUDAN\thttp://gate.ahram.org.eg/News/1829111.aspx\tArabic\n731962663\t2018-02-18\tSUDAN\thttp://gate.ahram.org.eg/News/1829111.aspx\tArabic\n731964381\t2018-02-18\tCOLOMBIA\thttp://www.contextotucuman.com/nota/105454/simio-se-niega-a-separarse-de-perra-que-lo-adopto-y-amamanto.html\tSpanish, Castilian\n731964532\t2018-02-18\tVENEZUELA\thttps://www.sfgate.com/espanol/news/article/Maduro-va-a-la-Cumbre-de-las-Americas-pese-a-12623500.php\tSpanish, Castilian\n731964532\t2018-02-18\tVENEZUELA\thttps://www.chron.com/espanol/news/article/Maduro-va-a-la-Cumbre-de-las-Americas-pese-a-12623500.php\tSpanish, Castilian\n731964777\t2018-02-18\tALGERIA\thttp://www.annasronline.com/index.php/2014-08-25-12-15-24/2015-09-23-21-25-42/90116-2018-02-18-21-41-43\tArabic\n731957912\t2018-02-18\tRUSSIA\thttps://www.nytimes.com/2018/02/18/world/europe/russia-us-election.html\tEnglish\n731958159\t2018-02-18\tRUSSIA\thttps://www.msn.com/en-us/news/world/bad-guy-russia-emerges-as-central-player-in-western-diplomacy/ar-BBJi19L\tEnglish\n731958319\t2018-02-18\tJAPAN\thttp://www.hellenicshippingnews.com/the-quiet-king-of-japanese-shipbuilding-expands-its-empire/\tEnglish\n731958589\t2018-02-18\tSOUTH KOREA\thttps://www.hancinema.net/hancinema-s-digest-photography-and-art-115639.html\tEnglish\n731958589\t2018-02-18\tSOUTH KOREA\thttps://www.hancinema.net/www.hancinema.net/hancinema-s-digest-photography-and-art-115639.html\tEnglish\n731958669\t2018-02-18\tCANADA\thttp://www.macleans.ca/opinion/gerald-stanleys-trial-highlights-the-colonialism-of-canadian-media/\tEnglish\n731959584\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270227/tragedy-as-al-shabaab-terrorists-end-lovebirds-dreams\tEnglish\n731959584\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270227/al-shabaab-militants-raided-the-school-compound-at-dawn-killed-the-two\tEnglish\n731959609\t2018-02-18\tGERMANY\thttp://www.gulf-times.com/story/582214/Award-winning-filmmaker-shares-experiences-at-NU-Q\tEnglish\n731959890\t2018-02-18\tRUSSIA\thttps://www.salon.com/2018/02/18/trump-to-hold-listening-session-with-students-teachers-from-florida-shooting/\tEnglish\n731960049\t2018-02-18\tMOROCCO\thttp://menafn.com/1096479681/MoroccanSpanish-Delegation-Visits-Dakhla-to-Explore-Opportunities-for-Investment-in-Fisheries-Sector\tEnglish\n731960220\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/OpEd/Commentary/Nema-NFA-others-must-prove-their-relevance/689364-4310184-15bcu0i/\tEnglish\n731960463\t2018-02-18\tTURKEY\thttps://www.msn.com/en-gb/news/world/syrian-kurdish-official-deal-for-syrian-army-to-enter-afrin/ar-BBJi1Lq\tEnglish\n731960735\t2018-02-18\tCHINA\thttps://noticiassin.com/2018/02/al-menos-800-millones-de-dolares-aporto-la-colonia-china-a-rd-en-el-2017-segun-fu-xirong/\tSpanish, Castilian\n731960790\t2018-02-18\tEGYPT\thttp://ahram.org.eg/News/202562/59/638197/%D8%A2%D8%B1%D8%A7%D8%A1-%D8%AD%D8%B1%D8%A9/%D8%A7%D8%B9%D9%84%D8%A7%D9%85%D9%8A%D9%88-%D8%A7%D9%84%D8%B4%D8%B1%D9%82%D9%8A%D8%A9-%D8%B1%D9%85%D8%B2-%D8%A7%D9%84%D9%88%D8%B7%D9%86%D9%8A%D8%A9.aspx\tArabic\n731961227\t2018-02-18\tNIGERIA\thttp://evz.ro/povestea-asasinarii-mercur.html\tRomanian, Moldavian, Moldovan\n731961237\t2018-02-18\tSYRIA\thttp://french.china.org.cn/foreign/txt/2018-02/19/content_50561850.htm\tFrench\n731961490\t2018-02-18\tALGERIA\thttps://www.echoroukonline.com/ara/articles/549349.html\tEnglish\n731961941\t2018-02-18\tITALY\thttp://ciaobambino.com/florence-duomo-and-campanile-with-kids/\tEnglish\n731961987\t2018-02-18\tCAMBODIA\thttp://www.khmertimeskh.com/50109247/un-country-team-promote-cambodian-model-fight-political-human-rights-porn/\tEnglish\n731962236\t2018-02-18\tPHILIPPINES\thttps://mronline.org/2018/02/18/operation-pacific-eagle-in-the-philippines-washingtons-new-colonial-war/\tEnglish\n731962386\t2018-02-18\tEGYPT\thttp://www.alufuqnews.com/Mal-Waqtsad/200932.html\tArabic\n731962843\t2018-02-18\tVENEZUELA\thttp://www.noticiasrcn.com/internacional-crisis-venezuela/pese-negativa-peru-venezuela-insiste-maduro-ira-cumbre-las-americas\tSpanish, Castilian\n731962956\t2018-02-18\tJAPAN\thttp://www.noticierovenevision.net/noticias/economia/quevedo-se-reunio-con-el-presidente-de-banco-de-cooperacion-internacional-del-japon\tSpanish, Castilian\n731964412\t2018-02-18\tALGERIA\thttp://www.annasronline.com/index.php/2014-08-09-10-34-08/90077-2018-02-18-20-21-33\tArabic\n731964555\t2018-02-18\tUNITED STATES\thttp://blog.milliyet.com.tr/bir-cinli-bir-amerikali-ve-akilli-bir-turk/Blog/?BlogNo\u003d582181\tTurkish\n731964774\t2018-02-18\tNIGERIA\thttps://www.ziare-pe-net.ro/stiri/cel-putin-19-persoane-au-fost-ucise-si-70-au-fost-ranite-intr-un-atentat-in-nord-estul-nigeriei-5788079.html\tRomanian, Moldavian, Moldovan\n731964806\t2018-02-18\tUNITED STATES\thttps://www.diariolasamericas.com/florida/familia-que-acogio-nikolas-cruz-afirma-que-no-sabia-que-vivian-un-monstruo-n4143888\tSpanish, Castilian\n731957919\t2018-02-18\tSINGAPORE\thttps://www.channelnewsasia.com/news/singapore/budget-2018-5-issues-that-could-be-in-the-spotlight-9952562\tEnglish\n731958065\t2018-02-18\tAUSTRALIA\thttps://www.theage.com.au/business/companies/domain-chairman-says-company-in-great-shape-without-chief-executive-20180219-p4z0sc.html\tEnglish\n731958171\t2018-02-18\tPOLAND\thttps://www.msn.com/en-us/news/world/swastikas-slurs-daubed-on-polish-embassy-in-tel-aviv/ar-BBJgVhA\tEnglish\n731958281\t2018-02-18\tUNITED KINGDOM\thttps://www.care2.com/causes/malaysian-newspaper-releases-how-to-spot-a-gay-guide.html\tEnglish\n731959755\t2018-02-18\tBANGLADESH\thttp://www.thedailystar.net/backpage/murder-suspect-killed-shootout-1536688\tEnglish\n731960239\t2018-02-18\tMOROCCO\thttp://menafn.com/1096479681/MoroccanSpanish-Delegation-Visits-Dakhla-to-Explore-Opportunities-for-Investment-in-Fisheries-Sector\tEnglish\n731960245\t2018-02-18\tUNITED STATES\thttp://www.justjared.com/tags/robin-dearden-/\tEnglish\n731960258\t2018-02-18\tRUSSIA\thttps://www.expatica.com/ru/news/country-news/Russia-attack-church_1713041.html\tEnglish\n731960587\t2018-02-18\tUNITED STATES\thttp://www.benningtonbanner.com/stories/man-admits-assaulting-woman,532371\tEnglish\n731960746\t2018-02-18\tCHINA\thttp://french.china.org.cn/foreign/txt/2018-02/19/content_50561298.htm\tFrench\n731961113\t2018-02-18\tRUSSIA\thttps://iz.ru/710453/2018-02-19/palestinskie-boeviki-vtoroi-raz-za-sutki-obstreliali-iug-izrailia\tRussian\n731961299\t2018-02-18\tUKRAINE\thttps://www.omsk.kp.ru/daily/26796.5/3831216/\tRussian\n731961299\t2018-02-18\tUKRAINE\thttps://ukranews.com/news/548098-vo-vsemyrnom-banke-napomnyly-ukrayne-o-dolgakh\tRussian\n731961525\t2018-02-18\tRUSSIA\thttp://www.greanvillepost.com/2018/02/18/mueller-indictment-the-russian-influence-is-a-commercial-marketing-scheme/\tEnglish\n731961759\t2018-02-18\tUNITED STATES\thttps://www.nbcwashington.com/news/local/Marching-for-Our-Lives-Survivors-of-Florida-Shooting-Announce-March-on-Washington-474429843.html\tEnglish\n731961835\t2018-02-18\tANGOLA\thttp://dailynews.co.tz/final/index.php/home-news/55957-buchosa-councillors-want-executive-director-out\tEnglish\n731962054\t2018-02-18\tUNITED STATES\thttp://abc7.com/travel/free-jetblue-flights-for-families-of-florida-shooting-victims/3104562/\tEnglish\n731962388\t2018-02-18\tSPAIN\thttp://www.publico.es/politica/rebelion-mujeres-psoe-sanchez-no-apoyar-valenciano-liderar-grupo-socialista-europeo.html\tSpanish, Castilian\n731962849\t2018-02-18\tPORTUGAL\thttp://expresso.sapo.pt/sociedade/2018-02-18-Cronicas-do-Purgatorio-um-retrato-de-Vasco-Pulido-Valente\tPortuguese\n731962890\t2018-02-18\tSAUDI ARABIA\thttp://al-akhbar.com/node/291054\tArabic\n731962890\t2018-02-18\tSAUDI ARABIA\thttp://www.al-akhbar.com/node/291054\tArabic\n731962951\t2018-02-18\tIRAN\thttp://www.panamaamerica.com.pa/mundo/trump-arremete-contra-el-congreso-y-el-fbi-por-no-haber-investigado-un-pago-de-obama-iran\tSpanish, Castilian\n731964494\t2018-02-18\tCHINA\thttps://nazory.aktualne.cz/komentare/zeman-dohazoval-cssd-babise-jak-kecal-z-prodane-nevesty/r~75c0e07614dd11e880d30cc47ab5f122/?redirected\u003d1518995790\tCzech\n731964536\t2018-02-18\tGREECE\thttp://alwatan.com/details/245010\tArabic\n731964573\t2018-02-18\tIRAQ\thttp://alwatan.com/details/244997\tArabic\n731957568\t2018-02-17\tNIGERIA\thttp://sunnewsonline.com/death-toll-from-borno-blasts-hits-21/\tEnglish\n731957867\t2018-02-18\tUNITED STATES\thttps://www.channelnewsasia.com/news/world/sudan-releases-political-prisoners-from-khartoum-jails-9970226\tEnglish\n731957867\t2018-02-18\tUNITED STATES\thttp://news.trust.org/item/20180218223237-ph4bp\tEnglish\n731957867\t2018-02-18\tUNITED STATES\thttps://www.reuters.com/article/us-sudan-politics/sudan-releases-political-prisoners-from-khartoum-jails-idUSKCN1G20W0\tEnglish\n731958053\t2018-02-18\tUNITED STATES\thttp://abcnews.go.com/GMA/Culture/princess-kate-steps-green-british-academy-film-awards/story?id\u003d53185429\tEnglish\n731958252\t2018-02-18\tUNITED STATES\thttp://www.news965.com/news/john-kasich-rips-congress-urges-common-sense-gun-laws/wE96KMRDDJSEOgJmUxHxwJ/\tEnglish\n731959796\t2018-02-18\tUNITED STATES\thttp://www.benningtonbanner.com/stories/man-admits-assaulting-woman,532371\tEnglish\n731959900\t2018-02-18\tMOROCCO\thttp://menafn.com/1096479681/MoroccanSpanish-Delegation-Visits-Dakhla-to-Explore-Opportunities-for-Investment-in-Fisheries-Sector\tEnglish\n731959997\t2018-02-18\tUNITED STATES\thttps://www.usatoday.com/story/tech/news/2018/02/18/robert-mueller-investigation-some-americans-want-facebook-fined-over-meddling/349270002/\tEnglish\n731960278\t2018-02-18\tTHAILAND\thttps://www.bangkokpost.com/news/general/1414291/ties-forged-in-brotherhood\tEnglish\n731960283\t2018-02-18\tZIMBABWE\thttp://www.chronicle.co.zw/president-consoles-tsvangirai-family-govt-to-honour-promises-made-to-him/\tEnglish\n731960433\t2018-02-18\tMOROCCO\thttp://menafn.com/1096479681/MoroccanSpanish-Delegation-Visits-Dakhla-to-Explore-Opportunities-for-Investment-in-Fisheries-Sector\tEnglish\n731960451\t2018-02-18\tSYRIA\thttps://www.sfgate.com/world/article/New-job-center-raises-hopes-of-Syrian-refugees-in-12623567.php\tEnglish\n731960573\t2018-02-18\tUNITED STATES\thttp://www.njherald.com/article/20180218/AP/302189852\tEnglish\n731960637\t2018-02-18\tUNITED STATES\thttp://journalstar.com/legislature/don-walton-university-budget-decision-is-your-call/article_45c987c3-3d91-5557-9538-84275dd9bbb5.html\tEnglish\n731960680\t2018-02-18\tUNITED STATES\thttp://thehayride.com/2018/02/crouere-anti-trump-mitt-romney-still-wants-president/\tEnglish\n731960748\t2018-02-18\tUNITED STATES\thttp://www.toutelatele.com/progTv/fiche.php?id\u003d1702561\u0026date\u003d2018-02-18\tFrench\n731960753\t2018-02-18\tSAUDI ARABIA\thttps://sabq.org/WwFtyS\tArabic\n731960753\t2018-02-18\tSAUDI ARABIA\thttp://www.alarab-news.com/ME-News/article-1899617.html\tArabic\n731960886\t2018-02-18\tGERMANY\thttp://www.mittelbayerische.de/region/neumarkt-nachrichten/nuernbergs-sonderstatus-vor-dem-ende-21102-art1616633.html\tGerman\n731960966\t2018-02-18\tEGYPT\thttp://24.com.eg/qatar/3723820.html\tArabic\n731961654\t2018-02-18\tMALAYSIA\thttps://www.thestar.com.my/news/nation/2018/02/19/another-rm2mil-allocated-to-tawp/\tEnglish\n731961942\t2018-02-18\tISRAEL\thttps://tendancecoatesy.wordpress.com/2018/02/18/haiti-oxfam-in-defence-of-mary-beard-contre-priyamvada-gopal/\tEnglish\n731962161\t2018-02-18\tFRANCE\thttp://www.deccanchronicle.com/nation/current-affairs/190218/nirmala-sitharaman-defends-rafale-fighter-jet-deal-with-france.html\tEnglish\n731962211\t2018-02-18\tTANZANIA\thttp://dailynews.co.tz/final/index.php/home-news/55953-bandari-college-told-to-repossess-buildings-from-tourism-institute\tEnglish\n731962312\t2018-02-18\tUNITED STATES\thttp://www.khmertimeskh.com/50109249/rainsy-urges-vital-water-boycott/\tEnglish\n731962455\t2018-02-18\tGERMANY\thttp://www.protothema.gr/world/article/762450/germania-400-stelehi-tou-spd-kata-tou-sunaspismou-upo-tin-merkel/\tModern Greek (since 1453–)\n731962538\t2018-02-18\tGERMANY\thttp://www.bokra.net/Article-1383805\tArabic\n731962636\t2018-02-18\tHUNGARY\thttps://dennikn.sk/1033313/zapad-a-pomocou-sorosa-ovladnu-moslimovia-z-afriky-sme-posledna-krestanska-krajina-varoval-orban/\tSlovak\n731964215\t2018-02-17\tISRAEL\thttps://www.la-croix.com/Journal/Essentiels-Monde-2018-02-19-1100914768\tFrench\n731964315\t2018-02-18\tEGYPT\thttp://www.alarab-news.com/ME-News/article-1899635.html\tArabic\n731964587\t2018-02-18\tGERMANY\thttp://lepays.bf/demande-de-levee-de-limmunite-de-deputes-de-lopposition-benin-volonte-reelle-dassainissement-chasse-aux-sorcieres/\tFrench\n731964598\t2018-02-18\tBRAZIL\thttps://www.acidadeon.com/ribeiraopreto/cotidiano/policia/NOT,0,0,1307851,travesti+morre+apos+ser+espancada+em+motel+de+ribeirao+preto.aspx\tPortuguese\n731957817\t2018-02-18\tCANADA\thttp://canada.onlinenigeria.com/montreal/137971-man-in-serious-condition-after-stabbing-on-beaudry-st.html\tEnglish\n731958194\t2018-02-18\tCHINA\thttp://www.scnow.com/news/article_fc025510-14d9-11e8-be5c-074be93a5ba7.html\tEnglish\n731958424\t2018-02-18\tPAKISTAN\thttps://dailytimes.com.pk/204507/pakistan-russia-set-hold-key-talks-week/\tEnglish\n731958517\t2018-02-18\tUNITED STATES\thttps://www.inquisitr.com/4791382/todd-hoffman-shocks-fans-leaving-gold-rush-parker-schnabel-and-tony-beets-react-to-shocking-news/\tEnglish\n731959850\t2018-02-18\tUNITED STATES\thttp://www.ivpressonline.com/storiesfromthepast/stories-from-the-past---feb-immigration-policy-hit/article_b40b12b6-14ec-11e8-a835-1f661dbb4cd2.html\tEnglish\n731960691\t2018-02-18\tUNITED STATES\thttp://www.justjared.com/tags/robin-dearden-/\tEnglish\n731960926\t2018-02-18\tPOLAND\thttps://www.fondsk.ru/news/2018/02/18/polsha-pod-natiskom-ukrainskih-kontrabandistov-45624.html\tRussian\n731961083\t2018-02-18\tEGYPT\thttp://ahram.org.eg/News/202562/4/638332/%D9%82%D8%B6%D8%A7%D9%8A%D8%A7-%D9%88%D8%A7%D8%B1%D8%A7%D8%A1/%D9%85%D8%B5%D8%B1-%D9%88%D8%A5%D8%B9%D8%A7%D8%AF%D8%A9-%D8%A7%D9%84%D8%A5%D8%B9%D9%85%D8%A7%D8%B1-%D8%A8%D8%A7%D9%84%D8%B9%D8%B1%D8%A7%D9%82.aspx\tArabic\n731961103\t2018-02-18\tCHINA\thttp://5minutes.rtl.lu/monde/laune/1137923.html\tFrench\n731961134\t2018-02-18\tISRAEL\thttp://ahram.org.eg/News/202562/11/638266/%D8%A7%D9%84%D8%A7%D8%B9%D9%85%D8%AF%D8%A9/%D9%84%D8%A8%D9%86%D8%A7%D9%86-%D9%8A%D9%86%D8%AA%D8%AC-%D8%A8%D8%AA%D8%B1%D9%88%D9%84%D8%A7.aspx\tArabic\n731961192\t2018-02-18\tMEXICO\thttp://noticieros.televisa.com/ultimas-noticias/internacional/2018-02-18/director-coco-dedica-bafta-gente-mexico/\tSpanish, Castilian\n731961250\t2018-02-18\tCHINA\thttp://5minutes.rtl.lu/monde/laune/1137923.html\tFrench\n731961367\t2018-02-18\tUKRAINE\thttps://www.radiofarda.com/a/Russia-Syria-deaths-creeping-anger-Kremlin-silence-mercenaries/29046942.html\tPersian\n731961535\t2018-02-18\tUNITED STATES\thttps://www.centralmaine.com/2018/02/18/father-and-10-year-old-son-both-killed-in-hermon-snowmobile-crash/\tEnglish\n731961785\t2018-02-18\tUNITED KINGDOM\thttp://www.independent.co.uk/news/world/europe/british-holocaust-denial-germany-police-investigation-europe-news-latest-a8216586.html\tEnglish\n731962142\t2018-02-18\tPHILIPPINES\thttps://mronline.org/2018/02/18/operation-pacific-eagle-in-the-philippines-washingtons-new-colonial-war/\tEnglish\n731962391\t2018-02-18\tMEXICO\thttp://www.hoytamaulipas.net/notas/331229/Un-gobierno-a-la-medida-de-cada-quien-Meade.html\tSpanish, Castilian\n731962904\t2018-02-18\tRUSSIA\thttp://www.fasopresse.net/societe/5972-deces-du-cineaste-idrissa-ouedraogo?5e90491fecb379c63acce1d6f2f74023\u003df7b0c9a0712efb4cb0783b6176c9f02c\tFrench\n731964351\t2018-02-18\tUNITED STATES\thttp://www.elnuevoherald.com/noticias/sur-de-la-florida/article200846264.html\tSpanish, Castilian\n731964439\t2018-02-18\tGERMANY\thttp://www.elnadanews.com/world/1564241\tArabic\n731957856\t2018-02-18\tSOUTH AFRICA\thttps://www.msn.com/en-za/news/other/hindustan-times-uttarakhand-gives-z-security-to-gupta-brothers-probed-over-graft-in-south-africa/ar-BBJiOCs\tEnglish\n731957856\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/article/2018-02-19-hindustan-times-uttarakhand-gives-z-security-to-gupta-brothers-probed-over-graft-in-south-africa/\tEnglish\n731958009\t2018-02-18\tISRAEL\thttps://www.msn.com/en-us/news/world/bad-guy-russia-emerges-as-central-player-in-western-diplomacy/ar-BBJi19L\tEnglish\n731958502\t2018-02-18\tUNITED STATES\thttp://www.americanpress.com/news/local/american-press-readies-to-flip-switch-on-new-printing-press/article_7986b308-14e1-11e8-81a7-af970219d64a.html\tEnglish\n731959916\t2018-02-18\tRUSSIA\thttp://www.telegraph.co.uk/news/2018/02/18/labour-mps-deny-spys-claims-paid-10k-czech-secret-service-threw/\tEnglish\n731960147\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270223/italian-investor-loses-land-in-sh1-billion-top-hotel\tEnglish\n731960522\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/Magazines/PeoplePower/for-how-long-will-Museveni-watch-police-collapse-before-acting-/689844-4309064-14jae0a/\tEnglish\n731960670\t2018-02-18\tUNITED STATES\thttp://www.benningtonbanner.com/stories/bluegrass-festival-coming-to-manchester,532369\tEnglish\n731960943\t2018-02-18\tRUSSIA\thttps://iz.ru/709709/marina-iurshina/s-14-let-vo-vzrosluiu-zhizn\tRussian\n731961166\t2018-02-18\tSRI LANKA\thttp://mawbima.lk/print20170621MB20171230.php?id\u003d10399\tSinhalese, Sinhala\n731961197\t2018-02-18\tMEXICO\thttp://www.notimex.gob.mx/comunicadosDetalle/492234\tSpanish, Castilian\n731961493\t2018-02-18\tTANZANIA\thttp://dailynews.co.tz/final/index.php/business/55944-flooding-illegal-brew-irk-traders\tEnglish\n731961611\t2018-02-18\tTANZANIA\thttp://dailynews.co.tz/final/index.php/business/55944-flooding-illegal-brew-irk-traders\tEnglish\n731961906\t2018-02-18\tUNITED STATES\thttps://mronline.org/2018/02/18/operation-pacific-eagle-in-the-philippines-washingtons-new-colonial-war/\tEnglish\n731962492\t2018-02-18\tCOLOMBIA\thttp://caracol.com.co/emisora/2018/02/18/barranquilla/1518989973_261768.html\tSpanish, Castilian\n731962615\t2018-02-18\tROMANIA\thttp://www.ziarelive.ro/stiri/bafta-2018-lista-completa-a-trofeelor-atribuite-la-cea-de-a-71-a-editie-a-galei.html\tRomanian, Moldavian, Moldovan\n731962928\t2018-02-18\tUNITED STATES\thttp://www.augsburger-allgemeine.de/panorama/Wut-richtet-sich-nach-Parkland-Attentat-auch-gegen-Donald-Trump-id44258791.html\tGerman\n731964404\t2018-02-18\tIRAN\thttp://www.hurriyet.com.tr/dunya/iha-enkazina-sirk-cevabi-40746233\tTurkish\n731964435\t2018-02-18\tRWANDA\thttps://www.egynews.net/1877799/%D8%A7%D9%84%D8%A3%D9%82%D8%B5%D8%B1-%D9%84%D9%84%D8%B3%D9%8A%D9%86%D9%85%D8%A7-%D8%A7%D9%84%D8%A5%D9%81%D8%B1%D9%8A%D9%82%D9%8A%D8%A9-%D9%8A%D8%B9%D9%84%D9%86-%D8%A7%D8%AE%D8%AA%D9%8A%D8%A7%D8%B1/\tArabic\n731964457\t2018-02-18\tITALY\thttp://www.italiannetwork.it/news.aspx?id\u003d51595\tItalian\n731964577\t2018-02-18\tISRAEL\thttps://www.sabah.com.tr/dunya/2018/02/19/israilin-gazze-saldirisinda\tTurkish\n731957750\t2018-02-18\tAUSTRALIA\thttps://www.brisbanetimes.com.au/national/western-australia/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957750\t2018-02-18\tAUSTRALIA\thttps://www.theage.com.au/national/western-australia/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957750\t2018-02-18\tAUSTRALIA\thttp://www.watoday.com.au/wa-news/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957750\t2018-02-18\tAUSTRALIA\thttp://www.smh.com.au/wa-news/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957826\t2018-02-18\tSWITZERLAND\thttp://sacramento.cbslocal.com/2018/02/18/switzerland-boiling-lobsters/\tEnglish\n731958231\t2018-02-18\tUNITED STATES\thttp://www.stltoday.com/news/local/columns/tony-messenger/messenger-hallmark-hawley-and-the-metoo-movement-forced-arbitration-effort/article_96f72296-608e-5bb0-861a-88a39fe7127e.html\tEnglish\n731958296\t2018-02-18\tNEW ZEALAND\thttp://www.dailymail.co.uk/wires/pa/article-5406795/Britons-fatal-New-Zealand-car-crash-named.html\tEnglish\n731958553\t2018-02-18\tUNITED STATES\thttp://miami.cbslocal.com/2018/02/18/turning-anger-into-activism-school-shooting/\tEnglish\n731958676\t2018-02-18\tSYRIA\thttp://popculture.com/wwe/2018/02/18/sami-zayn-humanitarian-award-wwe/\tEnglish\n731959536\t2018-02-17\tZIMBABWE\thttps://www.herald.co.zw/army-fatigues-land-duo-in-trouble/\tEnglish\n731959663\t2018-02-18\tALBANIA\thttps://www.therussophile.org/kosovo-celebrates-a-decade-of-dependence-and-confusion.html\tEnglish\n731959753\t2018-02-18\tAUSTRALIA\thttp://www.smh.com.au/nsw/man-charged-after-sydney-car-park-brawl-leaves-victim-on-life-support-20180218-p4z0sv.html\tEnglish\n731959836\t2018-02-18\tISRAEL\thttp://imemc.org/article/israeli-soldiers-abduct-five-palestinians-in-jenin-salfit-and-jerusalem-briefly-detain-14-in-hebron/\tEnglish\n731960090\t2018-02-18\tOCEANS\thttp://psuvanguard.com/no-peace-in-sight-for-syria/\tEnglish\n731960162\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/man-gets-20-years-for-having-bhang\tEnglish\n731960162\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/truck-driver-jailed-for-20-years-for-being-in-possession-of-bhang\tEnglish\n731960367\t2018-02-18\tAUSTRALIA\thttps://www.sbs.com.au/news/husband-of-slain-british-mp-jo-cox-accused-of-sexual-misconduct\tEnglish\n731960414\t2018-02-18\tRUSSIA\thttps://www.mediaite.com/online/sen-grassley-tweets-at-trump-we-can-no-longer-say-there-is-no-russian-interference-in-elections/\tEnglish\n731960487\t2018-02-18\tBANGLADESH\thttp://dev.thedailystar.net/country/si-breaches-security-dhaka-airport-1536874\tEnglish\n731960495\t2018-02-18\tOCEANS\thttp://psuvanguard.com/no-peace-in-sight-for-syria/\tEnglish\n731960524\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/News/National/Nakaseke--Shs1-6b-fruit-processing-plant--/688334-4310366-11j4593/\tEnglish\n731960782\t2018-02-18\tCONGO, DEMOCRATIC REPUBLIC OF THE\thttps://laprosperiteonline.net/2018/02/18/36-ans-de-lutte-politique-udps-un-etat-desprit-par-dessus-tout/\tFrench\n731961153\t2018-02-18\tBRAZIL\thttp://www.redebrasilatual.com.br/politica/2018/02/cut-momento-e-de-aumentar-pressao-e-enterrar-de-vez-a-reforma-da-previdencia\tPortuguese\n731961180\t2018-02-18\tSWITZERLAND\thttps://www.blick.ch/news/wirtschaft/blick-serie-danke-dass-sie-diesen-job-machen-heute-die-zeitungsvertraegerin-die-strasse-habe-ich-am-liebsten-fuer-mich-allein-id8002408.html\tGerman\n731961331\t2018-02-18\tTURKEY\thttp://www.al-akhbar.com/node/291050\tArabic\n731961526\t2018-02-18\tUNITED STATES\thttp://www.newspressnow.com/news/local_news/what-really-happens-to-a-criminal-s-property/article_79f91889-cbaa-550a-ac7b-51235aa41c5f.html\tEnglish\n731961620\t2018-02-18\tUNITED STATES\thttps://www.sparefoot.com/self-storage/news/6456-federal-government-moves-to-seize-florida-storage-properties/\tEnglish\n731961794\t2018-02-18\tUNITED KINGDOM\thttp://en.shafaqna.com/200-mosques-hold-open-days-across-britain/\tEnglish\n731961918\t2018-02-18\tINDIA\thttps://tendancecoatesy.wordpress.com/2018/02/18/haiti-oxfam-in-defence-of-mary-beard-contre-priyamvada-gopal/\tEnglish\n731961972\t2018-02-18\tCAMBODIA\thttp://www.khmertimeskh.com/50109247/un-country-team-promote-cambodian-model-fight-political-human-rights-porn/\tEnglish\n731962042\t2018-02-18\tINDIA\thttp://www.deccanchronicle.com/nation/current-affairs/190218/nirmala-sitharaman-defends-rafale-fighter-jet-deal-with-france.html\tEnglish\n731962050\t2018-02-18\tUNITED STATES\thttp://www.greanvillepost.com/2018/02/18/if-the-democrats-were-decent/\tEnglish\n731962200\t2018-02-18\tUNITED STATES\thttps://ibsintelligence.com/ibs-journal/full-steam-ahead-path-solutions/\tEnglish\n731962297\t2018-02-18\tUNITED STATES\thttps://www.nbcwashington.com/news/local/Marching-for-Our-Lives-Survivors-of-Florida-Shooting-Announce-March-on-Washington-474429843.html\tEnglish\n731962531\t2018-02-18\tUKRAINE\thttps://censor.net.ua/blogs/3051121/sudova_medatsya_v_gospodarskomu_protses_buti_chi_ne_buti\tUkrainian\n731962859\t2018-02-18\tMEXICO\thttp://www.hoytamaulipas.net/notas/331229/Un-gobierno-a-la-medida-de-cada-quien-Meade.html\tSpanish, Castilian\n731962936\t2018-02-18\tUNITED STATES\thttps://www.mja.dk/ritzau/overlevende-fra-florida-planlaegger-protest-mod-vaabenlove\tDanish\n731962936\t2018-02-18\tUNITED STATES\thttps://www.mx.dk/nyheder/global/story/11575434\tDanish\n731962936\t2018-02-18\tUNITED STATES\thttps://www.bt.dk/udland/overlevende-fra-florida-planlaegger-protest-mod-vaabenlove\tDanish\n731964433\t2018-02-18\tMEXICO\thttp://global.liputan6.com/read/3298400/19-2-1978-baku-tembak-militer-mesir-vs-siprus-di-bandara-larnaca\tIndonesian\n731964440\t2018-02-18\tQATAR\thttp://www.elnadanews.com/world/1564241\tArabic\n731964474\t2018-02-18\tFRANCE\thttps://www.la-croix.com/Journal/Essentiels-France-2018-02-19-1100914775\tFrench\n731964702\t2018-02-18\tGUINEA-BISSAU\thttp://lepays.bf/manif-contre-cedeao-guinee-bissau-quaurait-ete-pays-cette-organisation/\tFrench\n731964822\t2018-02-18\tVENEZUELA\thttp://www.panorama.com.ve/politicayeconomia/MUD-reunion-hoy-PJ-y-AD-no-irian-a-las-presidenciales-20180218-0028.html\tSpanish, Castilian\n731964832\t2018-02-18\tSYRIA\thttp://stepagency-sy.net/archives/183696\tArabic\n731957725\t2018-02-18\tUNITED STATES\thttp://www.abc.net.au/news/2018-02-19/bombing-of-darwin-digger-returns-to-nt-for-the-76th-anniversary/9459494\tEnglish\n731957995\t2018-02-18\tUNITED KINGDOM\thttp://www.ibtimes.co.uk/baftas-2018-three-billboards-outside-ebbing-wins-five-awards-including-best-film-1662267\tEnglish\n731957995\t2018-02-18\tUNITED KINGDOM\thttps://www.dailymaverick.co.za/article/2018-02-19-black-panther-shining-a-light-onto-africans-self-belief-and-aspirations/\tEnglish\n731958190\t2018-02-18\tJAPAN\thttp://www.hellenicshippingnews.com/the-quiet-king-of-japanese-shipbuilding-expands-its-empire/\tEnglish\n731958515\t2018-02-18\tUNITED STATES\thttp://www.benningtonbanner.com/stories/frost-house-donates-5k-to-shaftsbury-school,532370\tEnglish\n731958620\t2018-02-18\tUNITED STATES\thttps://www.wtvq.com/2018/02/18/knox-county-sheriff-investigating-school-threat/\tEnglish\n731960076\t2018-02-18\tINDIA\thttps://www.straight.com/news/1034361/justin-trudeau-prepares-meet-indian-politicians-linked-hardline-rashtriya-swayamsevak\tEnglish\n731960243\t2018-02-18\tMOROCCO\thttp://menafn.com/1096479681/MoroccanSpanish-Delegation-Visits-Dakhla-to-Explore-Opportunities-for-Investment-in-Fisheries-Sector\tEnglish\n731960513\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/Magazines/PeoplePower/Tracing-the-origin-goons-Ugandan-politics/689844-4309112-ylcg5j/\tEnglish\n731960580\t2018-02-18\tUNITED STATES\thttp://www.benningtonbanner.com/stories/bluegrass-festival-coming-to-manchester,532369\tEnglish\n731960772\t2018-02-18\tSWEDEN\thttp://www.folkbladet.se/blogg/widardirekt/ribbenvik-har-koll-pa-invandringen/?blog\u003d2518025\u0026entry\u003d9745539\tSwedish\n731960973\t2018-02-18\tEGYPT\thttp://ahram.org.eg/News/202562/4/638327/%D9%82%D8%B6%D8%A7%D9%8A%D8%A7-%D9%88%D8%A7%D8%B1%D8%A7%D8%A1/%C2%AB%D8%AF%D8%A7%D8%B9%D8%B4%C2%BB-%D9%8A%D8%A8%D9%83%D9%89-%D9%82%D8%AA%D9%84%D8%A7%D9%87-%D9%81%D9%89-%D8%B3%D9%8A%D9%86%D8%A7%D8%A1.aspx\tArabic\n731961183\t2018-02-18\tSOUTH KOREA\thttp://biz.heraldcorp.com/view.php?ud\u003d20180219000019\tKorean\n731961258\t2018-02-18\tISRAEL\thttp://french.china.org.cn/foreign/txt/2018-02/19/content_50562090.htm\tFrench\n731961355\t2018-02-18\tGREECE\thttps://www.lykavitos.gr/archives/505428\tModern Greek (since 1453–)\n731961501\t2018-02-18\tMALAYSIA\thttps://www.thestar.com.my/news/nation/2018/02/19/another-rm2mil-allocated-to-tawp/\tEnglish\n731961882\t2018-02-18\tCANADA\thttps://www.theglobeandmail.com/report-on-business/small-business/holiday-pay-changes-have-ontario-employers-scratching-their-heads/article38017390/\tEnglish\n731962119\t2018-02-18\tNEW ZEALAND\thttp://www.scoop.co.nz/stories/SC1802/S00041/scientists-send-snapper-to-boot-camp.htm\tEnglish\n731962190\t2018-02-18\tUNITED STATES\thttp://www.greanvillepost.com/2018/02/18/the-war-on-dissent-the-specter-of-divisiveness/\tEnglish\n731962292\t2018-02-18\tQATAR\thttp://www.gulf-times.com/story/582215/Tamuq-hosts-open-house-for-aspirants\tEnglish\n731962350\t2018-02-18\tUNITED STATES\thttp://abc13.com/politics/power-and-prestige-when-presidents-visit-houston/2031283/\tEnglish\n731962550\t2018-02-18\tLEBANON\thttp://al-akhbar.com/node/291006\tArabic\n731962858\t2018-02-18\tCANADA\thttp://www.tvanouvelles.ca/2018/02/18/patrick-brown-lance-sa-campagne-a-sa-propre-succession\tFrench\n731962877\t2018-02-18\tRUSSIA\thttps://www.penza.kp.ru/daily/26796.5/3831220/\tRussian\n731964306\t2018-02-18\tBRAZIL\thttps://www.portosenavios.com.br/noticias/geral/42704-brasil-avancara-mais-no-mercado-de-commodities-estimam-eua\tPortuguese\n731964552\t2018-02-18\tHONDURAS\thttp://proceso.hn/portadas/10-portada/hondurenos-abrigan-esperanza-de-una-prorroga-mas-al-tps.html\tSpanish, Castilian\n731964676\t2018-02-18\tOMAN\thttp://alwatan.com/details/244913\tArabic\n731957716\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/article/2018-02-19-hindustan-times-uttarakhand-gives-z-security-to-gupta-brothers-probed-over-graft-in-south-africa/\tEnglish\n731957716\t2018-02-18\tSOUTH AFRICA\thttps://www.msn.com/en-za/news/other/hindustan-times-uttarakhand-gives-z-security-to-gupta-brothers-probed-over-graft-in-south-africa/ar-BBJiOCs\tEnglish\n731957779\t2018-02-18\tBELGIUM\thttps://dailytimes.com.pk/204423/seeking-post-brexit-unity-eu-leaders-find-fights/\tEnglish\n731957790\t2018-02-18\tJAPAN\thttp://www.hellenicshippingnews.com/the-quiet-king-of-japanese-shipbuilding-expands-its-empire/\tEnglish\n731958143\t2018-02-18\tRUSSIA\thttp://www.hellenicshippingnews.com/uae-remains-committed-to-opec-oil-output-cut-deal-official/\tEnglish\n731958161\t2018-02-18\tISRAEL\thttp://www.watertowndailytimes.com/national/netanyahu-to-iran-do-not-test-israels-resolve-20180218\tEnglish\n731958314\t2018-02-18\tUNITED STATES\thttps://stocknewstimes.com/2018/02/18/british-american-tobacco-bats-given-a-gbx-5600-price-target-by-goldman-sachs-group-analysts.html\tEnglish\n731958507\t2018-02-18\tUNITED STATES\thttps://www.lmtonline.com/opinion/recommendations/article/for-Harris-County-Department-of-Education-primary-12623394.php\tEnglish\n731959588\t2018-02-18\tJERSEY\thttp://www.njherald.com/article/20180218/AP/302189839\tEnglish\n731959604\t2018-02-18\tUNITED STATES\thttps://www.centraltelegraph.com.au/news/dysart-man-snaps-after-stolen-car-smashes-into-his/3338715/\tEnglish\n731959694\t2018-02-18\tSPAIN\thttp://www.90min.com/posts/5981352-ernesto-valverde-reveals-why-he-dropped-philippe-coutinho-for-saturday-s-win-over-eibar\tEnglish\n731959898\t2018-02-18\tSOUTH KOREA\thttp://galacticconnection.com/petition-warning-the-world-about-5g-at-the-winter-olympics/\tEnglish\n731960017\t2018-02-18\tMAYOTTE\thttp://www.newsbug.info/iroquois_countys_times-republic/watseka-firefighters-honored-at-banquet-for-hard-work/article_d60f9caa-14ed-11e8-a725-8f80524ee2c0.html\tEnglish\n731960130\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/truck-driver-jailed-for-20-years-for-being-in-possession-of-bhang\tEnglish\n731960130\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/man-gets-20-years-for-having-bhang\tEnglish\n731960556\t2018-02-18\tUNITED STATES\thttps://friscofastball.com/0-21-eps-expected-for-palo-alto-networks-inc-panw-2/\tEnglish\n731960674\t2018-02-18\tUNITED STATES\thttp://kdlg.org/post/new-stuyahok-man-escaped-custody-thursday\tEnglish\n731961044\t2018-02-18\tVENEZUELA\thttp://elperiodicodemonagas.com.ve/ww/guyana-aumenta-tropas-y-patrullaje-en-frontera-con-venezuela/\tSpanish, Castilian\n731961274\t2018-02-18\tSAUDI ARABIA\thttps://www.elperiodico.cat/ca/internacional/20180218/netanyahu-amenaca-liran-i-lacusa-de-crear-un-imperi-proxim-orient-6633119\tCatalan\n731961357\t2018-02-18\tSYRIA\thttp://www.al-akhbar.com/node/291050\tArabic\n731961402\t2018-02-18\tUNITED STATES\thttp://www.alufuqnews.com/Akhbar-Al-Fn/200888.html\tArabic\n731962105\t2018-02-18\tUNITED KINGDOM\thttp://www.scoop.co.nz/stories/PO1802/S00198/lord-mayor-of-london-visits-new-zealand.htm\tEnglish\n731962134\t2018-02-18\tCHINA\thttps://mronline.org/2018/02/18/operation-pacific-eagle-in-the-philippines-washingtons-new-colonial-war/\tEnglish\n731962241\t2018-02-18\tUNITED STATES\thttp://www.cjonline.com/news/20180218/hays-bookkeeper-loses-appeal-for-20-million-estate\tEnglish\n731962277\t2018-02-18\tCANADA\thttp://www.msn.com/en-ca/news/msn/chantal-h%C3%A9bert-for-ndp-slogans-have-changed-but-core-narrative-remains-the-same/ar-BBJih2W\tEnglish\n731962326\t2018-02-18\tUNITED STATES\thttps://www.broadwayworld.com/connecticut/article/Connecticut-Women-Attend-the-Second-Womens-Voices-Theater-Festival-Held-in-DC-20180218\tEnglish\n731962539\t2018-02-18\tSPAIN\thttp://www.publico.es/politica/rebelion-mujeres-psoe-sanchez-no-apoyar-valenciano-liderar-grupo-socialista-europeo.html\tSpanish, Castilian\n731962544\t2018-02-18\tUNITED KINGDOM\thttps://www.mja.dk/ritzau/amerikansk-drama-vinder-en-bafta-for-aarets-bedste-film\tDanish\n731964230\t2018-02-18\tMEXICO\thttp://www.elsoldenayarit.mx/opinion/58275-en-el-pri-abierta-la-oportunidad-para-jorge-vallarta-adan-casas-gerardo-montenegro-y-tapia\tSpanish, Castilian\n731964312\t2018-02-18\tBRAZIL\thttps://www.acidadeon.com/ribeiraopreto/lazerecultura/NOT,0,0,1307842,livro+vai+registrar+a+historia+da+feira+nacional+do+livro+de+ribeirao+preto.aspx\tPortuguese\n731964374\t2018-02-18\tSAUDI ARABIA\thttp://www.okaz.com.sa/article/1616382\tArabic\n731964507\t2018-02-18\tPARAGUAY\thttps://www.correiodoestado.com.br/cidades/campo-grande/deputado-de-ms-e-a-favor-de-intervencao-militar-no-rio-de-janeiro/321794/\tPortuguese\n731964585\t2018-02-18\tEGYPT\thttp://www.elfagr.com/2974637\tArabic\n731964622\t2018-02-18\tLATVIA\thttps://www.diena.lv/raksts/latvija/zinas/raidijums-kolegovas-deklaraciju-lieta-aizdomas-par-darbibam-ar-sia-_pallogs_-dividendem-14191476\tLatvian\n731964691\t2018-02-18\tSOUTH KOREA\thttp://www.idomin.com/?mod\u003dnews\u0026act\u003darticleView\u0026idxno\u003d559482\tKorean\n731957895\t2018-02-18\tSIERRA LEONE\thttps://www.nytimes.com/2018/02/18/nyregion/african-immigrants-bronx-community-college.html\tEnglish\n731958454\t2018-02-18\tUNITED KINGDOM\thttp://www.enterprisenews.com/zz/news/20180218/facebook-to-verify-ads-with-postcards-after-russian-meddling\tEnglish\n731958485\t2018-02-18\tRWANDA\thttp://www.newtimes.co.rw/section/read/229841/\tEnglish\n731959879\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270227/al-shabaab-militants-raided-the-school-compound-at-dawn-killed-the-two\tEnglish\n731959879\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270227/tragedy-as-al-shabaab-terrorists-end-lovebirds-dreams\tEnglish\n731959998\t2018-02-18\tUNITED STATES\thttp://www.bostonglobe.com/metro/2018/02/18/lowell-fire-chief-warns-surge-opioid-overdoses/qF5SQQ5EoPpox2PYEZ0PAM/story.html\tEnglish\n731960159\t2018-02-18\tMEXICO\thttp://www.ivpressonline.com/storiesfromthepast/stories-from-the-past---feb-immigration-policy-hit/article_b40b12b6-14ec-11e8-a835-1f661dbb4cd2.html\tEnglish\n731960171\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270229/alarm-over-defilers-and-rapists-on-the-prowl\tEnglish\n731960482\t2018-02-18\tTHAILAND\thttps://www.bangkokpost.com/news/politics/1414178/parties-shy-away-from-activists\tEnglish\n731960499\t2018-02-18\tIRAN\thttp://psuvanguard.com/no-peace-in-sight-for-syria/\tEnglish\n731961159\t2018-02-18\tALBANIA\thttp://strugalajm.com/aliupdsh-ja-behet-me-grup-parlamentar/\tAlbanian\n731961343\t2018-02-18\tSYRIA\thttp://www.aljadeed.tv/arabic/news/arab-world/180220187\tArabic\n731961663\t2018-02-18\tUNITED STATES\thttp://www.newsherald.com/news/20180218/week-in-weird\tEnglish\n731961713\t2018-02-18\tCANADA\thttp://theconversation.com/broken-system-why-is-a-quarter-of-canadas-prison-population-indigenous-91562\tEnglish\n731961820\t2018-02-18\tZIMBABWE\thttps://www.herald.co.zw/met-dept-looks-to-radars-to-boost-weather-info/\tEnglish\n731961932\t2018-02-18\tISRAEL\thttps://iranian.com/2018/02/18/israels-netanyahu-act-irans-empire/\tEnglish\n731962461\t2018-02-18\tBRAZIL\thttp://www.acritica.com/channels/hoje/news/foragido-da-prisao-e-colocado-de-joelhos-e-executado-com-14-tiros-em-manaus\tPortuguese\n731962523\t2018-02-18\tSWEDEN\thttp://www.emaratalyoum.com/life/four-sides/2018-02-19-1.1072668\tArabic\n731962718\t2018-02-18\tGERMANY\thttp://www.allgemeine-zeitung.de/vermischtes/vermischtes/wieder-flugzeugabsturz-im-iran-wohl-alle-66-insassen-tot_18532417.htm\tGerman\n731964253\t2018-02-18\tMEXICO\thttp://www.diez.hn/liganacionaldehonduras/1153369-498/motagua-estados_unidos-xolos_de_tijuana-liga_de_campeones-concacaf\tSpanish, Castilian\n731964395\t2018-02-18\tCZECH REPUBLIC\thttps://nazory.aktualne.cz/komentare/zeman-dohazoval-cssd-babise-jak-kecal-z-prodane-nevesty/r~75c0e07614dd11e880d30cc47ab5f122/?redirected\u003d1518995790\tCzech\n731964565\t2018-02-18\tIRAN\thttps://www.trend.az/iran/politics/2862483.html\tRussian\n731964638\t2018-02-18\tSYRIA\thttp://hsbnoticias.com/noticias/internacional/atentado-en-siria-un-carro-bomba-cobro-la-vida-de-personas-i-392280\tSpanish, Castilian\n731957558\t2018-02-11\tSOUTH KOREA\thttp://en.europeonline-magazine.eu/1st-leadhungarys-orban-threatens-to-close-ngos-helping-asylum-seekersby-gregor-mayer-dpa_626994.html\tEnglish\n731957613\t2018-02-18\tRWANDA\thttp://www.newtimes.co.rw/section/read/229841/\tEnglish\n731957816\t2018-02-18\tCANADA\thttp://www.chroniclejournal.com/news/national/angry-quebec-nurses-push-for-lower-patient-ratios-and-less/article_5d6eff51-0c58-50e2-90b7-10d26ad80703.html\tEnglish\n731958144\t2018-02-18\tRWANDA\thttp://www.newtimes.co.rw/section/read/229841/\tEnglish\n731958165\t2018-02-18\tLIBYA\thttps://www.businessinsider.nl/chris-hondros-photos-story-documentary-by-greg-campbell-2018-2/\tEnglish\n731958214\t2018-02-18\tRUSSIA\thttps://www.mediamatters.org/blog/2018/02/18/trump-parties-birther-who-floated-protecting-schools-mass-shooters-armed-drones/219425\tEnglish\n731958576\t2018-02-18\tSIERRA LEONE\thttps://www.businessinsider.nl/chris-hondros-photos-story-documentary-by-greg-campbell-2018-2/\tEnglish\n731958663\t2018-02-18\tZIMBABWE\thttp://www.chronicle.co.zw/hccl-bid-to-evict-protestors-suffers-setback/\tEnglish\n731959799\t2018-02-18\tUNITED STATES\thttp://variety.com/2018/film/in-contention/bafta-awards-oscars-prediction-1202704128/\tEnglish\n731960060\t2018-02-18\tSIERRA LEONE\thttp://www.newtimes.co.rw/section/read/229833/\tEnglish\n731960241\t2018-02-18\tMOROCCO\thttp://menafn.com/1096479681/MoroccanSpanish-Delegation-Visits-Dakhla-to-Explore-Opportunities-for-Investment-in-Fisheries-Sector\tEnglish\n731960339\t2018-02-18\tPAKISTAN\thttps://www.straight.com/news/1034361/justin-trudeau-prepares-meet-indian-politicians-linked-hardline-rashtriya-swayamsevak\tEnglish\n731960520\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/Magazines/PeoplePower/Tracing-the-origin-goons-Ugandan-politics/689844-4309112-ylcg5j/\tEnglish\n731960532\t2018-02-18\tSOUTH AFRICA\thttp://www.monitor.co.ug/Magazines/Life/Jacob-Zuma-cheerful-dancing-and-controversial-president-/689856-4308712-usr47d/\tEnglish\n731960734\t2018-02-18\tCHINA\thttps://gestion.pe/economia/indecopi-impone-derechos-antidumping-definitivos-importacion-cierres-china-227557\tSpanish, Castilian\n731961151\t2018-02-18\tUKRAINE\thttps://kp.ua/politics/601348-hlavu-banka-latvyy-zaderzhaly-po-podozrenyui-v-korruptsyy\tRussian\n731961365\t2018-02-18\tCHINA\thttp://french.china.org.cn/foreign/txt/2018-02/19/content_50561751.htm\tFrench\n731961770\t2018-02-18\tUNITED STATES\thttp://abc13.com/politics/power-and-prestige-when-presidents-visit-houston/2031283/\tEnglish\n731962272\t2018-02-18\tAUSTRALIA\thttp://www.afr.com/technology/why-two-of-australias-hottest-tech-exports-atlassian-and-bigcommerce-prefer-austin-texas-to-silicon-valley-20180215-h0w6cx\tEnglish\n731962621\t2018-02-18\tVENEZUELA\thttp://www.correodelorinoco.gob.ve/gobierno-nacional-garantiza-distribucion-de-alimentos-para-las-familias-venezolanas/\tSpanish, Castilian\n731964343\t2018-02-18\tINDIA\thttps://naidunia.jagran.com/madhya-pradesh/bhopal-wfwunehww-1565282\tHindi\n731957801\t2018-02-18\tAUSTRIA\thttp://philamirror.info/2018/02/19/new-stamps-from-austria-33/\tEnglish\n731958331\t2018-02-18\tURUGUAY\thttps://www.thecable.ng/efforts-sabotaged-cleaner-lagos-initiative-officials-raise-alarm\tEnglish\n731958616\t2018-02-18\tUNITED STATES\thttps://www.yahoo.com/news/person-interest-detained-1-dead-195643557.html\tEnglish\n731959620\t2018-02-18\tUNITED STATES\thttp://napavalleyregister.com/business/finding-solar-farm-sites-a-challenge-in-napa-wine-country/article_dd79909f-70cd-599a-a5f4-946ee1b8d68b.html\tEnglish\n731959623\t2018-02-18\tUNITED STATES\thttp://wwlp.com/2018/02/18/western-massachusetts-wakes-up-to-a-winter-wonderland-sunday-morning/\tEnglish\n731959751\t2018-02-18\tBANGLADESH\thttp://dev.thedailystar.net/country/si-breaches-security-dhaka-airport-1536874\tEnglish\n731959929\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/truck-driver-jailed-for-20-years-for-being-in-possession-of-bhang\tEnglish\n731959929\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/man-gets-20-years-for-having-bhang\tEnglish\n731960167\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270225/crisis-looms-as-water-levels-in-rivers-drop\tEnglish\n731960167\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270225/water-levels-in-some-of-mt-kenya-s-key-rivers-have-decreased-significantly-over-the-past-few-years\tEnglish\n731960204\t2018-02-18\tLEBANON\thttps://af.reuters.com/article/worldNews/idAFKCN1G20TI\tEnglish\n731960616\t2018-02-18\tJAPAN\thttps://www.theautochannel.com/news/2018/02/18/511020-mazda-to-unveil-updated-mazda6-wagon-geneva-motor-show.html\tEnglish\n731960755\t2018-02-18\tGERMANY\thttp://ahram.org.eg/News/202562/4/638323/%D9%82%D8%B6%D8%A7%D9%8A%D8%A7-%D9%88%D8%A7%D8%B1%D8%A7%D8%A1/%D9%85%D8%B5%D8%B1-%D8%A7%D9%84%D8%A2%D9%86-%D9%85%D8%A7-%D8%A8%D8%B9%D8%AF-%D8%B3%D9%8A%D9%86%D8%A7%D8%A1-.aspx\tArabic\n731960764\t2018-02-18\tFRANCE\thttp://www.paris-normandie.fr/dieppe/drame-de-l-usine-saipol-a-dieppe--le-jour-d-apres-KH12268255\tFrench\n731960840\t2018-02-18\tEGYPT\thttp://ahram.org.eg/Category/202562/1159/%D9%85%D8%AC%D8%AA%D9%85%D8%B9-%D8%A7%D9%84%D8%B4%D8%B1%D9%83%D8%A7%D8%AA.aspx\tArabic\n731960920\t2018-02-18\tGERMANY\thttps://www.taringa.net/posts/info/20133230/El-F-hrer-defiende-la-mano-de-obra-Alemana.html\tSpanish, Castilian\n731960948\t2018-02-18\tAFGHANISTAN\thttp://mandegardaily.com/reports/%D9%86%DB%8C%D9%80%D8%B1%D9%86%DA%AF-%D8%AA%D8%A7%D8%B2%DB%80-%D8%B3%DB%8C%D9%80%D8%A7%D8%B3%DB%8C%D8%9B-%DB%8C%DA%A9-%D8%AA%DB%8C%D8%B1-%D9%88-%D8%AF%D9%88-%D9%81%D9%80%D8%A7%D8%AE%D8%AA%D9%87/\tPersian\n731961276\t2018-02-18\tUKRAINE\thttp://mignews.com.ua/proisshestviya/19518448.html\tRussian\n731961341\t2018-02-18\tSYRIA\thttp://french.china.org.cn/foreign/txt/2018-02/19/content_50561919.htm\tFrench\n731961379\t2018-02-18\tUKRAINE\thttp://expres.ua/news/2018/02/18/284691-lavrov-poyasnyv-chomu-kreml-proty-myrotvorchoyi-misiyi-donbasi\tUkrainian\n731961405\t2018-02-18\tUNITED STATES\thttp://www.boyens-medien.de/artikel/schlaglichter/britische-filmpreise-three-billboards-als-bester-film-praemiert.html\tGerman\n731961405\t2018-02-18\tUNITED STATES\thttp://www.augsburger-allgemeine.de/newsticker/Britische-Filmpreise-Three-Billboards-als-bester-Film-praemiert-id44258926.html\tGerman\n731961405\t2018-02-18\tUNITED STATES\thttp://www.zeit.de/news/2018-02/18/britische-filmpreise-three-billboards-als-bester-film-praemiert-180218-99-134628\tGerman\n731961405\t2018-02-18\tUNITED STATES\thttps://www.n-tv.de/ticker/Britische-Filmpreise-Three-Billboards-als-bester-Film-praemiert-article20292946.html\tGerman\n731962228\t2018-02-18\tUKRAINE\thttp://www.gulf-times.com/story/582206/Thousands-of-Saakashvili-supporters-march-in-Kiev\tEnglish\n731962282\t2018-02-18\tUNITED STATES\thttp://www.telegraphherald.com/news/tri-state/article_8f4648c0-fd48-5cf8-a5f2-fb122ca95cad.html\tEnglish\n731962336\t2018-02-18\tUNITED STATES\thttps://www.broadwayworld.com/connecticut/article/Connecticut-Women-Attend-the-Second-Womens-Voices-Theater-Festival-Held-in-DC-20180218\tEnglish\n731964463\t2018-02-18\tFINLAND\thttp://www.aif.ru/society/history/ledovyy_pohod_alekseya_shchastnogo_podvig_i_tragediya_krasnogo_admirala\tRussian\n731958050\t2018-02-18\tUNITED KINGDOM\thttps://www.care2.com/causes/malaysian-newspaper-releases-how-to-spot-a-gay-guide.html\tEnglish\n731958302\t2018-02-18\tUNITED STATES\thttp://www.ktbb.com/post/?p\u003d692486\tEnglish\n731958302\t2018-02-18\tUNITED STATES\thttp://www.ktbb.com/post/?p\u003d692483\tEnglish\n731958381\t2018-02-18\tPAKISTAN\thttps://dailytimes.com.pk/204478/karachi-varsity-missing-student-found-dead/\tEnglish\n731959611\t2018-02-18\tINDIA\thttp://www.dailyexcelsior.com/rss-bjp-cc-for-withdrawal-of-2008-land-row-cases/\tEnglish\n731959674\t2018-02-18\tAUSTRALIA\thttps://www.dailyexaminer.com.au/news/homeless-drug-addicted-rocky-mum-turns-life-around/3338437/\tEnglish\n731959830\t2018-02-18\tGAMBIA, THE\thttp://www.westernadvocate.com.au/story/5232253/whats-on/?cs\u003d146\tEnglish\n731959925\t2018-02-18\tGUINEA\thttps://slantedhall.wordpress.com/2018/02/18/inspirational-talk-on-adlam-an-african-alphabet-adventure/\tEnglish\n731959962\t2018-02-18\tUNITED STATES\thttp://www.bostonglobe.com/metro/2018/02/18/lowell-fire-chief-warns-surge-opioid-overdoses/qF5SQQ5EoPpox2PYEZ0PAM/story.html\tEnglish\n731960081\t2018-02-18\tINDIA\thttps://www.straight.com/news/1034361/justin-trudeau-prepares-meet-indian-politicians-linked-hardline-rashtriya-swayamsevak\tEnglish\n731960083\t2018-02-18\tPAKISTAN\thttps://www.straight.com/news/1034361/justin-trudeau-prepares-meet-indian-politicians-linked-hardline-rashtriya-swayamsevak\tEnglish\n731960163\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270227/tragedy-as-al-shabaab-terrorists-end-lovebirds-dreams\tEnglish\n731960163\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270227/al-shabaab-militants-raided-the-school-compound-at-dawn-killed-the-two\tEnglish\n731960229\t2018-02-18\tUNITED STATES\thttp://thehayride.com/2018/02/crouere-anti-trump-mitt-romney-still-wants-president/\tEnglish\n731960247\t2018-02-18\tNIGERIA\thttps://punchng.com/no-alternative-to-buhari-igbo-deserves-2023-presidency-balarabe-musa/\tEnglish\n731960679\t2018-02-18\tRUSSIA\thttps://www.washingtonpost.com/opinions/trump-is-ignoring-the-worst-attack-on-america-since-911/2018/02/18/5ad888f2-14f3-11e8-8b08-027a6ccb38eb_story.html\tEnglish\n731961052\t2018-02-18\tUNITED STATES\thttps://elcomercio.pe/mundo/trump-rusia-tenido-exito-sembrar-discordia-ee-uu-noticia-498227\tSpanish, Castilian\n731961173\t2018-02-18\tROMANIA\thttps://www.ziar.com/news\u003d11413183\tRomanian, Moldavian, Moldovan\n731961173\t2018-02-18\tROMANIA\thttps://www.ziar.com/news\u003d11413190\tRomanian, Moldavian, Moldovan\n731961422\t2017-02-18\tIRAQ\thttp://www.jordantimes.com/news/local/iraq-working-full-capacity%E2%80%99-prepare-border-crossing-smooth-trade\tEnglish\n731961455\t2018-02-18\tAUSTRALIA\thttps://www.therural.com.au/story/5235542/five-reasons-the-murray-darling-basin-changes-matter-to-you/?cs\u003d5822\tEnglish\n731961572\t2018-02-18\tAUSTRALIA\thttp://www.portlincolntimes.com.au/story/5235420/standing-for-reliable-power/\tEnglish\n731961887\t2018-02-18\tCOMOROS\thttp://menafn.com/1096479022/UAE-One-killed-three-injured-in-RAK-accident\tEnglish\n731961887\t2018-02-18\tCOMOROS\thttp://menafn.com/1096479023/UAE-One-killed-three-injured-in-RAK-accident\tEnglish\n731962005\t2018-02-18\tUNITED STATES\thttps://www.noozhawk.com/article/dick_polman_reublican_nazi_running_for_congress_20180211\tEnglish\n731962131\t2018-02-18\tPAKISTAN\thttp://www.njherald.com/article/20180217/AP/302179951\tEnglish\n731962290\t2018-02-18\tUNITED STATES\thttps://www.nbcwashington.com/news/local/Marching-for-Our-Lives-Survivors-of-Florida-Shooting-Announce-March-on-Washington-474429843.html\tEnglish\n731964501\t2018-02-18\tVENEZUELA\thttp://impactocna.com/opinion-la-esperanza-del-cambio-por-antonio-sanchez-garcia/\tSpanish, Castilian\n731964657\t2018-02-18\tUNITED KINGDOM\thttps://www.correiodoestado.com.br/cidades/adolescente-enterra-no-quintal-de-casa-revolver-que-matou-comerciante/321801/\tPortuguese\n731957702\t2018-02-18\tSOUTH AFRICA\thttps://www.msn.com/en-za/news/other/hindustan-times-uttarakhand-gives-z-security-to-gupta-brothers-probed-over-graft-in-south-africa/ar-BBJiOCs\tEnglish\n731957702\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/article/2018-02-19-hindustan-times-uttarakhand-gives-z-security-to-gupta-brothers-probed-over-graft-in-south-africa/\tEnglish\n731958034\t2018-02-18\tUNITED KINGDOM\thttps://www.independent.ie/entertainment/duchess-of-cambridge-stands-out-in-dark-green-as-stars-wear-black-for-baftas-36617177.html\tEnglish\n731958235\t2018-02-18\tLIBYA\thttps://www.al-monitor.com/pulse/contents/afp/2018/02/lebanon-carnival-lifestyle.html\tEnglish\n731959677\t2018-02-18\tAUSTRALIA\thttp://www.geelongadvertiser.com.au/news/geelong/geelong-family-dealing-with-treacher-collins-to-host-uk-activist-jono-lancaster/news-story/2fbf48040cce17556f99b1ad7f5b7554?nk\u003d18a2ff5e4c41da647830906fa9d2c652-1518994980\tEnglish\n731960006\t2018-02-18\tTHAILAND\thttps://www.bangkokpost.com/news/general/1414291/ties-forged-in-brotherhood\tEnglish\n731960607\t2018-02-18\tUNITED STATES\thttp://www.dailyinterlake.com/apps/pbcs.dll/dcce?Site\u003dDI\u0026Date\u003d20180218\u0026Category\u003d3015\u0026Module\u003d1\u0026Class\u003d1004\u0026Type\u003d3015\u0026ID\u003d174004\tEnglish\n731960607\t2018-02-18\tUNITED STATES\thttp://www.dailyinterlake.com/apps/pbcs.dll/dcce?Site\u003dDI\u0026Date\u003d20180218\u0026Category\u003d3015\u0026Module\u003d1\u0026Class\u003d1004\u0026Type\u003d3015\u0026ID\u003d174003\tEnglish\n731961100\t2018-02-18\tISRAEL\thttp://french.china.org.cn/foreign/txt/2018-02/19/content_50562090.htm\tFrench\n731961435\t2018-02-11\tUNITED STATES\thttp://www.telegraphherald.com/news/tri-state/article_8f4648c0-fd48-5cf8-a5f2-fb122ca95cad.html\tEnglish\n731961529\t2018-02-18\tUNITED STATES\thttp://www.foxnews.com/us/2018/02/18/massachusetts-woman-accused-fatally-shooting-driver-for-cutting-her-off.html\tEnglish\n731961634\t2018-02-18\tCANADA\thttps://www.theglobeandmail.com/opinion/editorials/globe-editorial-carbon-taxes-tories-and-the-truth/article38005957/\tEnglish\n731961735\t2018-02-18\tAFGHANISTAN\thttp://www.eurasiareview.com/18022018-afghanistan-president-ghanis-concept-of-national-issues-oped/\tEnglish\n731961748\t2018-02-18\tTANZANIA\thttp://dailynews.co.tz/final/index.php/home-news/55953-bandari-college-told-to-repossess-buildings-from-tourism-institute\tEnglish\n731961800\t2018-02-18\tNEW ZEALAND\thttp://www.scoop.co.nz/stories/PO1802/S00198/lord-mayor-of-london-visits-new-zealand.htm\tEnglish\n731961839\t2018-02-18\tSOUTH AFRICA\thttps://www.newsbytesapp.com/timeline/India/16233/81137/the-gupta-brothers-who-are-they\tEnglish\n731962259\t2018-02-18\tSOUTH KOREA\thttp://www.wral.com/president-harrison-ford-yes-please-but-just-on-the-big-screen-/17350039/\tEnglish\n731962295\t2018-02-18\tUNITED STATES\thttp://www.al.com/news/birmingham/index.ssf/2018/02/police_investigating_rumored_t.html\tEnglish\n731962521\t2018-02-18\tMEXICO\thttp://cancunmio.com/2299993-el-caribe-mexicano-recibio-mas-de-13-millones-de-visitantes-en-el-2017/\tSpanish, Castilian\n731962924\t2018-02-18\tUNITED STATES\thttp://news.joins.com/article/22376854\tKorean\n731962931\t2018-02-18\tUNITED STATES\thttp://www.augsburger-allgemeine.de/panorama/Wut-richtet-sich-nach-Parkland-Attentat-auch-gegen-Donald-Trump-id44258791.html\tGerman\n731964504\t2018-02-18\tTOGO\thttp://lepays.bf/dialogue-politique-togo-faure-sortira-t-plus-fort-2/\tFrench\n731964695\t2018-02-18\tPORTUGAL\thttp://www.lameuse.be/193425/article/2018-02-18/orlando-sa-surgit-du-banc-et-offre-un-point-au-standard\tFrench\n731964750\t2018-02-18\tFRANCE\thttps://www.la-croix.com/Journal/lutte-contre-societe-lombre-2018-02-19-1100914754\tFrench\n731958164\t2018-02-18\tLIBYA\thttps://www.businessinsider.nl/chris-hondros-photos-story-documentary-by-greg-campbell-2018-2/\tEnglish\n731958396\t2018-02-18\tSUDAN\thttp://news.trust.org/item/20180218223737-qcicq\tEnglish\n731958396\t2018-02-18\tSUDAN\thttp://news.trust.org/item/20180218224208-d3umu\tEnglish\n731958396\t2018-02-18\tSUDAN\thttp://news.trust.org/item/20180218224338-3a2uv\tEnglish\n731958464\t2018-02-18\tSUDAN\thttp://www.foreigndesknews.com/news/politics/sudan-releases-political-prisoners/\tEnglish\n731958543\t2018-02-18\tUNITED STATES\thttp://www.dailypress.com/news/politics/dp-nws-ga-budget-changes-20180216-story.html\tEnglish\n731958642\t2018-02-18\tUNITED STATES\thttp://www.palmbeachpost.com/news/national-govt--politics/north-palm-republican-mega-donor-issues-ultimatum-assault-weapons/DBbNXrigDLBIEUrHCbjJxM/\tEnglish\n731958642\t2018-02-18\tUNITED STATES\thttp://www.mypalmbeachpost.com/news/national-govt--politics/north-palm-republican-mega-donor-issues-ultimatum-assault-weapons/DBbNXrigDLBIEUrHCbjJxM/\tEnglish\n731958651\t2018-02-18\tUNITED KINGDOM\thttps://www.dailymaverick.co.za/article/2018-02-19-black-panther-shining-a-light-onto-africans-self-belief-and-aspirations/\tEnglish\n731960015\t2018-02-18\tZAMBIA\thttps://www.daily-mail.co.zm/farmers-upbeat-as-fertiliser-rolls-in/\tEnglish\n731960087\t2018-02-18\tIRAN\thttp://www.fbc.com.fj/world/60036/israels-netanyahu-attacks-dangerous-iranian-tiger\tEnglish\n731960265\t2018-02-18\tISRAEL\thttp://imemc.org/article/israeli-soldiers-abduct-five-palestinians-in-jenin-salfit-and-jerusalem-briefly-detain-14-in-hebron/\tEnglish\n731960834\t2018-02-18\tSYRIA\thttp://www.bursa.ro/./zero-hedge-rusia-preia-controlul-in-sectorul-petrolier-din-siria-341045\u0026s\u003dinternational\u0026articol\u003d341045.html\tRomanian, Moldavian, Moldovan\n731960834\t2018-02-18\tSYRIA\thttp://www.bursa.ro/zero-hedge-rusia-preia-controlul-in-sectorul-petrolier-din-siria-341045\u0026s\u003dinternational\u0026articol\u003d341045.html\tRomanian, Moldavian, Moldovan\n731960896\t2018-02-18\tPOLAND\thttps://www.24matins.fr/topnews/une/netanyahu-juge-inacceptables-les-propos-du-premier-ministre-polonais-sur-la-shoah-713956\tFrench\n731961203\t2018-02-18\tMEXICO\thttp://www.notimex.gob.mx/comunicadosDetalle/492234\tSpanish, Castilian\n731961242\t2018-02-18\tPOLAND\thttp://www.alalam.ir/news/3375171\tArabic\n731961312\t2018-02-18\tSYRIA\thttp://www.al-akhbar.com/node/291050\tArabic\n731961522\t2018-02-18\tUNITED STATES\thttps://www.broadwayworld.com/connecticut/article/Connecticut-Women-Attend-the-Second-Womens-Voices-Theater-Festival-Held-in-DC-20180218\tEnglish\n731961565\t2018-02-18\tAUSTRALIA\thttps://www.therural.com.au/story/5235542/five-reasons-the-murray-darling-basin-changes-matter-to-you/?cs\u003d5822\tEnglish\n731962017\t2018-02-18\tUNITED KINGDOM\thttp://www.independent.co.uk/arts-entertainment/films/news/baftas-2018-joanna-lumley-times-up-metoo-womens-suffrage-suffragettes-sexual-harassment-a8217016.html\tEnglish\n731962017\t2018-02-18\tUNITED KINGDOM\thttp://www.milenio.com/hey/ridley-scott-recibe-bafta-honorifico-2018-cineasta_0_1124287756.html\tSpanish, Castilian\n731962194\t2018-02-18\tSAUDI ARABIA\thttp://saudigazette.com.sa/article/528674/Opinion/Local-Viewpoint/Status-of-foreign-women-married-to-Saudis\tEnglish\n731962202\t2018-02-18\tTURKEY\thttp://neoskosmos.com/news/en/Turkish-Foreign-Ministry-expresses-concerns-over-Kotzias-comments-on-relations-with-Turkey\tEnglish\n731962945\t2018-02-18\tGERMANY\thttp://www.heimatzeitung.de/nachrichten/ticker/2840708_Britische-Filmpreise-Three-Billboards-als-bester-Film-praemiert.html\tGerman\n731964518\t2018-02-18\tUNITED STATES\thttps://www.clarin.com/mundo/jovenes-marcharan-washington-mayor-control-armas_0_Skt34DDDG.html\tSpanish, Castilian\n731957899\t2018-02-18\tUNITED STATES\thttp://www.iberianet.com/news/doing-something-right/article_bc063186-1464-11e8-951b-4b678b9ed158.html\tEnglish\n731958005\t2018-02-18\tRUSSIA\thttps://www.msn.com/en-us/news/world/bad-guy-russia-emerges-as-central-player-in-western-diplomacy/ar-BBJi19L\tEnglish\n731959765\t2018-02-18\tBANGLADESH\thttp://dev.thedailystar.net/country/si-breaches-security-dhaka-airport-1536874\tEnglish\n731959976\t2018-02-18\tINDIA\thttp://www.dailyexcelsior.com/rss-bjp-cc-for-withdrawal-of-2008-land-row-cases/\tEnglish\n731960500\t2018-02-18\tSYRIA\thttps://www.reuters.com/article/mideast-crisis-syria-turkey-afrin/turkey-denies-allegation-of-chemical-attack-in-syria-idUSL8N1Q80LU\tEnglish\n731960554\t2018-02-18\tUNITED STATES\thttps://friscofastball.com/0-21-eps-expected-for-palo-alto-networks-inc-panw-2/\tEnglish\n731960576\t2018-02-18\tUNITED STATES\thttp://www.morganton.com/news/bill-tied-hands-of-dea-in-drug-war/article_c78894ae-14e6-11e8-9b22-334fe1a2d829.html\tEnglish\n731960633\t2018-02-18\tUNITED STATES\thttp://variety.com/2018/film/in-contention/bafta-awards-oscars-prediction-1202704128/\tEnglish\n731960695\t2018-02-18\tJERSEY\thttp://www.njherald.com/article/20180218/AP/302189852\tEnglish\n731961079\t2018-02-18\tCHINA\thttp://french.china.org.cn/foreign/txt/2018-02/19/content_50561919.htm\tFrench\n731961298\t2018-02-18\tSYRIA\thttp://www.al-akhbar.com/node/291050\tArabic\n731961436\t2018-02-17\tUKRAINE\thttp://www.gulf-times.com/story/582206/Thousands-of-Saakashvili-supporters-march-in-Kiev\tEnglish\n731961645\t2018-02-18\tRUSSIA\thttp://theconversation.com/russia-not-so-much-a-re-rising-superpower-as-a-skilled-strategic-spoiler-90916\tEnglish\n731961851\t2018-02-18\tUNITED STATES\thttps://dailynewshungary.com/orbans-keynote-speech-hungary-comes-first/\tEnglish\n731961895\t2018-02-18\tHUNGARY\thttps://www.power-technology.com/projects/paks-ii-nuclear-power-plant/\tEnglish\n731961992\t2018-02-18\tSOUTH KOREA\thttp://www.khmertimeskh.com/50109247/un-country-team-promote-cambodian-model-fight-political-human-rights-porn/\tEnglish\n731962260\t2018-02-18\tUNITED KINGDOM\thttps://www.watchdog.org/national/op-ed-america-s-first-commander-in-chief-for-god/article_79065f46-14e6-11e8-9f22-d3495e626bf9.html\tEnglish\n731962518\t2018-02-18\tMEXICO\thttp://www.proceso.com.mx/523056/heridos-por-accidente-en-oaxaca-claman-por-ayuda-mi-hija-perdio-una-pierna-no-se-que-hare-dice-afectado\tSpanish, Castilian\n731962587\t2018-02-18\tSPAIN\thttps://lepetitjournal.com/madrid/education/luniversite-franco-espagnole-va-permettre-de-massifier-les-echanges-223696\tFrench\n731962587\t2018-02-18\tSPAIN\thttps://lepetitjournal.com/madrid/communaute/la-secretaire-detat-chargee-des-personnes-handicapees-madrid-223695\tFrench\n731962646\t2018-02-18\tVENEZUELA\thttp://www.correodelorinoco.gob.ve/gobierno-nacional-garantiza-distribucion-de-alimentos-para-las-familias-venezolanas/\tSpanish, Castilian\n731962658\t2018-02-18\tUNITED STATES\thttps://www.bt.dk/udland/overlevende-fra-florida-planlaegger-protest-mod-vaabenlove\tDanish\n731962658\t2018-02-18\tUNITED STATES\thttps://www.mx.dk/nyheder/global/story/11575434\tDanish\n731962658\t2018-02-18\tUNITED STATES\thttps://www.mja.dk/ritzau/overlevende-fra-florida-planlaegger-protest-mod-vaabenlove\tDanish\n731962765\t2018-02-18\tMEXICO\thttp://adnsureste.info/prd-avalo-a-manuel-garcia-corpus-como-candidato-al-senado-1430-h/\tSpanish, Castilian\n731962869\t2018-02-18\tBELARUS\thttps://iz.ru/710449/2018-02-18/smi-soobshchili-o-prichastnosti-ig-k-napadeniiu-v-kizliare\tRussian\n731964340\t2018-02-18\tTURKEY\thttps://www.la-croix.com/Journal/Vers-restitution-monasteres-chretiens-Turquie-2018-02-19-1100914752\tFrench\n731964659\t2018-02-18\tUNITED KINGDOM\thttps://www.correiodoestado.com.br/cidades/adolescente-enterra-no-quintal-de-casa-revolver-que-matou-comerciante/321801/\tPortuguese\n731964785\t2018-02-18\tIRAN\thttp://www.albayan.ae/one-world/arabs/2018-02-19-1.3189977\tArabic\n731957582\t2018-02-18\tAUSTRALIA\thttps://www.tweeddailynews.com.au/news/im-celeb-outrage-youve-hit-rock-bottom/3338745/\tEnglish\n731959632\t2018-02-18\tCAMBODIA\thttp://www.khmertimeskh.com/50109246/tackling-poverty-inequality-qa-oxfam/\tEnglish\n731959931\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/man-gets-20-years-for-having-bhang\tEnglish\n731959931\t2018-02-18\tUGANDA\thttps://www.standardmedia.co.ke/article/2001270247/truck-driver-jailed-for-20-years-for-being-in-possession-of-bhang\tEnglish\n731960054\t2018-02-18\tSOUTH KOREA\thttp://www.tnp.sg/news/world/us-top-diplomat-tillerson-n-korea-talks-im-listening\tEnglish\n731960132\t2018-02-18\tSOUTH AFRICA\thttp://www.monitor.co.ug/Magazines/Life/Jacob-Zuma-cheerful-dancing-and-controversial-president-/689856-4308712-usr47d/\tEnglish\n731961109\t2018-02-18\tISRAEL\thttps://www.radiofarda.com/a/Israeli-police-arrested-senior-figures-close-to-netanyahu/29046927.html\tPersian\n731961149\t2018-02-18\tAFGHANISTAN\thttp://mandegardaily.com/reports/%D8%AF%D8%B1-%D9%86%D8%B4%D8%B3%D8%AA%DB%8C-%D8%AF%D8%B1-%DA%A9%D8%A7%D8%A8%D9%84-%D9%85%D8%B7%D8%B1%D8%AD-%D8%B4%D8%AF-%D9%85%D8%AF%D8%BA%D9%80%D9%85%E2%80%8C%D8%B3%D8%A7%D8%B2%DB%8C-%D8%A7%D9%82/\tPersian\n731961313\t2018-02-18\tSYRIA\thttp://www.al-akhbar.com/node/291050\tArabic\n731961537\t2018-02-18\tUNITED STATES\thttp://www.theherald-news.com/2018/02/18/joliet-man-shot-and-killed-in-chicago/a4523m6/\tEnglish\n731961551\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/opinionista/2018-02-19-thuma-mina-the-nearly-man-rises-to-lift-south-africas-mood/\tEnglish\n731961847\t2018-02-18\tHUNGARY\thttps://dailynewshungary.com/orbans-keynote-speech-hungary-comes-first/\tEnglish\n731962081\t2018-02-18\tMALAYSIA\thttps://www.thestar.com.my/news/nation/2018/02/19/another-rm2mil-allocated-to-tawp/\tEnglish\n731962315\t2018-02-18\tUNITED STATES\thttps://www.yahoo.com/news/florida-school-massacre-survivors-plan-213000882.html\tEnglish\n731962315\t2018-02-18\tUNITED STATES\thttp://www.independent.co.uk/news/world/americas/us-politics/school-shooting-florida-parkland-march-demonstration-cruz-gun-control-laws-emma-gonzales-a8217011.html\tEnglish\n731962653\t2018-02-18\tUNITED ARAB EMIRATES\thttp://www.alittihad.ae/details.php?id\u003d12382\u0026y\u003d2018\tArabic\n731962968\t2018-02-18\tEGYPT\thttp://www.almalnews.com/Story/365646/14/%D8%B6%D8%A8%D8%B7%20%D9%85%D8%B3%D8%AA%D9%84%D8%B2%D9%85%D8%A7%D8%AA%20%D8%B7%D8%A8%D9%8A%D8%A9%20%D9%85%D9%87%D8%B1%D8%A8%D8%A9%20%D8%A8%D9%85%D8%B7%D8%A7%D8%B1%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9\tArabic\n731964319\t2018-02-18\tEGYPT\thttps://www.nmisr.com/arab-news/egypt-news/%D8%B3%D8%B9%D8%B1-%D8%A7%D9%84%D8%AF%D9%88%D9%84%D8%A7%D8%B1-%D8%A7%D9%84%D9%8A%D9%88%D9%85-%D8%A7%D9%84%D8%A5%D8%AB%D9%86%D9%8A%D9%86-19-02-2018\tArabic\n731964320\t2018-02-18\tSAUDI ARABIA\thttp://www.okaz.com.sa/article/1616392\tArabic\n731964522\t2018-02-18\tAUSTRIA\thttp://www.annasronline.com/index.php/2014-08-09-10-33-20/2014-08-23-11-15-15/90129-21-22\tArabic\n731957929\t2018-02-18\tUNITED KINGDOM\thttp://philamirror.info/2018/02/19/new-stamps-from-austria-33/\tEnglish\n731957990\t2018-02-18\tUNITED STATES\thttps://www.inquisitr.com/4791891/jennifer-aniston-and-justin-theroux-met-on-valentines-day-claims-people/\tEnglish\n731958055\t2018-02-18\tRWANDA\thttp://www.newtimes.co.rw/section/read/229841/\tEnglish\n731958247\t2018-02-18\tPAKISTAN\thttp://onlinenews.com.pk/index.php?page\u003dnewsdetail\u0026news_id\u003d11730\tEnglish\n731959661\t2018-02-18\tZAMBIA\thttps://www.daily-mail.co.zm/farmers-upbeat-as-fertiliser-rolls-in/\tEnglish\n731960129\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270229/alarm-over-defilers-and-rapists-on-the-prowl\tEnglish\n731960173\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270242/villages-get-first-police-post\tEnglish\n731960173\t2018-02-18\tKENYA\thttps://www.standardmedia.co.ke/article/2001270242/areas-receive-first-police-post-since-independence\tEnglish\n731960557\t2018-02-18\tUNITED STATES\thttp://www.njherald.com/article/20180218/AP/302189847\tEnglish\n731960723\t2018-02-18\tCÔTE D\u0027IVOIRE\thttp://news.icilome.com/?idnews\u003d843966\u0026f\u003d\tFrench\n731960806\t2018-02-18\tUKRAINE\thttps://www.ridus.ru/news/271132\tRussian\n731960892\t2018-02-18\tROMANIA\thttp://curieruldevalcea.ro/mandat-european-de-arestare-pus-in-aplicare-de-politistii-valceni-4/\tRomanian, Moldavian, Moldovan\n731961002\t2018-02-18\tRUSSIA\thttps://www.ridus.ru/news/271132\tRussian\n731961022\t2018-02-18\tEGYPT\thttp://ahram.org.eg/News/202562/4/638332/%D9%82%D8%B6%D8%A7%D9%8A%D8%A7-%D9%88%D8%A7%D8%B1%D8%A7%D8%A1/%D9%85%D8%B5%D8%B1-%D9%88%D8%A5%D8%B9%D8%A7%D8%AF%D8%A9-%D8%A7%D9%84%D8%A5%D8%B9%D9%85%D8%A7%D8%B1-%D8%A8%D8%A7%D9%84%D8%B9%D8%B1%D8%A7%D9%82.aspx\tArabic\n731961053\t2018-02-18\tGREECE\thttp://www.dimokratiki.gr/18-02-2018/ta-ethnika-zitimata-ypiretounte-ton-kalytero-tropo-otan-yparchi-schediasmos-synesi-gnosi-ke-apofasistikotita/\tModern Greek (since 1453–)\n731961938\t2018-02-18\tIRAN\thttps://iranian.com/2018/02/18/israels-netanyahu-act-irans-empire/\tEnglish\n731962133\t2018-02-18\tPHILIPPINES\thttps://mronline.org/2018/02/18/operation-pacific-eagle-in-the-philippines-washingtons-new-colonial-war/\tEnglish\n731962512\t2018-02-18\tIRAN\thttp://www.fasopresse.net/societe/5967-assises-criminelles-de-tenkodogo-21-dossiers-inscrits-au-role?5e90491fecb379c63acce1d6f2f74023\u003df7b0c9a0712efb4cb0783b6176c9f02c\tFrench\n731962625\t2018-02-18\tUNITED STATES\thttps://www.elobservador.com.uy/novick-ofrecio-al-gobierno-el-equipo-giuliani-n1172760\tSpanish, Castilian\n731962923\t2018-02-18\tGAMBIA, THE\thttp://www.novimagazin.rs/svet/predsednik-gambije-najavio-moratorijum-na-smrtnu-kaznu\tSerbian\n731964302\t2018-02-18\tTURKEY\thttp://www.erbol.com.bo/noticia/politica/18022018/iglesia_pide_investigar_explosiones_de_oruro\tSpanish, Castilian\n731964709\t2018-02-18\tSWEDEN\thttp://www.chicagotribune.com/hoy/eeuu/ct-hoy-los-partidos-politicos-de-mexico-ratifican-a-sus-candidatos-presidenciales-20180218-story.html\tSpanish, Castilian\n731964790\t2018-02-18\tBELARUS\thttps://rian.com.ua/world_news/20180218/1032459831/ukraine-rf-sblizit-mirotvorcy-donbass.html\tRussian\n731957572\t2018-02-17\tHAITI\thttp://www.dailymail.co.uk/news/article-5406691/Oxfam-accused-cover-sex-scandal-report-release.html\tEnglish\n731957641\t2018-02-18\tUNITED KINGDOM\thttp://www.goldderby.com/article/2018/2018-bafta-awards-preview-sneak-peek-inside-royal-albert-hall/\tEnglish\n731957746\t2018-02-18\tAUSTRALIA\thttps://www.theage.com.au/national/western-australia/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957746\t2018-02-18\tAUSTRALIA\thttp://www.watoday.com.au/wa-news/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957746\t2018-02-18\tAUSTRALIA\thttps://www.brisbanetimes.com.au/national/western-australia/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731957746\t2018-02-18\tAUSTRALIA\thttp://www.smh.com.au/wa-news/the-perth-suburbs-dodging-was-population-boom-20180215-h0w5wb.html\tEnglish\n731958031\t2018-02-18\tUNITED KINGDOM\thttp://www.ibtimes.co.uk/baftas-2018-three-billboards-outside-ebbing-wins-five-awards-including-best-film-1662267\tEnglish\n731958031\t2018-02-18\tUNITED KINGDOM\thttps://www.dailymaverick.co.za/article/2018-02-19-black-panther-shining-a-light-onto-africans-self-belief-and-aspirations/\tEnglish\n731958035\t2018-02-18\tUNITED KINGDOM\thttps://www.theage.com.au/entertainment/tv-and-radio/paul-burrell-claims-princess-dianas-letter-said-my-husband-is-going-to-kill-me-20180218-h0w9xx.html\tEnglish\n731958064\t2018-02-18\tUNITED STATES\thttp://medford.wickedlocal.com/news/20180218/firefighters-seek-answers-from-city-on-station-conditions-training-facility\tEnglish\n731958257\t2018-02-18\tUNITED STATES\thttp://miami.cbslocal.com/2018/02/18/turning-anger-into-activism-school-shooting/\tEnglish\n731958400\t2018-02-18\tSIERRA LEONE\thttps://www.thesierraleonetelegraph.com/apc-presidential-candidate-dr-samura-kamara-accuses-bio-of-stealing-18-million/\tEnglish\n731958436\t2018-02-18\tRUSSIA\thttps://www.nytimes.com/2018/02/18/world/europe/russia-us-election.html\tEnglish\n731959861\t2018-02-18\tUNITED STATES\thttp://www.niagara-gazette.com/news/local_news/buff-state-assistant-professor-announces-school-board-run/article_888d2a59-2957-5ed4-8a48-c6e42d5423e8.html\tEnglish\n731960271\t2018-02-18\tINDIA\thttp://www.dailyexcelsior.com/mehbooba-asks-youth-shun-violence/\tEnglish\n731960392\t2018-02-18\tRUSSIA\thttps://www.washingtonpost.com/opinions/trump-is-ignoring-the-worst-attack-on-america-since-911/2018/02/18/5ad888f2-14f3-11e8-8b08-027a6ccb38eb_story.html\tEnglish\n731960529\t2018-02-18\tUGANDA\thttp://www.monitor.co.ug/Magazines/PeoplePower/Tracing-the-origin-goons-Ugandan-politics/689844-4309112-ylcg5j/\tEnglish\n731960872\t2018-02-18\tSWEDEN\thttp://www.folkbladet.se/blogg/widardirekt/ribbenvik-har-koll-pa-invandringen/?blog\u003d2518025\u0026entry\u003d9745539\tSwedish\n731960912\t2018-02-18\tBRAZIL\thttps://odia.ig.com.br/imoveis-e-casa/2018/02/5512590-para-fechar-negocio.html\tPortuguese\n731960949\t2018-02-18\tEL SALVADOR\thttp://elmundo.sv/iglesia-catolica-rechaza-propuesta-de-lectura-obligada-de-biblia-en-escuelas/\tSpanish, Castilian\n731960980\t2018-02-18\tVENEZUELA\thttps://www.elperiodico.cat/ca/ciencia/20180218/citrics-evolucio-historica-6629521\tCatalan\n731961090\t2018-02-18\tSUDAN\thttp://ahram.org.eg/News/202562/59/638192/%D8%A2%D8%B1%D8%A7%D8%A1-%D8%AD%D8%B1%D8%A9/%D8%A8%D9%81%D9%87%D9%85%20%D9%86%D8%A7%D8%B5%D8%B1-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%86%D8%B2%D8%A7%D9%81-%D9%88%D8%A7%D9%84%D9%88%D9%81%D8%A7%D8%A9.aspx\tArabic\n731961268\t2018-02-18\tIRAQ\thttp://ahram.org.eg/News/202562/4/638324/%D9%82%D8%B6%D8%A7%D9%8A%D8%A7-%D9%88%D8%A7%D8%B1%D8%A7%D8%A1/%D8%B3%D9%82%D9%88%D8%B7-%D8%A7%D9%84%D8%A3%D9%82%D9%86%D8%B9%D8%A9.aspx\tArabic\n731961643\t2018-02-18\tMALAYSIA\thttps://www.thestar.com.my/news/nation/2018/02/19/mariam-drums-up-a-different-beat-lion-dance-performer-plays-on-despite-disapproval/\tEnglish\n731961677\t2018-02-18\tUNITED STATES\thttps://www.azcentral.com/story/news/local/arizona/2018/02/18/police-third-arizona-student-arrested-2-days-after-bringing-gun-school/349574002/\tEnglish\n731961857\t2018-02-18\tKENYA\thttp://dailynews.co.tz/final/index.php/home-news/55950-eala-to-address-food-insecurity\tEnglish\n731962480\t2018-02-18\tPAKISTAN\thttp://www.augsburger-allgemeine.de/panorama/Wut-richtet-sich-nach-Parkland-Attentat-auch-gegen-Donald-Trump-id44258791.html\tGerman\n731962813\t2018-02-18\tBRAZIL\thttp://www.correiobraziliense.com.br/app/noticia/eu-estudante/tf_carreira/2018/02/18/tf_carreira_interna,660580/uma-sociedade-e-um-mercado-de-trabalho-inclusivos-comecam-na-escola.shtml\tPortuguese\n731964206\t2018-02-11\tBRAZIL\thttp://jornaldiadia.com.br/2016/?p\u003d393551\tPortuguese\n731964467\t2018-02-18\tFRANCE\thttps://www.la-croix.com/Journal/lutte-contre-societe-lombre-2018-02-19-1100914754\tFrench\n731964469\t2018-02-18\tFRANCE\thttps://www.clarin.com/mundo/israel-volvio-advertir-amenaza-irani_0_rJ39mIDPM.html\tSpanish, Castilian\n731964471\t2018-02-18\tAFGHANISTAN\thttp://www.alkhaleej.ae/alkhaleej/page/5e2a5cf8-ea89-4038-910a-62d6250f29a2\tArabic\n731957566\t2018-02-11\tUNITED STATES\thttp://www.chicagonow.com/opinionated-woman/2018/02/could-the-tragic-death-of-commander-paul-bauer-be-a-catalyst-to-help-heal-chicago/\tEnglish\n731958057\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/article/2018-02-19-analysis-turning-vicious-into-a-virtuous-circle/\tEnglish\n731959654\t2018-02-18\tZIMBABWE\thttp://www.chronicle.co.zw/president-consoles-tsvangirai-family-govt-to-honour-promises-made-to-him/\tEnglish\n731959675\t2018-02-18\tGERMANY\thttps://www.noosanews.com.au/news/charge-after-stolen-clothing-allegedly-brought-int/3338569/\tEnglish\n731959779\t2018-02-18\tUNITED STATES\thttp://www.foxnews.com/world/2018/02/18/russia-church-shooting-kills-5-after-gunman-opens-fire-on-people-leaving-service.html\tEnglish\n731960443\t2018-02-18\tSYRIA\thttps://www.sfgate.com/world/article/New-job-center-raises-hopes-of-Syrian-refugees-in-12623567.php\tEnglish\n731960624\t2018-02-18\tUNITED STATES\thttp://www.bizpacreview.com/2018/02/18/bongino-oozes-disgust-pelosi-disgraces-country-knowingly-lie-americans-604304\tEnglish\n731960910\t2018-02-18\tINDONESIA\thttp://medan.tribunnews.com/2018/02/19/mantan-pengawal-presiden-soekarno-ini-miliki-700-pusaka-ada-yang-datang-sendiri\tIndonesian\n731960994\t2018-02-18\tFRANCE\thttp://es.rfi.fr/americas/20180218-abogado-palma-salamanca-no-tuvo-un-proceso-justo-en-chile\tSpanish, Castilian\n731961006\t2018-02-18\tINDIA\thttp://jagbani.punjabkesari.in/national/news/gujarat-will-tribute-to-trudeau-sabarmati-ashram-will-visit-places-canada-pm-836803\tPunjabi, Panjabi\n731961037\t2018-02-18\tUKRAINE\thttp://fedpress.ru/news/40/society/1966586\tRussian\n731961037\t2018-02-18\tUKRAINE\thttps://dnews.dn.ua/news/667087\tRussian\n731961856\t2018-02-18\tSOUTH AFRICA\thttps://www.dailymaverick.co.za/opinionista/2018-02-19-thuma-mina-the-nearly-man-rises-to-lift-south-africas-mood/\tEnglish\n731962140\t2018-02-18\tUNITED STATES\thttps://mronline.org/2018/02/18/operation-pacific-eagle-in-the-philippines-washingtons-new-colonial-war/\tEnglish"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 102400 bytes. Learn more about \u003cstrong\u003eZEPPELIN_INTERPRETER_OUTPUT_LIMIT\u003c/strong\u003e\u003c/div\u003e"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://137.194.93.233:4040/jobs/job?id\u003d197",
+            "http://137.194.93.233:4040/jobs/job?id\u003d198",
+            "http://137.194.93.233:4040/jobs/job?id\u003d199",
+            "http://137.194.93.233:4040/jobs/job?id\u003d200",
+            "http://137.194.93.233:4040/jobs/job?id\u003d201",
+            "http://137.194.93.233:4040/jobs/job?id\u003d202",
+            "http://137.194.93.233:4040/jobs/job?id\u003d203",
+            "http://137.194.93.233:4040/jobs/job?id\u003d204",
+            "http://137.194.93.233:4040/jobs/job?id\u003d205",
+            "http://137.194.93.233:4040/jobs/job?id\u003d206",
+            "http://137.194.93.233:4040/jobs/job?id\u003d207",
+            "http://137.194.93.233:4040/jobs/job?id\u003d208",
+            "http://137.194.93.233:4040/jobs/job?id\u003d209",
+            "http://137.194.93.233:4040/jobs/job?id\u003d210",
+            "http://137.194.93.233:4040/jobs/job?id\u003d211",
+            "http://137.194.93.233:4040/jobs/job?id\u003d212"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548148536700_-1062112544",
+      "id": "20190122-101536_2011028412",
+      "dateCreated": "2019-01-22 10:15:36.700",
+      "dateStarted": "2019-01-22 10:50:28.174",
+      "dateFinished": "2019-01-22 10:50:43.057",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548150628093_800740660",
+      "id": "20190122-105028_394061465",
+      "dateCreated": "2019-01-22 10:50:28.093",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Query1_JBS",
+  "id": "2E3ZYJ3GN",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
