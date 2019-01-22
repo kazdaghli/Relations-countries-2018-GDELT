@@ -394,18 +394,6 @@
           }
         ]
       },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://137.194.93.233:4040/jobs/job?id\u003d11"
-          ],
-          "interpreterSettingId": "spark"
-        }
-      },
       "apps": [],
       "jobName": "paragraph_1548089764779_414871557",
       "id": "20190121-175604_881846219",
@@ -413,6 +401,20 @@
       "dateStarted": "2019-01-21 18:23:02.167",
       "dateFinished": "2019-01-21 18:23:03.809",
       "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548149676840_438433634",
+      "id": "20190122-103436_451639313",
+      "dateCreated": "2019-01-22 10:34:36.840",
+      "status": "READY",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -491,19 +493,6 @@
             "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 102400 bytes. Learn more about \u003cstrong\u003eZEPPELIN_INTERPRETER_OUTPUT_LIMIT\u003c/strong\u003e\u003c/div\u003e"
           }
         ]
-      },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://137.194.93.233:4040/jobs/job?id\u003d12",
-            "http://137.194.93.233:4040/jobs/job?id\u003d13"
-          ],
-          "interpreterSettingId": "spark"
-        }
       },
       "apps": [],
       "jobName": "paragraph_1548091293605_-14537574",
