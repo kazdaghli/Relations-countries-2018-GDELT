@@ -40,6 +40,47 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "%md\n### File Downloader Function",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 09:51:17.001",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eFile Downloader Function\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548147068109_622008946",
+      "id": "20190122-095108_296087409",
+      "dateCreated": "2019-01-22 09:51:08.109",
+      "dateStarted": "2019-01-22 09:51:17.039",
+      "dateFinished": "2019-01-22 09:51:19.949",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "text": "def RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n       case (name: String, content: PortableDataStream) \u003d\u003e\n          val zis \u003d new ZipInputStream(content.open)\n          Stream.continually(zis.getNextEntry).\n                takeWhile(_ !\u003d null).\n                flatMap { _ \u003d\u003e\n                    val br \u003d new BufferedReader(new InputStreamReader(zis))\n                    Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                }\n    }\n    return resultRDD\n}\n// Export GKG\nval gkgRDD \u003d RDDDownloader(\"/home/lem/GDELTData/gkg/*.csv.zip\") \n",
       "user": "anonymous",
       "dateUpdated": "2019-01-21 18:04:27.701",
@@ -69,6 +110,47 @@
       "dateCreated": "2019-01-21 18:03:34.811",
       "dateStarted": "2019-01-21 18:04:27.759",
       "dateFinished": "2019-01-21 18:04:33.347",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### GKG preprocessing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 09:53:26.159",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eGKG preprocessing\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548147177967_-461791852",
+      "id": "20190122-095257_2074516318",
+      "dateCreated": "2019-01-22 09:52:57.967",
+      "dateStarted": "2019-01-22 09:53:26.168",
+      "dateFinished": "2019-01-22 09:53:26.206",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -190,6 +272,47 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "%md\n### Query 6 From GKG Preparation",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 09:54:11.814",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 6 From GKG Preparation\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548147223669_1823707713",
+      "id": "20190122-095343_1063600649",
+      "dateCreated": "2019-01-22 09:53:43.669",
+      "dateStarted": "2019-01-22 09:54:11.844",
+      "dateFinished": "2019-01-22 09:54:11.902",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "text": "val gkg \u003d prep_gkg.withColumn(\"DATE_NEW\", $\"DATE\".cast(\"date\")).createOrReplaceTempView(\"gkg\")\nval query_tone_country_daily_articles \u003d \"SELECT  DocumentIdentifier as Country1 , Locations as Country2, DATE_NEW, AVG(float(V2Tone)) as DailyAvgTone FROM gkg Group by Country1, Country2, DATE_NEW Order by  DATE_NEW ASC\"\n\n\nz.show(sql(query_tone_country_daily_articles))",
       "user": "anonymous",
       "dateUpdated": "2019-01-21 18:58:07.355",
@@ -258,18 +381,6 @@
           }
         ]
       },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://10.0.2.15:4040/jobs/job?id\u003d8"
-          ],
-          "interpreterSettingId": "spark"
-        }
-      },
       "apps": [],
       "jobName": "paragraph_1548091703636_104411449",
       "id": "20190121-182823_1407342809",
@@ -308,18 +419,6 @@
             "data": "df_tone_country_daily_articles: org.apache.spark.sql.DataFrame \u003d [Country1: string, Country2: string ... 2 more fields]\nlookUpDomainCountry: org.apache.spark.sql.DataFrame \u003d [Domain: string, FIPSCountryCode: string ... 1 more field]\nreq6_3: org.apache.spark.sql.DataFrame \u003d [Country1: string, Country2: string ... 2 more fields]\n"
           }
         ]
-      },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://10.0.2.15:4040/jobs/job?id\u003d10"
-          ],
-          "interpreterSettingId": "spark"
-        }
       },
       "apps": [],
       "jobName": "paragraph_1548092362643_403726719",
@@ -394,20 +493,6 @@
             "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 1000 rows. Learn more about \u003cstrong\u003ezeppelin.spark.maxResult\u003c/strong\u003e\u003c/div\u003e"
           }
         ]
-      },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://10.0.2.15:4040/jobs/job?id\u003d11",
-            "http://10.0.2.15:4040/jobs/job?id\u003d12",
-            "http://10.0.2.15:4040/jobs/job?id\u003d13"
-          ],
-          "interpreterSettingId": "spark"
-        }
       },
       "apps": [],
       "jobName": "paragraph_1548094534739_470338284",
