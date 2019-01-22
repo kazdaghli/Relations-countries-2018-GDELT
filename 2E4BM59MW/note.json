@@ -1,0 +1,1240 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Creation of RDD from Data\nDans ce notebook nous allons charger les données dans des RDD",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:29.214",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreation of RDD from Data\u003c/h2\u003e\n\u003cp\u003eDans ce notebook nous allons charger les données dans des RDD\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277693_-166536356",
+      "id": "20181212-102323_67420128",
+      "dateCreated": "2019-01-22 11:01:17.694",
+      "dateStarted": "2019-01-22 11:02:29.336",
+      "dateFinished": "2019-01-22 11:02:29.368",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md Les fichiers sont stockés compressés, on a besoin d\u0027un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0027on les lit depuis S3:",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:29.434",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eLes fichiers sont stockés compressés, on a besoin d\u0026rsquo;un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0026rsquo;on les lit depuis S3:\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277698_-903538805",
+      "id": "20181212-102329_808049084",
+      "dateCreated": "2019-01-22 11:01:17.698",
+      "dateStarted": "2019-01-22 11:02:29.522",
+      "dateFinished": "2019-01-22 11:02:29.581",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val data_path \u003d \"/home/lem/GDELTData\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:29.626",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "data_path: String \u003d /home/lem/GDELTData\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277700_1762523519",
+      "id": "20190122-093133_1845500535",
+      "dateCreated": "2019-01-22 11:01:17.700",
+      "dateStarted": "2019-01-22 11:02:29.834",
+      "dateFinished": "2019-01-22 11:02:30.590",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\n\n\ndef RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n       case (name: String, content: PortableDataStream) \u003d\u003e\n          val zis \u003d new ZipInputStream(content.open)\n          Stream.continually(zis.getNextEntry).\n                takeWhile(_ !\u003d null).\n                flatMap { _ \u003d\u003e\n                    val br \u003d new BufferedReader(new InputStreamReader(zis))\n                    Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                }\n    }\n    return resultRDD\n}\n// Export Events\nval eventsRDD \u003d RDDDownloader(data_path + \"/events/*.export.CSV.zip\")\nval mentionsRDD \u003d RDDDownloader(data_path + \"/mentions/*.CSV.zip\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:30.631",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\nRDDDownloader: (fileName: String)org.apache.spark.rdd.RDD[String]\neventsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[298] at flatMap at \u003cconsole\u003e:43\nmentionsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[300] at flatMap at \u003cconsole\u003e:43\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277703_-729315616",
+      "id": "20171217-232457_1732696781",
+      "dateCreated": "2019-01-22 11:01:17.703",
+      "dateStarted": "2019-01-22 11:02:30.815",
+      "dateFinished": "2019-01-22 11:02:35.344",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val cachedEvents \u003d eventsRDD.cache // RDD\nval cachedMentions \u003d mentionsRDD.cache",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:35.408",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "cachedEvents: eventsRDD.type \u003d MapPartitionsRDD[298] at flatMap at \u003cconsole\u003e:43\ncachedMentions: mentionsRDD.type \u003d MapPartitionsRDD[300] at flatMap at \u003cconsole\u003e:43\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277707_1933398785",
+      "id": "20190107-102856_946427568",
+      "dateCreated": "2019-01-22 11:01:17.707",
+      "dateStarted": "2019-01-22 11:02:35.638",
+      "dateFinished": "2019-01-22 11:02:37.370",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Event(GLOBALEVENTID: Int,\nSQLDATE: String,\nMonthYear: String,\nYear: Int,\nFractionDate: Double,\nActor1Code: String,\nActor1Name: String,\nActor1CountryCode: String,\nActor1KnownGroupCode: String,\nActor1EthnicCode: String,\nActor1Religion1Code: String,\nActor1Religion2Code: String,\nActor1Type1Code: String,\nActor1Type2Code: String,\nActor1Type3Code: String,\nActor2Code: String,\nActor2Name: String,\nActor2CountryCode: String,\nActor2KnownGroupCode: String,\nActor2EthnicCode: String,\nActor2Religion1Code: String,\nActor2Religion2Code: String,\nActor2Type1Code: String,\nActor2Type2Code: String,\nActor2Type3Code: String,\nIsRootEvent: Int,\nEventCode: String,\nEventBaseCode: String,\nEventRootCode: String,\nQuadClass: Int,\nGoldsteinScale: Double,\nNumMentions: Int,\nNumSources: Int,\nNumArticles: Int,\nAvgTone: Double,\nActor1Geo_Type: Int,\nActor1Geo_FullName: String,\nActor1Geo_CountryCode: String,\nActor1Geo_ADM1Code: String,\nActor1Geo_ADM2Code: String,\nActor1Geo_Lat: Double,\nActor1Geo_Long: Double,\nActor1Geo_FeatureID: String,\nActor2Geo_Type: Int,\nActor2Geo_FullName: String,\nActor2Geo_CountryCode: String,\nActor2Geo_ADM1Code: String,\nActor2Geo_ADM2Code: String,\nActor2Geo_Lat: Double,\nActor2Geo_Long: Double,\nActor2Geo_FeatureID: String,\nActionGeo_Type: Int,\nActionGeo_FullName: String,\nActionGeo_CountryCode: String,\nActionGeo_ADM1Code: String,\nActionGeo_ADM2Code: String,\nActionGeo_Lat: Double,\nActionGeo_Long: Double,\nActionGeo_FeatureID: String,\nDATEADDED: String,\nSOURCEURL: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:37.456",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Event\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277708_956362117",
+      "id": "20190107-095023_1048093380",
+      "dateCreated": "2019-01-22 11:01:17.709",
+      "dateStarted": "2019-01-22 11:02:37.648",
+      "dateFinished": "2019-01-22 11:02:39.446",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Mention(GLOBALEVENTID: Int,\nEventTimeDate: String,\nMentionTimeDate: String,\nMentionType: Int,\nMentionSourceName: String,\nMentionIdentifier: String,\nSentenceID: Int,\nActor1CharOffset: Int,\nActor2CharOffset: Int,\nActionCharOffset: Int,\nInRawText: Int,\nConfidence: Int,\nMentionDocLen: Int,\nMentionDocTone: Double,\nMentionDocTranslationInfo: String)//,\n//Extras: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:39.453",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Mention\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277713_2056412102",
+      "id": "20190122-093120_1753376525",
+      "dateCreated": "2019-01-22 11:01:17.713",
+      "dateStarted": "2019-01-22 11:02:39.676",
+      "dateFinished": "2019-01-22 11:02:41.044",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.text.SimpleDateFormat\n\ndef toDouble(s : String): Double \u003d if (s.isEmpty) 0 else s.toDouble\ndef toInt(s : String): Int \u003d if (s.isEmpty) 0  else s.toInt\ndef toBigInt(s : String): BigInt \u003d if (s.isEmpty) BigInt(0) else BigInt(s)\n \nval inputFormat_ymd \u003d new SimpleDateFormat(\"yyyyMMdd\")\nval outputFormat_ymd \u003d new SimpleDateFormat(\"yyyy-MM-dd\")\n\nval inputFormat_ym \u003d new SimpleDateFormat(\"yyyyMM\")\nval outputFormat_ym \u003d new SimpleDateFormat(\"yyyy-MM\")\n\nval inputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyyMMddhhmmss\")\nval outputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyy-MM-dd hh:mm:ss\")\n    \ndef parse_date(s : String, inputFormat : SimpleDateFormat, outputFormat : SimpleDateFormat):\n    String \u003d if (s.isEmpty) s else  outputFormat.format(inputFormat.parse(s))   \n\n\ncachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDS.createOrReplaceTempView(\"events\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:41.067",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.text.SimpleDateFormat\ntoDouble: (s: String)Double\ntoInt: (s: String)Int\ntoBigInt: (s: String)BigInt\ninputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@ef87e460\noutputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@f67a0200\ninputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d55c4fe0\noutputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d62d344d\ninputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@88c7dd60\noutputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@e863f5a0\nparse_date: (s: String, inputFormat: java.text.SimpleDateFormat, outputFormat: java.text.SimpleDateFormat)String\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277720_492074973",
+      "id": "20190121-175524_598037471",
+      "dateCreated": "2019-01-22 11:01:17.720",
+      "dateStarted": "2019-01-22 11:02:41.318",
+      "dateFinished": "2019-01-22 11:02:48.937",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val ds1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDS\n\nval ds2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDS\n\nval ds3 \u003d ds1.union(ds2)\nds3.createOrReplaceTempView(\"mentions\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:49.024",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "ds1: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds2: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds3: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277723_1920389429",
+      "id": "20190122-093356_682030381",
+      "dateCreated": "2019-01-22 11:01:17.723",
+      "dateStarted": "2019-01-22 11:02:49.279",
+      "dateFinished": "2019-01-22 11:02:52.380",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var events \u003d cachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDF()\n\nevents \u003d events.withColumn(\"SQLDate_date\",$\"SQLDATE\".cast(\"date\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:52.394",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 59 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 60 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277724_-1597167127",
+      "id": "20190121-175556_1570822517",
+      "dateCreated": "2019-01-22 11:01:17.725",
+      "dateStarted": "2019-01-22 11:02:52.617",
+      "dateFinished": "2019-01-22 11:02:56.957",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var df1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDF()\n\nvar df2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDF()\n\nvar mentions \u003d df1.union(df2).toDF()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:02:57.033",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "df1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\ndf2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nmentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277725_-1923971939",
+      "id": "20190122-093506_992271553",
+      "dateCreated": "2019-01-22 11:01:17.725",
+      "dateStarted": "2019-01-22 11:02:57.220",
+      "dateFinished": "2019-01-22 11:03:00.903",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Preprocess on the events and mentions DF ",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:00.956",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003ePreprocess on the events and mentions DF\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277726_1256720924",
+      "id": "20190121-165005_1391737556",
+      "dateCreated": "2019-01-22 11:01:17.726",
+      "dateStarted": "2019-01-22 11:03:01.180",
+      "dateFinished": "2019-01-22 11:03:01.222",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ## Cameo translation",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:01.241",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCameo translation\u003c/h2\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277727_-125893801",
+      "id": "20190121-165029_321139741",
+      "dateCreated": "2019-01-22 11:01:17.727",
+      "dateStarted": "2019-01-22 11:03:01.577",
+      "dateFinished": "2019-01-22 11:03:01.610",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val Cameolocation \u003d \"/home/sara/zeppelin-0.8.0-bin-all/NoSQL_Project/CameoFolder\"\nval file_Country \u003d \"CAMEO.country.txt\"\nval file_Ethnic \u003d \"CAMEO.ethnic.txt\"\nval file_Eventcodes \u003d \"CAMEO.eventcodes.txt\"\nval file_Knowngroup \u003d \"CAMEO.knowngroup.txt\"\nval file_Religion \u003d \"CAMEO.religion.txt\"\nval file_Type \u003d \"CAMEO.type.txt\"\nval file_Quad \u003d \"CAMEO.QuadClass.txt\"\nval file_GeoType \u003d \"CAMEO.GeoType.txt\"\nval file_FIPSCountryCode \u003d \"CAMEO.FIPSCountyCode.txt\"\nval file_Language \u003d \"CAMEO.language.txt\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:01.669",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Cameolocation: String \u003d /home/sara/zeppelin-0.8.0-bin-all/NoSQL_Project/CameoFolder\nfile_Country: String \u003d CAMEO.country.txt\nfile_Ethnic: String \u003d CAMEO.ethnic.txt\nfile_Eventcodes: String \u003d CAMEO.eventcodes.txt\nfile_Knowngroup: String \u003d CAMEO.knowngroup.txt\nfile_Religion: String \u003d CAMEO.religion.txt\nfile_Type: String \u003d CAMEO.type.txt\nfile_Quad: String \u003d CAMEO.QuadClass.txt\nfile_GeoType: String \u003d CAMEO.GeoType.txt\nfile_FIPSCountryCode: String \u003d CAMEO.FIPSCountyCode.txt\nfile_Language: String \u003d CAMEO.language.txt\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277728_1684587415",
+      "id": "20190121-165124_2136866161",
+      "dateCreated": "2019-01-22 11:01:17.728",
+      "dateStarted": "2019-01-22 11:03:01.894",
+      "dateFinished": "2019-01-22 11:03:07.741",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// creation of the mapping dataset\nval country_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Country)\n\nval ethnic_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Ethnic)\n\nval eventCodes_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Eventcodes)\n\nval group_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Knowngroup)\n\nval religion_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Religion)\n\nval type_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Type)\n\nval quad_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Quad)\n    \nval geoType_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_GeoType)\n    \nval FIPS_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_FIPSCountryCode)\n    \nval language_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_FIPSCountryCode)\n    \n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:07.836",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "country_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nethnic_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\neventCodes_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngroup_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nreligion_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ntype_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nquad_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngeoType_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nFIPS_transco: org.apache.spark.sql.DataFrame \u003d [LABEL: string, CODE: string]\nlanguage_transco: org.apache.spark.sql.DataFrame \u003d [LABEL: string, CODE: string]\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://10.0.2.15:4040/jobs/job?id\u003d48",
+            "http://10.0.2.15:4040/jobs/job?id\u003d49",
+            "http://10.0.2.15:4040/jobs/job?id\u003d50",
+            "http://10.0.2.15:4040/jobs/job?id\u003d51",
+            "http://10.0.2.15:4040/jobs/job?id\u003d52",
+            "http://10.0.2.15:4040/jobs/job?id\u003d53",
+            "http://10.0.2.15:4040/jobs/job?id\u003d54",
+            "http://10.0.2.15:4040/jobs/job?id\u003d55",
+            "http://10.0.2.15:4040/jobs/job?id\u003d56",
+            "http://10.0.2.15:4040/jobs/job?id\u003d57"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277729_401848104",
+      "id": "20190121-165205_570025735",
+      "dateCreated": "2019-01-22 11:01:17.729",
+      "dateStarted": "2019-01-22 11:03:07.987",
+      "dateFinished": "2019-01-22 11:03:18.202",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events \u003d events.join(country_transco, events(\"Actor1CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor1CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\nevents \u003d events.join(country_transco, events(\"Actor2CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor2CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\n\nevents \u003d events.join(ethnic_transco, events(\"Actor1EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor1EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\nevents \u003d events.join(ethnic_transco, events(\"Actor2EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor2EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\n\nevents \u003d events.join(eventCodes_transco, events(\"EventCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventBaseCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventBaseCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventRootCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventRootCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\n\nevents \u003d events.join(group_transco, events(\"Actor1KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor1KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\nevents \u003d events.join(group_transco, events(\"Actor2KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor2KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\n\nevents \u003d events.join(religion_transco, events(\"Actor1Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor1Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\n\nevents \u003d events.join(type_transco, events(\"Actor1Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\n\nevents \u003d events.join(quad_transco, events(\"QuadClass\")\u003d\u003d\u003dquad_transco(\"CODE\"), \"left\").withColumn(\"QuadClassType\", col(\"LABEL\")).drop(quad_transco.columns: _*)\n\nevents \u003d events.join(geoType_transco, events(\"Actor1Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"Actor2Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"ActionGeo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\n\nevents \u003d events.join(FIPS_transco, events(\"Actor1Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"Actor2Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"ActionGeo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:18.296",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 61 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 62 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 63 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 64 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 65 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 66 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 67 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 68 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 69 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 70 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 71 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 72 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 73 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 74 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 75 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 76 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 77 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 78 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 79 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 80 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 81 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 82 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 83 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 84 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 85 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277729_-1933008512",
+      "id": "20190121-165736_1049734185",
+      "dateCreated": "2019-01-22 11:01:17.730",
+      "dateStarted": "2019-01-22 11:03:18.518",
+      "dateFinished": "2019-01-22 11:03:42.106",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\nmentions \u003d mentions.join(language_transco, mentions(\"MentionDocTranslationInfo\")\u003d\u003d\u003dlanguage_transco(\"CODE\"), \"left\").withColumn(\"Language\", col(\"LABEL\")).drop(language_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:42.205",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "mentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 14 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277749_-1176479668",
+      "id": "20190122-094703_2016048028",
+      "dateCreated": "2019-01-22 11:01:17.749",
+      "dateStarted": "2019-01-22 11:03:42.391",
+      "dateFinished": "2019-01-22 11:03:43.204",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:43.300",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 235.533,
+              "optionOpen": false
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nSQLDATE\nMonthYear\nYear\nFractionDate\nActor1Code\nActor1Name\nActor1CountryCode\nActor1KnownGroupCode\nActor1EthnicCode\nActor1Religion1Code\nActor1Religion2Code\nActor1Type1Code\nActor1Type2Code\nActor1Type3Code\nActor2Code\nActor2Name\nActor2CountryCode\nActor2KnownGroupCode\nActor2EthnicCode\nActor2Religion1Code\nActor2Religion2Code\nActor2Type1Code\nActor2Type2Code\nActor2Type3Code\nIsRootEvent\nEventCode\nEventBaseCode\nEventRootCode\nQuadClass\nGoldsteinScale\nNumMentions\nNumSources\nNumArticles\nAvgTone\nActor1Geo_Type\nActor1Geo_FullName\nActor1Geo_CountryCode\nActor1Geo_ADM1Code\nActor1Geo_ADM2Code\nActor1Geo_Lat\nActor1Geo_Long\nActor1Geo_FeatureID\nActor2Geo_Type\nActor2Geo_FullName\nActor2Geo_CountryCode\nActor2Geo_ADM1Code\nActor2Geo_ADM2Code\nActor2Geo_Lat\nActor2Geo_Long\nActor2Geo_FeatureID\nActionGeo_Type\nActionGeo_FullName\nActionGeo_CountryCode\nActionGeo_ADM1Code\nActionGeo_ADM2Code\nActionGeo_Lat\nActionGeo_Long\nActionGeo_FeatureID\nDATEADDED\nSOURCEURL\nSQLDate_date\nActor1CountryName\nActor2CountryName\nActor1EthnicName\nActor2EthnicName\nEventCodeDesc\nEventBaseCodeDesc\nEventRootCodeDesc\nActor1KnownGroupName\nActor2KnownGroupName\nActor1Religion1Name\nActor1Religion2Name\nActor2Religion1Name\nActor2Religion2Name\nActor1Type1Name\nActor1Type2Name\nActor1Type3Name\nActor2Type1Name\nActor2Type2Name\nActor2Type3Name\nQuadClassType\nActor1Geo_Name\nActor2Geo_Name\nActionGeo_Name\nActor1Geo_CountryName\nActor2Geo_CountryName\nActionGeo_CountryName\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277750_-1717334007",
+      "id": "20190121-172121_428905243",
+      "dateCreated": "2019-01-22 11:01:17.750",
+      "dateStarted": "2019-01-22 11:03:43.480",
+      "dateFinished": "2019-01-22 11:03:44.319",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "mentions.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:44.360",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nEventTimeDate\nMentionTimeDate\nMentionType\nMentionSourceName\nMentionIdentifier\nSentenceID\nActor1CharOffset\nActor2CharOffset\nActionCharOffset\nInRawText\nConfidence\nMentionDocLen\nMentionDocTone\nMentionDocTranslationInfo\nLanguage\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277752_156413992",
+      "id": "20190122-095247_714216003",
+      "dateCreated": "2019-01-22 11:01:17.752",
+      "dateStarted": "2019-01-22 11:03:44.567",
+      "dateFinished": "2019-01-22 11:03:45.541",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 2 processing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:45.574",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 2 processing\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277753_-1913221105",
+      "id": "20190121-111706_406896183",
+      "dateCreated": "2019-01-22 11:01:17.753",
+      "dateStarted": "2019-01-22 11:03:45.742",
+      "dateFinished": "2019-01-22 11:03:45.780",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ## events_by_actor (based on actor1) \n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:45.829",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eevents_by_actor (based on actor1)\u003c/h2\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277754_-864554443",
+      "id": "20190121-233651_1470040629",
+      "dateCreated": "2019-01-22 11:01:17.754",
+      "dateStarted": "2019-01-22 11:03:46.040",
+      "dateFinished": "2019-01-22 11:03:46.084",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events_by_actor1 \u003d ",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:03:46.120",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u003cconsole\u003e:42: error: not found: value events_by_actor1\nval $ires92 \u003d events_by_actor1\n              ^\n\u003cconsole\u003e:39: error: not found: value events_by_actor1\n       events_by_actor1 \u003d\n       ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277754_111710826",
+      "id": "20190121-234245_847631124",
+      "dateCreated": "2019-01-22 11:01:17.754",
+      "dateStarted": "2019-01-22 11:03:46.308",
+      "dateFinished": "2019-01-22 11:03:46.392",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Events avg tone between actors\nval query_tone_actors_daily \u003d \"SELECT  Actor1Name, Actor2Name, SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1Name, Actor2Name, SQLDATE Order by  SQLDATE ASC\"\nval df_tone_actors_daily\u003d sqlContext.sql(query_tone_actors_daily).filter(($\"Actor1Name\" !\u003d\u003d \"\") \u0026\u0026 ($\"Actor2Name\" !\u003d\u003d \"\") )\nz.show(sql(query_tone_actors_daily))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:40:21.466",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151277755_-1070723511",
+      "id": "20190118-133037_1148408548",
+      "dateCreated": "2019-01-22 11:01:17.755",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 5 processing : Number 1",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 12:04:27.159",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 5 processing : Number 1\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151490043_779823501",
+      "id": "20190122-110450_444027680",
+      "dateCreated": "2019-01-22 11:04:50.043",
+      "dateStarted": "2019-01-22 12:04:27.168",
+      "dateFinished": "2019-01-22 12:04:27.196",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Events avg tone between actors\nevents.createOrReplaceTempView(\"events\")\nval query_tone_actors_daily \u003d \"SELECT  Actor1Name, Actor2Name, SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1Name, Actor2Name, SQLDATE Order by  SQLDATE ASC \"\nval df_tone_actors_daily\u003d sqlContext.sql(query_tone_actors_daily).filter(($\"Actor1Name\" !\u003d\u003d \"\") \u0026\u0026 ($\"Actor2Name\" !\u003d\u003d \"\") )\nz.show(df_tone_actors_daily)\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 11:58:52.264",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "Actor1Name": "string",
+                      "Actor2Name": "string",
+                      "SQLDATE": "string",
+                      "DailyAvgTone": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "query_tone_actors_daily: String \u003d \"SELECT  Actor1Name, Actor2Name, SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1Name, Actor2Name, SQLDATE Order by  SQLDATE ASC \"\nwarning: there were two deprecation warnings; re-run with -deprecation for details\ndf_tone_actors_daily: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Actor1Name: string, Actor2Name: string ... 2 more fields]\n"
+          },
+          {
+            "type": "TABLE",
+            "data": "Actor1Name\tActor2Name\tSQLDATE\tDailyAvgTone\nAUSTRALIA\tCHINESE\t2008-02-21\t-1.19850187265917\nRETIRED\tVIETNAM\t2008-02-21\t-4.12821758135017\nAUSTRALIA\tCHINA\t2008-02-21\t-1.19850187265917\nCOLLEGE\tTEXAS\t2017-02-18\t-1.43266475644699\nAFGHANISTAN\tIRAN\t2017-02-18\t1.19402985074627\nBOEING\tIRAN\t2017-02-18\t-6.9817216059990646\nCOLLEGE\tVIRGINIA\t2017-02-18\t5.01138952164009\nCOMPANIES\tCALIFORNIA\t2017-02-18\t-1.13808801213961\nPAKISTAN\tAFGHANISTAN\t2017-02-18\t-8.55457227138646\nSOUTH AFRICAN\tAFRICA\t2017-02-18\t2.07075064710957\nMOUSSA FAKI MAHAMAT\tAFRICA\t2017-02-18\t-8.55520968439256\nUNITED STATES\tPROFESSOR\t2017-02-18\t-1.45912485261365\nIRAQ\tISLAMIC\t2017-02-18\t-2.75835275835276\nEGYPT\tEGYPT\t2017-02-18\t0.987654320987649\nAFRICA\tNEW YORK\t2017-02-18\t-3.4791814619006303\nFILIPINO\tTOURIST\t2017-02-18\t0.0\nLAWYER\tCANADA\t2017-02-18\t-2.03720106288751\nMAHENDRA CHAUDHRY\tCABINET\t2017-02-18\t-1.80722891566265\nPRESIDENT\tINSURGENT\t2017-02-18\t-3.033932096637735\nEXXON MOBIL\tUNITED ARAB EMIRATES\t2017-02-18\t0.34071550255537\nSUDAN\tSOUTH SUDAN\t2017-02-18\t-6.574923547400611\nTURKEY\tKURDISTAN\t2017-02-18\t-5.29100529100529\nFOREIGN SECRETARY\tBHUTAN\t2017-02-18\t1.4629608366821176\nBULAWAYO\tPREACHER\t2017-02-18\t0.98039215686275\nYMCA\tMILITARY\t2017-02-18\t4.58715596330275\nAUSTRALIA\tBARRISTER\t2017-02-18\t-2.33837689133425\nTOURIST\tBEIJING\t2017-02-18\t2.72727932320462\nFRANCE\tCANADA\t2017-02-18\t-0.5524861878453\nTHE ASSOCIATED PRESS\tWRITER\t2017-02-18\t-2.3121387283237\nAFGHANISTAN\tPAKISTAN\t2017-02-18\t-8.55457227138646\nUNITED STATES\tPOLICE\t2017-02-18\t-4.9671977507029\nNIGERIA\tPRESIDENT\t2017-02-18\t-0.45412354115065995\nBRITAIN\tTHE EU\t2017-02-18\t0.31756070081069\nUNITED KINGDOM\tRELIGION\t2017-02-18\t-1.40845070422535\nMAINE\tMAINE\t2017-02-18\t1.12359550561798\nTHE EUROPEAN UNION\tBRITAIN\t2017-02-18\t-1.8970189701897\nTERRORIST\tUNITED STATES\t2017-02-18\t-2.69058295964126\nGOVERNMENT\tPOPULATION\t2017-02-18\t0.21645021645021\nCHINA\tBHUTAN\t2017-02-18\t-3.39943342776204\nCHIEF EXECUTIVE\tJAPAN\t2017-02-18\t0.34071550255537\nPROFESSOR\tRUSSIAN\t2017-02-18\t-0.917431192660549\nNEW DELHI\tAFGHANISTAN\t2017-02-18\t-0.52369924347692\nUNITED STATES\tJUDGE\t2017-02-18\t-4.42477876106195\nUNITED STATES\tTHE WHITE HOUSE\t2017-02-18\t-5.60975609756098\nUS OFFICIAL\tRUSSIA\t2017-02-18\t-8.610824238542937\nUNITED STATES\tCANADA\t2017-02-18\t0.55325034578147\nCRIMINAL\tUNITED KINGDOM\t2017-02-18\t-3.44827586206897\nPHYSICIAN\tSTUDENT\t2017-02-18\t0.76190476190476\nUNITED STATES\tSENATE\t2017-02-18\t-6.60592255125285\nISRAELI\tNEW ZEALAND\t2017-02-18\t-3.24324324324324\nTERRORIST\tMILITARY\t2017-02-18\t-2.69058295964126\nSYDNEY\tPRIME MINISTER\t2017-02-18\t4.69208211143695\nTHE OPPOSITION\tCULTIVATOR\t2017-02-18\t-5.224348262032087\nSWEDEN\tSWEDEN\t2017-02-18\t-6.06451612903226\nCABINET\tTERRORIST\t2017-02-18\t-5.65371024734982\nOPPOSITION LEADER\tPOLICE\t2017-02-18\t-3.60059631838216\nUNITED STATES\tCOMPANY\t2017-02-18\t-4.909814386406374\nRUSSIA\tCOMPANIES\t2017-02-18\t-2.48995983935743\nSENATE\tOBAMA\t2017-02-18\t-0.16168148746968\nCARACAS\tCANNES\t2017-02-18\t0.99667774086379\nABU DHABI\tEXXON MOBIL\t2017-02-18\t0.34071550255537\nIRAQ\tJORDANIAN\t2017-02-18\t-0.56179775280899\nCONNECTICUT\tIRAQ\t2017-02-18\t1.54142581888247\nBRITISH\tFRENCH\t2017-02-18\t-1.26126126126126\nISRAEL\tNEW ZEALAND\t2017-02-18\t-3.24324324324324\nTEXAS\tTEXAS\t2017-02-18\t-1.60744500846024\nISRAEL\tPUBLICATION\t2017-02-18\t-4.791251502037885\nUNITED KINGDOM\tINDUSTRY\t2017-02-18\t2.20264317180617\nRESIDENTS\tBUSINESS\t2017-02-18\t-2.21606648199446\nPROFESSOR\tRUSSIA\t2017-02-18\t-0.917431192660549\nNEPAL\tPOLICE\t2017-02-18\t-7.39644970414201\nINFANTRY\tCOMBAT TROOPS\t2017-02-18\t-4.52380952380952\nBISHOP\tMAGAZINE\t2017-02-18\t0.40816326530612\nSOMALIA\tNATIONALS\t2017-02-18\t-3.60655737704919\nHAWAII\tIRAQ\t2017-02-18\t-2.3916292974589\nCANADA\tCANADA\t2017-02-18\t-2.03720106288751\nFIRST STATE\tPRESIDENT\t2017-02-18\t1.63522012578617\nEUROPEAN\tLUXEMBOURG\t2017-02-18\t-4.43262411347518\nPRIME MINISTER\tSYDNEY\t2017-02-18\t4.69208211143695\nCOMMUNITY\tVIRGINIA\t2017-02-18\t5.01138952164009\nRUSSIA\tUNITED STATES\t2017-02-18\t-7.65432098765432\nCAMBODIA\tSUPREME COURT\t2017-02-18\t-7.01298701298701\nNAIROBI\tKENYA\t2017-02-18\t-4.57746478873239\nTHAI\tGROUP OF EIGHT\t2017-02-18\t0.66857688634192\nAUSTRALIA\tCANADIAN\t2017-02-18\t3.345620195132843\nUNITED KINGDOM\tLITHUANIA\t2017-02-18\t3.7593984962406\nDLAMINI ZUMA\tAFRICAN UNION\t2017-02-18\t-6.34920634920635\nKURD\tANKARA\t2017-02-18\t2.01342281879194\nRUSSIA\tRUSSIA\t2017-02-18\t-2.48995983935743\nABUJA\tPRESIDENT\t2017-02-18\t-3.02835051546392\nTERRORIST\tGERMANY\t2017-02-18\t-4.26829268292683\nALASKA\tBANK\t2017-02-18\t5.0761421319797\nSYRIAN\tJORDAN\t2017-02-18\t2.82258064516129\nNEW YORK\tAFRICA\t2017-02-18\t-3.4791814619006303\nAFAR\tMOSUL\t2017-02-18\t-7.95180722891566\nUNITED KINGDOM\tTHE EU\t2017-02-18\t0.651393666103885\nHEALTH MINIST\tAUSTRALIA\t2017-02-18\t-0.64102564102564\nSENATE\tPRESIDENT\t2017-02-18\t-1.49625935162095\nUNITED STATES\tFREETOWN\t2017-02-18\t-0.11933174224344\nCHINA\tZHUANG\t2017-02-18\t3.5130266075388\nTAIWAN\tSYDNEY\t2017-02-18\t-1.19850187265917\nIBRAHIM SULEIMAN\tAL QAEDA\t2017-02-18\t-8.539080919969718\nDRUG TRAFFICKER\tMEXICO\t2017-02-18\t-5.70291777188329\nUZBEKISTAN\tSOUTH KOREAN\t2017-02-18\t1.92678227360309\nISRAEL\tISRAEL\t2017-02-18\t-5.65371024734982\nFARMER\tUNITED STATES\t2017-02-18\t-0.308641975308642\nCOMPANY\tSAN FRANCISCO\t2017-02-18\t-7.59493670886076\nFREETOWN\tSCHOOL\t2017-02-18\t-0.11933174224344\nBEIJING\tTOURIST\t2017-02-18\t2.72727932320462\nLONDON\tRUSSIA\t2017-02-18\t-2.44025793399925\nUNITED STATES\tCHIEF EXECUTIVE\t2017-02-18\t0.47846889952153\nMEXICO\tDRUG TRAFFICKER\t2017-02-18\t-5.70291777188329\nA US\tAUSTRALIA\t2017-02-18\t-4.919172292411665\nVOTER\tLAWMAKER\t2017-02-18\t-3.37552742616034\nLITHUANIA\tUNITED KINGDOM\t2017-02-18\t3.7593984962406\nUNITED STATES\tFEDERAL COURT\t2017-02-18\t-3.96226415094339\nISLAMABAD\tPAKISTAN\t2017-02-18\t0.0997008973080797\nAFRICA\tSOUTH AFRICAN\t2017-02-18\t2.07075064710957\nBOEING\tSAN FRANCISCO\t2017-02-18\t1.27962085308057\nSYRIAN\tRUSSIA\t2017-02-18\t2.82258064516129\nUNITED KINGDOM\tSCOTLAND\t2017-02-18\t-7.72532188841202\nEUROPE\tLITHUANIA\t2017-02-18\t3.7593984962406\nSINGAPORE\tCHINA\t2017-02-18\t2.29885057471265\nAUSTRALIA\tNEW ZEALAND\t2017-02-18\t5.69105691056911\nINTERIM LEADER\tMUSLIM\t2017-02-18\t-7.20338983050848\nRIGHTS GROUP\tADVOCATE\t2017-02-18\t-1.93610842207164\nVENEZUELA\tCANNES\t2017-02-18\t0.99667774086379\nCOMPANIES\tMUMBAI\t2017-02-18\t2.63157894736842\nSTUDENT\tUNITED STATES\t2017-02-18\t-3.63636363636363\nKINGSTOWN\tUNITED STATES\t2017-02-18\t-5.35019455252919\nPRESIDENT\tAMERICAN\t2017-02-18\t-4.24242424242424\nJAPAN\tMALAYSIA\t2017-02-18\t0.21321961620469\nFUKUSHIMA\tMALAYSIA\t2017-02-18\t0.21321961620469\nJAPAN\tHAWAII\t2017-02-18\t-2.3916292974589\nCHINA\tSINGAPORE\t2017-02-18\t2.29885057471265\nUNITED ARAB EMIRATES\tPUBLIC SECTOR\t2017-02-18\t-3.60360360360361\nSTUDENT\tPHYSICIAN\t2017-02-18\t0.76190476190476\nGERMANY\tDETROIT\t2017-02-18\t2.18579234972677\nCANADIAN\tSIKH\t2017-02-18\t0.73529411764706\nHAWAII\tAFGHANISTAN\t2017-02-18\t-2.3916292974589\nUNITED STATES\tBARCELONA\t2017-02-18\t-2.995741149651135\nNAIROBI\tCANADA\t2017-02-18\t-4.57746478873239\nCHINA\tUNITED STATES\t2017-02-18\t-0.44247787610619\nCHINA\tFRANCE\t2017-02-18\t2.72822665267576\nUNITED STATES\tFARMER\t2017-02-18\t-0.308641975308642\nIRAN\tREGIME\t2017-02-18\t-7.35042735042735\nGOVERNOR\tUNITED STATES\t2017-02-18\t-2.57731958762887\nGOVERNMENT TROOPS\tPHILIPPINE\t2017-02-18\t-3.04878048780488\nUNITED STATES\tTERRORIST\t2017-02-18\t-5.07456186810728\nUNITED STATES\tRUSSIAN\t2017-02-18\t-4.39882697947214\nAUSTRALIA\tFIJI\t2017-02-18\t4.69208211143695\nSTUDENT\tMIAMI\t2017-02-18\t-6.16302186878728\nTURKEY\tCOLOMBIAN\t2017-02-18\t-2.76577355229041\nPRESIDENT\tUNITED STATES\t2017-02-18\t-4.24242424242424\nINFANTRY\tBATTALION\t2017-02-18\t-4.52380952380952\nPOLICE OFFICER\tSTATE SECRETARY\t2017-02-18\t-5.85480093676815\nTHAILAND\tMYANMAR\t2017-02-18\t-1.34318334452652\nQATAR\tQATAR\t2017-02-18\t-2.9874213836478\nSILVIO BERLUSCONI\tPREMIER\t2017-02-18\t-0.34782608695652\nPREMIER\tITALY\t2017-02-18\t-0.34782608695652\nPAKISTAN\tNAWAZ SHARIF\t2017-02-18\t-5.65583634175692\nUNITED STATES\tBRITISH\t2017-02-18\t-14.5454545454545\nUNITED STATES\tVOTER\t2017-02-18\t-2.0485033864977034\nCONAKRY\tCELLOU DALEIN DIALLO\t2017-02-18\t-4.33526011560694\nSCHOOL\tCOLUMBUS\t2017-02-18\t-3.74639769452449\nUNITED KINGDOM\tBANK\t2017-02-18\t1.31386861313869\nUNITED STATES\tDANE\t2017-02-18\t1.77736202057998\nA US\tSCHOOL\t2017-02-18\t-0.87565674255692\nPREMIER\tSILVIO BERLUSCONI\t2017-02-18\t-0.34782608695652\nUNITED STATES\tPRESIDENT\t2017-02-18\t-2.10418327831308\nUNITED KINGDOM\tTOURIST\t2017-02-18\t-3.9348710990502\nIRAN\tBOEING\t2017-02-18\t-6.996823413008386\nAFRICAN UNION\tDLAMINI ZUMA\t2017-02-18\t-6.34920634920635\nGOVERNMENT TROOPS\tISNILON\t2017-02-18\t-3.04878048780488\nUNITED STATES\tAL QAEDA\t2017-02-18\t-7.8873615374349155\nDEPUTY\tRUSSIA\t2017-02-18\t-7.19101123595505\nKINGSTOWN\tRHODE ISLAND\t2017-02-18\t-7.942954419121746\nNIGERIA\tINSURGENT\t2017-02-18\t-3.02835051546392\nPRESIDENT\tLAWMAKER\t2017-02-18\t-1.95865070729053\nMEDIA\tAUTHORITIES\t2017-02-18\t-6.5597667638484\nKENTUCKY\tLAWMAKER\t2017-02-18\t-3.37552742616034\nRUSSIAN\tSYRIA\t2017-02-18\t-4.62085308056872\nSUDAN\tRECEP TAYYIP ERDOGAN\t2017-02-18\t1.96078431372549\nLONDON\tMOSCOW\t2017-02-18\t-2.44025793399925\nUNITED STATES\tINVESTOR\t2017-02-18\t0.38022813688213\nNIGERIAN\tWORKER\t2017-02-18\t-10.1391650099404\nCANADA\tNAIROBI\t2017-02-18\t-4.57746478873239\nJAPAN\tINDONESIA\t2017-02-18\t0.21321961620469\nSCHOOL\tRESIDENTS\t2017-02-18\t0.29296875\nMUMBAI\tCOMPANIES\t2017-02-18\t2.63157894736842\nAUSTRALIAN\tGOVERNMENT\t2017-02-18\t5.97826086956522\nGERMAN\tGERMANY\t2017-02-18\t-2.76923076923077\nCOLUMBUS\tSCHOOL\t2017-02-18\t-3.74639769452449\nSENATE\tUNITED STATES\t2017-02-18\t1.62866449511401\nCHINESE\tSINGAPORE\t2017-02-18\t2.29885057471265\nPHILIPPINE\tINSURGENT\t2017-02-18\t-3.03951367781155\nRIGHTS GROUP\tAFRICA\t2017-02-18\t-2.0669553099369202\nCITIZEN\tEUROPE\t2017-02-18\t-2.00573065902579\nAFRICA\tJUDGE\t2017-02-18\t-1.2110872404060833\nPARIS\tCHINESE\t2017-02-18\t2.72822665267576\nCHIEF EXECUTIVE\tFRANCE\t2017-02-18\t-1.61030595813205\nSINGAPORE\tCHINESE\t2017-02-18\t2.29885057471265\nPRESIDENT\tITALY\t2017-02-18\t-0.34782608695652\nMILITARY\tYMCA\t2017-02-18\t4.58715596330275\nRECEP TAYYIP ERDOGAN\tSUDAN\t2017-02-18\t1.96078431372549\nTAIWAN\tBRUNEI\t2017-02-18\t3.57142857142857\nBRITISH\tEUROPEAN PARLIAMENT\t2017-02-18\t-1.12426035502959\nCANADA\tCANADIAN\t2017-02-18\t-1.44508670520232\nSCHOOL\tFREETOWN\t2017-02-18\t-0.11933174224344\nBRUNEI\tTAIWAN\t2017-02-18\t3.57142857142857\nPRESIDENT\tQATAR\t2017-02-18\t-2.9874213836478005\nTHAILAND\tTHE US\t2017-02-18\t-1.35658914728682\nZHUANG\tCHINA\t2017-02-18\t3.5130266075388\nEGYPT\tMINIST OF ELECTRICITY\t2017-02-18\t0.987654320987649\nUNITED STATES\tBUSINESS\t2017-02-18\t1.25509875410404\nPHILIPPINE\tPHILIPPINE\t2017-02-18\t0.0\nWASHINGTON\tGOVERNOR\t2017-02-18\t-2.01612903225806\nCOMPANIES\tMAHARASHTRA\t2017-02-18\t1.2987012987013\nAUSTRALIA\tMARINES\t2017-02-18\t0.15673981191223\nIRAN\tIRAQ\t2017-02-18\t-5.29100529100529\nCANADA\tOTTAWA\t2017-02-18\t1.50943396226415\nINTERIOR MINIST\tTHE EU\t2017-02-18\t1.1889035667107\nSTAFF MEMBER\tHOSPITAL\t2017-02-18\t-3.88127853881279\nKURDISTAN\tTURKEY\t2017-02-18\t2.01342281879194\nMUMBAI\tGOVERNMENT\t2017-02-18\t-1.97326543602801\nJAPAN\tAFGHANISTAN\t2017-02-18\t-2.3916292974589\nBARCELONA\tUNITED STATES\t2017-02-18\t-3.4086699955328967\nVOTER\tPARLIAMENT\t2017-02-18\t-1.994301994302\nCOMPANY\tGOOGLE\t2017-02-18\t-7.93650793650793\nPROFESSOR\tAUSTRALIA\t2017-02-18\t-1.72413793103448\nIRAN\tIRAQI\t2017-02-18\t-5.29100529100529\nTOURIST\tCHINA\t2017-02-18\t3.31606999195495\nHAWAII\tJAPAN\t2017-02-18\t-2.3916292974589\nGOVERNMENT\tINDIGENOUS\t2017-02-18\t-0.7185628742515\nUNITED KINGDOM\tRUSSIA\t2017-02-18\t-4.39882697947214\nCOMMUNITY\tCANADA\t2017-02-18\t3.4965034965035\nDEFENCE FORCE\tMELBOURNE\t2017-02-18\t-1.39372822299651\nBRITAIN\tTHE EUROPEAN UNION\t2017-02-18\t-1.8970189701897\nJEWISH\tPALESTINIAN\t2017-02-18\t-2.25563909774436\nIBRAHIM SULEIMAN\tTERRORIST\t2017-02-18\t-9.84251968503932\nFRANCE\tFRANCE\t2017-02-18\t-2.5974025974026\nNATIONAL ASSEMBLY\tAFRICA\t2017-02-18\t-3.5426731078905\nRESIDENTS\tSCHOOL\t2017-02-18\t0.29296875\nAIRLINE\tBOEING\t2017-02-18\t-6.9364161849711\nSRI LANKA\tCHINA\t2017-02-18\t3.2520325203252\nWASHINGTON\tMANUFACTURER\t2017-02-18\t-1.06516290726817\nSYRIA\tTURKEY\t2017-02-18\t2.01342281879194\nBARCELONA\tTHE US\t2017-02-18\t-2.995741149651135\nUNICEF\tRUSSIAN\t2017-02-18\t0.7249611242296851\nCOMCAST\tLAWMAKER\t2017-02-18\t-0.40927694406548\nSOUTH KOREAN\tUZBEKISTAN\t2017-02-18\t1.92678227360309\nUNITED STATES\tJAPAN\t2017-02-18\t-2.3916292974589\nIRAN\tPERSIAN GULF\t2017-02-18\t-3.09278350515464\nSAUDI ARABIA\tSWITZERLAND\t2017-02-18\t0.9102593615715177\nMILITARY\tTERRORIST\t2017-02-18\t-2.69058295964126\nGAMBIA\tPRESIDENT\t2017-02-18\t-9.2\nHOSPITAL\tVERMONT\t2017-02-18\t-2.90456431535269\nIRAQ\tSYRIA\t2017-02-18\t-6.354784411646669\nTHE EU\tMILITARY\t2017-02-18\t0.95693779904306\nUNITED STATES\tPRISON\t2017-02-18\t-4.17302798982189\nPREACHER\tBULAWAYO\t2017-02-18\t0.98039215686275\nPRIME MINISTER\tPOLISH\t2017-02-18\t-4.40191387559809\nTHAILAND\tPOLITICIAN\t2017-02-18\t-0.539374325782091\nRESIDENTS\tUNITED STATES\t2017-02-18\t0.29296875\nUNITED STATES\tCOLLEGE\t2017-02-18\t-1.0034094324002367\nIRANIAN\tSWEDEN\t2017-02-18\t-6.13718411552346\nRUSSIA\tLOS ANGELES\t2017-02-18\t-10.2362204724409\nTOURIST\tFILIPINO\t2017-02-18\t0.0\nAMERICAN\tPRESIDENT\t2017-02-18\t-4.24242424242424\nNIGERIA\tCANADA\t2017-02-18\t0.952380952380952\nKINGSTON\tTOURIST\t2017-02-18\t1.66666666666666\nMELBOURNE\tDEFENCE FORCE\t2017-02-18\t-1.39372822299651\nPAKISTAN\tMOSCOW\t2017-02-18\t-0.58207217694994\nPOLICE\tUNITED STATES\t2017-02-18\t-0.83798882681564\nVIRGINIA\tPOLICE\t2017-02-18\t-4.21511627906977\nCONGLOMERATE\tABU DHABI\t2017-02-18\t1.00582318687136\nBRUNEI DARUSSALAM\tTAIWAN\t2017-02-18\t3.57142857142857\nCANBERRA\tMARINES\t2017-02-18\t0.15673981191223\nJAPAN\tIRAQ\t2017-02-18\t-2.3916292974589\nTAIWAN\tBRUNEI DARUSSALAM\t2017-02-18\t3.57142857142857\nTURKEY\tCOLOMBIA\t2017-02-18\t-2.76577355229041\nBUSINESS\tUNITED STATES\t2017-02-18\t0.55325034578147\nCHINA\tECONOMIST\t2017-02-18\t-0.61728395061729\nROBERT MUGABE\tMILITARY\t2017-02-18\t3.0690537084399\nEXXON MOBIL\tABU DHABI\t2017-02-18\t0.34071550255537\nKENYA\tNAIROBI\t2017-02-18\t-4.57746478873239\nSTUDENTS AND TEACHER\tLAW ENFORCEMENT OFFICER\t2017-02-18\t-9.09090909090909\nCANADA\tCOMMUNITY\t2017-02-18\t3.4965034965035\nSUPERIOR COURT\tJUDGE\t2017-02-18\t-4.42477876106195\nFARMER\tTHE POOR\t2017-02-18\t-1.21951219512196\nSCHOOL\tUNITED STATES\t2017-02-18\t-0.95794392523364\nISLAMIC\tIRAQ\t2017-02-18\t-2.7346324376027336\nBARCELONA\tPARIS\t2017-02-18\t-3.4086699955328967\nCOMPANY\tMICROSOFT\t2017-02-18\t1.7467248908297\nCHINESE\tBHUTAN\t2017-02-18\t-3.39943342776204\nSYRIAN\tAMMAN\t2017-02-18\t2.82258064516129\nUNITED STATES\tCHINA\t2017-02-18\t1.2987012987013\nPRESIDENT\tPOLICE\t2017-02-18\t-0.83798882681564\nUNITED STATES\tGOVERNMENT\t2017-02-18\t-1.20892746435213\nUNITED STATES\tOPERATIVE\t2017-02-18\t-3.67170626349892\nRUSSIAN\tUKRAINE\t2017-02-18\t-1.01010101010101\nNIGERIA\tGOVERNMENT\t2017-02-18\t-1.20288692862871\nFREETOWN\tUNITED STATES\t2017-02-18\t-0.11933174224344\nUNITED STATES\tIRAQ\t2017-02-18\t-6.18892508143323\nSYRIAN\tTHE US\t2017-02-18\t2.82258064516129\nREGULATOR\tMELBOURNE\t2017-02-18\t-1.80180180180181\nUNITED KINGDOM\tUNITED KINGDOM\t2017-02-18\t1.92776786689482\nOBAMA\tMILITARY\t2017-02-18\t-0.36585365853659\nUNITED STATES\tFRANCE\t2017-02-18\t5.74412532637076\nBANGLADESH\tPOLICE\t2017-02-18\t-7.74647887323944\nPROSECUTOR\tSWEDEN\t2017-02-18\t-6.06451612903226\nBRITAIN\tRUSSIAN\t2017-02-18\t-4.39882697947214\nJAPAN\tUNITED STATES\t2017-02-18\t-2.3916292974589\nGUNMEN\tPIRATE\t2017-02-18\t-5.4989816700611\nECONOMIST\tPRAVIN GORDHAN\t2017-02-18\t-6.14035087719298\nHUMAN RIGHTS WATCH\tPUBLICATION\t2017-02-18\t-4.791251502037885\nOKLAHOMA\tZIMBABWE\t2017-02-18\t-0.29654139398914\nCANADA\tINDUSTRY\t2017-02-18\t0.25773195876289\nPENNSYLVANIA\tPARIS\t2017-02-18\t2.95454545454545\nUNITED KINGDOM\tFRENCH\t2017-02-18\t-1.26126126126126\nAUSTRALIA\tAUSTRALIA\t2017-02-18\t-1.7711598746081498\nIRAQI\tTURKEY\t2017-02-18\t-5.29100529100529\nSOUTH KOREAN\tSOUTH KOREA\t2017-02-18\t1.92678227360309\nIRISH\tLIBYA\t2017-02-18\t2.04081632653061\nISLAM\tPOLICE\t2017-02-18\t-7.74647887323944\nTHE US\tBARCELONA\t2017-02-18\t-2.995741149651135\nISLAMIC\tAFRICA\t2017-02-18\t2.72373540856031\nIRAQ\tHAWAII\t2017-02-18\t-2.3916292974589\nUNITED STATES\tSIERRA LEONE\t2017-02-18\t-0.11933174224344\nREGULATOR\tCITIZEN\t2017-02-18\t1.22448979591836\nUNITED STATES\tLEGISLATOR\t2017-02-18\t0.0\nCOLOMBIAN\tTURKEY\t2017-02-18\t-2.76577355229041\nFOREIGN OFFICE\tRUSSIAN\t2017-02-18\t-1.01010101010101\nNIGERIA\tNIGERIA\t2017-02-18\t0.9710035902906001\nSUDAN\tTURKISH\t2017-02-18\t1.9607843137254897\nBURMESE\tMILITANT\t2017-02-18\t-8.68306801736614\nPOLICE OFFICER\tSUDANESE\t2017-02-18\t-5.85480093676815\nSUPREME COURT\tPRETORIA\t2017-02-18\t-7.9646017699115\nUTAH\tLIEUTENANT\t2017-02-18\t-0.45513654096229\nUNITED STATES\tHOSPITAL\t2017-02-18\t-2.90456431535269\nPRESIDENT\tGAMBIA\t2017-02-18\t-9.2\nAFRICA\tISLAMIC\t2017-02-18\t2.72373540856031\nBOEING\tUNITED STATES\t2017-02-18\t1.27962085308057\nNEW ZEALAND\tAUSTRALIA\t2017-02-18\t5.69105691056911\nGOVERNMENT\tUNIVERSITY\t2017-02-18\t-1.19965724078835\nAFRICA\tAFRICA\t2017-02-18\t-6.54942056035346\nJAPAN\tINVESTOR\t2017-02-18\t-1.38121546961326\nPRAVIN GORDHAN\tECONOMIST\t2017-02-18\t-6.14035087719298\nNEW HAMPSHIRE\tGOVERNMENT\t2017-02-18\t-1.20892746435213\nACTOR\tTEXAS\t2017-02-18\t-2.93453724604967\nSAUDI ARABIA\tKINGDOM\t2017-02-18\t0.8129028545119715\nJAPAN\tTHAILAND\t2017-02-18\t0.21321961620469\nSIERRA LEONE\tUNITED STATES\t2017-02-18\t-0.11933174224344\nAFGHANISTAN\tCIVILIAN\t2017-02-18\t-11.134903640257\nKENYA\tBORDER PATROL UNIT\t2017-02-18\t-5.79029733959311\nJAPANESE\tGOVERNMENT\t2017-02-18\t1.60642570281125\nTURKEY\tIRAQI\t2017-02-18\t-5.29100529100529\nADVOCATE\tRIGHTS GROUP\t2017-02-18\t-2.0233396806484936\nSAN FRANCISCO\tCOMPANY\t2017-02-18\t-7.59493670886076\nDISTRICT COURT\tPOLICE\t2017-02-18\t-6.07734806629834\nIRAQ\tCONGRESS\t2017-02-18\t-3.46534653465347\nJEAN CLAUDE JUNCKER\tGERMANY\t2017-02-18\t3.28638497652582\nCHINA\tRUSSIA\t2017-02-18\t3.79746835443038\nPOPULATION\tGOVERNMENT\t2017-02-18\t0.21645021645021\nHOUSTON\tUNIVERSITY\t2017-02-18\t-1.23456790123457\nSPOKESMAN\tDETROIT\t2017-02-18\t2.18579234972677\nBOSS\tUNITED KINGDOM\t2017-02-18\t1.31386861313869\nWASHINGTON\tLAWMAKER\t2017-02-18\t-7.2463768115942\nHOUSTON\tADMINISTRATION\t2017-02-18\t-1.23456790123457\nGENERAL ASSEMBLY\tARKANSAS\t2017-02-18\t-0.132566506724895\nUNITED STATES\tUNITED STATES\t2017-02-18\t-3.005475093911908\nKING\tHOSPITAL\t2017-02-18\t-2.72479564032697\nATTORNEY\tMINNESOTA\t2017-02-18\t-4.1025641025641\nINDUSTRY\tSTATE OFFICIAL\t2017-02-18\t-1.04493207941483\nPAKISTAN\tPAKISTAN\t2017-02-18\t-5.56660039761431\nIRELAND\tLIBYA\t2017-02-18\t2.04081632653061\nEUROPE\tCITIZEN\t2017-02-18\t-2.00573065902579\nINDUSTRY\tUNITED KINGDOM\t2017-02-18\t1.78571428571428\nUNITED STATES\tTEXAS\t2017-02-18\t-2.1836010012483302\nPRESIDENT\tTHE OPPOSITION\t2017-02-18\t0.69444444444445\nGOOGLE\tCOMPANY\t2017-02-18\t-7.93650793650793\nADMINISTRATION\tSTUDENT\t2017-02-18\t3.48258706467662\nABUJA\tINSURGENT\t2017-02-18\t-3.02835051546392\nSUPREME COURT\tAFRICA\t2017-02-18\t-7.9646017699115\nPAKISTAN\tPRISON\t2017-02-18\t-8.55457227138646\nSILVIO BERLUSCONI\tITALY\t2017-02-18\t-0.34782608695652\nRUSSIA\tCHINA\t2017-02-18\t3.79746835443038\nFARMER\tDANE\t2017-02-18\t1.77736202057998\nBRITISH\tRUSSIA\t2017-02-18\t-14.5454545454545\nSAN FRANCISCO\tINDUSTRY\t2017-02-18\t-1.70940170940171\nZIMBABWE\tPARLIAMENT\t2017-02-18\t-3.76175548589342\nUNITED STATES\tZIMBABWE\t2017-02-18\t-0.29615004935834\nIRANIAN\tIRANIAN\t2017-02-18\t-1.4284440878905331\nNORTH KOREA\tNORTH KOREAN\t2017-02-18\t1.51187904967603\nUNITED STATES\tRESIDENTS\t2017-02-18\t0.29296875\nSPOKESMAN\tSOUTH SUDAN\t2017-02-18\t-6.57492354740061\nUNITED STATES\tTURKEY\t2017-02-18\t-6.18892508143323\nBRITISH\tUNITED KINGDOM\t2017-02-18\t-3.07836394374856\nMOSCOW\tPAKISTAN\t2017-02-18\t-0.58207217694994\nAFAR\tIRAQI\t2017-02-18\t-7.95180722891566\nAIR FORCE\tASSAM\t2017-02-18\t2.33644859813084\nWORKER\tLAWMAKER\t2017-02-18\t-0.40927694406548\nUNITED STATES\tLAWMAKER\t2017-02-18\t-3.37552742616034\nBHUTAN\tFOREIGN SECRETARY\t2017-02-18\t1.4629608366821176\nTHAI\tMYANMAR\t2017-02-18\t4.02010050251256\nBRITISH\tBARBADOS\t2017-02-18\t4.54545454545454\nVOTER\tSCHOOL\t2017-02-18\t0.537634408602149\nISLAM\tBANGLADESH\t2017-02-18\t-9.00473933649289\nCHINA\tPARIS\t2017-02-18\t-0.44247787610619\nINSURGENT\tPRESIDENT\t2017-02-18\t-3.03951367781155\nAFRICA\tRIGHTS GROUP\t2017-02-18\t-1.93610842207164\nIRAQ\tAFGHANISTAN\t2017-02-18\t-2.3916292974589\nINSURGENT\tPHILIPPINE\t2017-02-18\t-3.03951367781155\nCORRESPONDENT\tGERMANY\t2017-02-18\t-4.26829268292683\nUNITED KINGDOM\tMUSLIM\t2017-02-18\t-7.20338983050848\nGENERAL ASSEMBLY\tUNITED STATES\t2017-02-18\t-0.18484288354898\nIRAQI\tIRAN\t2017-02-18\t-5.29100529100529\nAUSTRALIA\tDEFENCE FORCE\t2017-02-18\t-1.39372822299651\nUNITED KINGDOM\tVOTER\t2017-02-18\t-2.71844660194175\nCHINESE\tPARIS\t2017-02-18\t2.72822665267576\nUHURU KENYATTA\tSUPREME COURT\t2017-02-18\t-2.63446761800219\nUNITED STATES\tSCHOOL\t2017-02-18\t-0.87565674255692\nVICTORIA\tREGULATOR\t2017-02-18\t-1.80180180180181\nISLAM\tRELIGION\t2017-02-18\t-1.40845070422535\nHAWAII\tKING\t2017-02-18\t-1.99727207999414\nTHE UN\tRUSSIAN\t2017-02-18\t1.03092783505155\nWASHINGTON\tLAWYER\t2017-02-18\t-1.06516290726817\nUNITED KINGDOM\tISLAM\t2017-02-18\t2.04678362573099\nCHINA\tTOURIST\t2017-02-18\t3.97727272727273\nTALIBAN\tTERRORIST\t2017-02-18\t-15.4838709677419\nUNITED STATES\tSTUDENT\t2017-02-18\t-3.60360360360361\nPHILIPPINE\tFILIPINO\t2017-02-18\t-8.98876404494384\nNAVAL\tCANADA\t2017-02-18\t0.13888888888889\nIOWA\tCITIZEN\t2017-02-18\t-6.60954712362301\nBOEING\tAIRLINE\t2017-02-18\t-6.9364161849711\nTURKISH\tSUDAN\t2017-02-18\t1.9607843137254897\nANKARA\tRECEP TAYYIP ERDOGAN\t2017-02-18\t2.01342281879194\nBRITISH\tBRITISH\t2017-02-18\t-5.03246753246753\nISRAEL\tTERRORIST\t2017-02-18\t-5.65371024734982\nCORRESPONDENT\tTERRORIST\t2017-02-18\t-3.6379057399596553\nTHAILAND\tCHINA\t2017-02-18\t-1.35658914728682\nIRAQ\tIRAN\t2017-02-18\t-5.29100529100529\nAFGHANISTAN\tHAWAII\t2017-02-18\t-2.3916292974589\nPOLAND\tPOLISH\t2017-02-18\t-4.40191387559809\nMALAYSIA\tTHE EU\t2017-02-18\t-1.59453302961276\nNORWAY\tINDUSTRY\t2017-02-18\t-0.50651230101302\nNAMIBIA\tNEWS AGENCY\t2017-02-18\t-0.52770448548812\nAUSTRALIA\tPROFESSOR\t2017-02-18\t-1.72413793103448\nABUJA\tNIGERIA\t2017-02-18\t-3.02835051546392\nMINISTRY\tISRAELI\t2017-02-18\t-2.2593896713615\nREGULATOR\tVICTORIA\t2017-02-18\t-1.80180180180181\nLITHUANIA\tEUROPE\t2017-02-18\t3.7593984962406\nHOSPITAL\tUNITED STATES\t2017-02-18\t-0.79601990049752\nGOVERNOR\tUNIVERSITY\t2017-02-18\t-2.5773195876288706\nTERRORIST\tTURKEY\t2017-02-18\t-3.00751879699248\nSYRIAN\tMOSCOW\t2017-02-18\t2.82258064516129\nDEFECTOR\tWASHINGTON\t2017-02-18\t-3.7661761225047674\nVIETNAM\tTHE US\t2017-02-18\t1.10957004160888\nCOMPANIES\tRUSSIA\t2017-02-18\t-2.48995983935743\nPOLICE\tDISTRICT COURT\t2017-02-18\t-6.07734806629834\nEMBASSY\tUNITED KINGDOM\t2017-02-18\t-3.46534653465347\nCAMBODIA\tGOVERNMENT\t2017-02-18\t-4.0711739241151\nNEWS AGENCY\tNAMIBIA\t2017-02-18\t-0.52770448548812\nTERRORIST\tCORRESPONDENT\t2017-02-18\t-3.848034720948714\nCORRESPONDENT\tTURKEY\t2017-02-18\t-3.00751879699248\nCITIZEN\tSYRIA\t2017-02-18\t-6.345253489097955\nMAYOR\tUNITED STATES\t2017-02-18\t2.7937551355793\nTHE UN\tCOMPANIES\t2017-02-18\t0.20576131687243\nTAIWAN\tBRUNEI\t2017-02-19\t3.36134453781513\nYMCA\tMILITARY\t2017-02-19\t3.93013100436681\nKUWAIT\tKUWAIT\t2017-02-19\t-3.87596899224806\nTIGRE\tNEW JERSEY\t2017-02-19\t0.51395007342144\nAFAR\tMOSUL\t2017-02-19\t-8.27067669172932\nCOMPANY\tMICROSOFT\t2017-02-19\t1.76211453744493\nKUWAITI\tKUWAIT\t2017-02-19\t-3.87596899224806\nMILITARY\tYMCA\t2017-02-19\t3.93013100436681\nBRUNEI\tTAIWAN\t2017-02-19\t3.36134453781513\nKUWAIT\tKUWAITI\t2017-02-19\t-3.87596899224806\nTAIWAN\tBRUNEI DARUSSALAM\t2017-02-19\t3.36134453781513\nINDUSTRY\tUNITED KINGDOM\t2017-02-19\t1.77935943060498\nFIJI\tFIJI\t2017-02-19\t-6.32183908045977\nUNITED STATES\tTIGRE\t2017-02-19\t0.51395007342144\nUNITED NATIONS\tRWANDA\t2017-02-19\t-4.25531914893617\nPROSECUTOR\tSWEDEN\t2017-02-19\t-6.06860158311346\nFOREIGN SECRETARY\tBHUTAN\t2017-02-19\t1.44665461121158\nUNITED STATES\tVOTER\t2017-02-19\t-2.91095890410959\nBHUTAN\tFOREIGN SECRETARY\t2017-02-19\t1.44665461121158\nIRANIAN\tIRANIAN\t2017-02-19\t0.94339622641509\nBRUNEI DARUSSALAM\tTAIWAN\t2017-02-19\t3.36134453781513\nAFAR\tIRAQI\t2017-02-19\t-8.27067669172932\nSWEDEN\tSWEDEN\t2017-02-19\t-6.06860158311346\nJUSTICE SYSTEM\tGOVERNMENT\t2018-01-19\t-0.1952035694367\nEMPLOYEE\tCOMPANY\t2018-01-19\t0.42105263157895\nCHINA\tAIR FORCE\t2018-01-19\t-1.97657393850659\nIOWA\tLAWMAKER\t2018-01-19\t-15.3061224489796\nMEDIA\tUNITED STATES\t2018-01-19\t2.19298245614035\nREPRESENTATIVES\tUNITED STATES\t2018-01-19\t-3.01318267419963\nBUSINESS\tWORLD ECONOMIC FORUM\t2018-01-19\t-5.364713990517316\nCALIFORNIA\tMURRAY\t2018-01-19\t2.19298245614035\nWASHINGTON\tMAYOR\t2018-01-19\t-4.390135139220606\nIRAN\tUNITED STATES\t2018-01-19\t-3.58744394618834\nNIGERIA\tSEPARATIST LEADER\t2018-01-19\t-7.63395788947915\nPRINCE\tMANAMA\t2018-01-19\t6.23052959501558\nNEW MEXICO\tUNITED KINGDOM\t2018-01-19\t-1.34318334452652\nMANAMA\tPRINCE\t2018-01-19\t6.23052959501558\nUNITED STATES\tUNITED STATES\t2018-01-19\t-3.732529258939285\nLEGISLATOR\tNAIROBI\t2018-01-19\t-4.03899721448468\nTYCOON\tLONDON\t2018-01-19\t-2.12765957446809\nCHIEF MINISTER\tTRIBUNAL\t2018-01-19\t-1.89873417721519\nTHE US\tNEW MEXICO\t2018-01-19\t-1.34318334452652\nUNITED KINGDOM\tMUSLIM\t2018-01-19\t-3.52595494613125\nFRANCE\tUNITED KINGDOM\t2018-01-19\t-6.26753975678204\nTHE US\tMILITIA\t2018-01-19\t-5.10314875135722\nUNITED STATES\tPREACHER\t2018-01-19\t1.49253731343284\nRUSSIA\tUNITED STATES\t2018-01-19\t1.49253731343284\nUNITED STATES\tSTUDENT\t2018-01-19\t1.69534000046623\nNIGERIA\tMINIST OF HEALTH\t2018-01-19\t-11.9122257053292\nNEW JERSEY\tUNITED STATES\t2018-01-19\t-2.42718446601941\nAUSTRALIA\tCAMBODIAN\t2018-01-19\t-7.01298701298701\nHONDURAS\tWASHINGTON\t2018-01-19\t-4.38144329896907\nUNITED KINGDOM\tLONDON\t2018-01-19\t-2.12765957446809\nUNITED STATES\tIRAN\t2018-01-19\t-3.58744394618834\nRUSSIA\tPREACHER\t2018-01-19\t1.49253731343284\nBEIJING\tBRUNEI\t2018-01-19\t-1.97657393850659\nFIRST STATE\tGOVERNMENT\t2018-01-19\t-1.24320124320125\nTHE WHITE HOUSE\tISRAELI\t2018-01-19\t-3.2312925170068\nQATAR\tAIRLINE\t2018-01-19\t-2.9874213836477996\nEGYPT\tSUDANESE\t2018-01-19\t-3.42857142857143\nBRITISH\tSCHOOL\t2018-01-19\t-3.52595494613125\nSPOKESMAN\tUNITED STATES\t2018-01-19\t-6.79245283018868\nISRAEL\tUNITED STATES\t2018-01-19\t-3.176227282437756\nMAGAZINE\tCANADA\t2018-01-19\t-1.13871635610766\nNEW MEXICO\tTHE US\t2018-01-19\t-1.34318334452652\nISRAELI\tADMINISTRATION\t2018-01-19\t-7.38476892369108\nUNITED STATES\tREPRESENTATIVES\t2018-01-19\t-3.01318267419963\nSCHOOL\tJERSEY\t2018-01-19\t-0.13495276653171\nUS STUDENT\tSCHOOL\t2018-01-19\t-5.988700564971757\nMANAMA\tKINGDOM\t2018-01-19\t6.23052959501558\nTURKEY\tPHILIPPINE\t2018-01-19\t0.0\nHOSPITAL\tIDAHO\t2018-01-19\t-6.6120218579235\nSUMITOMO MITSUI\tTOKYO\t2018-01-19\t0.0\nSUDANESE\tBELGIUM\t2018-01-19\t-5.904039503802309\nTHAILAND\tMYANMAR\t2018-01-19\t-3.44332855093257\nJORDAN\tNETHERLANDS\t2018-01-19\t0.82730093071355\nMEXICO\tSUPREME COURT\t2018-01-19\t-2.2875816993464\nTHE WHITE HOUSE\tUNITED STATES\t2018-01-19\t-7.96296296296296\nCOLOMBIA\tGOVERNMENT\t2018-01-19\t-1.81818181818182\nJAMMU AND KASHMIR\tCONGRESS\t2018-01-19\t-6.060606060606051\nCHILE\tTHE POPE\t2018-01-19\t-3.79904712357273\nCHRISTIAN\tWASHINGTON\t2018-01-19\t-3.46358792184724\nCOMMUNITY\tSCHOOL\t2018-01-19\t-4.25101214574898\nLAWMAKER\tSCHOOL\t2018-01-19\t-3.52595494613125\nACTIVIST\tUNITED KINGDOM\t2018-01-19\t-1.94174757281553\nPRESIDENT\tCOMPANY\t2018-01-19\t-1.71184022824536\nUNITED KINGDOM\tNEW MEXICO\t2018-01-19\t-1.34318334452652\nKINGDOM\tMANAMA\t2018-01-19\t6.23052959501558\nAUSTRALIA\tBRITISH\t2018-01-19\t-1.72860847018151\nUNITED STATES\tSERVICEWOMEN\t2018-01-19\t-1.54197601370646\nNATIONAL BANK\tCRIMINAL\t2018-01-19\t-2.7083270659332497\nHOSPITAL\tNEWSPAPER\t2018-01-19\t-2.52167060677698\nUNITED STATES\tISRAEL\t2018-01-19\t-3.2312925170068\nTHE US\tSOUTH KOREA\t2018-01-19\t-1.92307692307692\nPENNSYLVANIA\tUNIVERSITY\t2018-01-19\t1.3215859030837\nMURRAY\tCALIFORNIA\t2018-01-19\t2.19298245614035\nCOMPANY\tATHENS\t2018-01-19\t1.0443864229765\nSPAIN\tFRANCE\t2018-01-19\t2.4896265560166\nABU DHABI\tADEN\t2018-01-19\t-3.125\nUNITED STATES\tAIRLINE\t2018-01-19\t-2.9874213836478\nPRIME MINISTER\tBUSINESS\t2018-01-19\t-6.061959323244955\nCARRIE LAM CHENG YUET NGOR\tHOSPITAL\t2018-01-19\t-3.46083788706739\nJERUSALEM\tREPRESENTATIVES\t2018-01-19\t0.74377091855708\nUNITED KINGDOM\tUNITED KINGDOM\t2018-01-19\t-1.8413597733711\nSUDANESE\tSCHOOL\t2018-01-19\t-4.40881763527054\nRUSSIA\tCONGRESS\t2018-01-19\t-4.62678171532885\nUNITED KINGDOM\tAUSTRALIA\t2018-01-19\t-1.72860847018151\nAMBASSADOR\tAFRICAN UNION\t2018-01-19\t-3.42857142857143\nKONO\tFOREIGN MINIST\t2018-01-19\t-0.32441200324412\nGOVERNMENT\tJUSTICE SYSTEM\t2018-01-19\t-0.1952035694367\nRUSSIA\tRUSSIA\t2018-01-19\t-2.91005291005291\nBRITISH\tCHINA\t2018-01-19\t-1.72860847018151\nTURKEY\tSYRIA\t2018-01-19\t-4.650458963600251\nLEEDS\tCANNES\t2018-01-19\t3.00353356890459\nUS STUDENT\tWASHINGTON\t2018-01-19\t-6.125907990314775\nJEWISH\tACTIVIST\t2018-01-19\t-1.94174757281553\nCHILE\tBISHOP\t2018-01-19\t-4.475468409245657\nUNITED STATES\tPOLICE OFFICER\t2018-01-19\t-1.7167381974249\nMILITIA\tANKARA\t2018-01-19\t-5.28162579041632\nMINIST OF DEFENCE\tBRAZIL\t2018-01-19\t-2.43055555555556\nEGYPT\tEGYPTIAN\t2018-01-19\t-2.89855072463768\nWASHINGTON\tCHRISTIAN\t2018-01-19\t-3.46358792184724\nMILITARY OFFICER\tCIVILIAN\t2018-01-19\t-1.50602409638555\nGOVERNMENT\tCOLOMBIA\t2018-01-19\t-1.81818181818182\nHOSPITAL\tMALTA\t2018-01-19\t-2.52167060677698\nSCHOOL\tLONDON\t2018-01-19\t-4.25101214574898\nUNITED KINGDOM\tBRUNEI\t2018-01-19\t-1.72860847018151\nWASHINGTON\tALBANIAN\t2018-01-19\t-3.8888888888888906\nUNIVERSITY\tPENNSYLVANIA\t2018-01-19\t1.3215859030837\nHAITI\tHAITI\t2018-01-19\t3.61990950226244\nCOMPANY\tCORK\t2018-01-19\t6.74603174603175\nKONO\tJAPAN\t2018-01-19\t-0.32733224222586\nNEW MEXICO\tMYANMAR\t2018-01-19\t-1.34318334452652\nCANNES\tLEEDS\t2018-01-19\t3.00353356890459\nCORRESPONDENT\tOPPOSITION ACTIVIST\t2018-01-19\t-6.23311381290107\nBUSINESS\tMAGAZINE\t2018-01-19\t-1.63265306122449\nHOSPITAL\tUNITED STATES\t2018-01-19\t-6.612021857923499\nUNITED STATES\tMINNESOTA\t2018-01-19\t-3.1496062992126\nEGYPT\tAFRICAN UNION\t2018-01-19\t-3.42857142857143\nUNITED STATES\tGOOGLE\t2018-01-19\t-5.427138639235869\nCOMMUNITY\tUNITED KINGDOM\t2018-01-19\t-4.25101214574898\nMINIST\tPARLIAMENT\t2018-01-19\t-5.15463917525773\nREPRESENTATIVES\tJERUSALEM\t2018-01-19\t0.74377091855708\nTHE WHITE HOUSE\tADMINISTRATION\t2018-01-19\t-7.96296296296296\nOROMO\tPOLITICAL PRISONER\t2018-01-19\t-7.52118644067799\nPRESIDENT\tISRAEL\t2018-01-19\t-3.73831775700935\nAMBASSADOR\tSUDANESE\t2018-01-19\t-3.42857142857143\nCATHOLIC\tUNITED KINGDOM\t2018-01-19\t-2.68987341772152\nAUTHORITIES\tTURKISH\t2018-01-19\t-12.3152709359606\nAMHARA\tPOLITICAL PRISONER\t2018-01-19\t-7.52118644067799\nUNITED STATES\tALBANIA\t2018-01-19\t-3.88888888888889\nCOLOMBIAN\tGOVERNMENT\t2018-01-19\t-1.81818181818182\nWASHINGTON\tIRAN\t2018-01-19\t-3.58744394618834\nIRAN\tEUROPEAN\t2018-01-19\t-1.20481927710844\nUNITED STATES\tACTIVIST\t2018-01-19\t-6.30011454753723\nREPRESENTATIVES\tTHE OPPOSITION\t2018-01-19\t-5.0\nSTUDENT\tLAWMAKER\t2018-01-19\t-1.26582278481012\nMALAYSIA\tASEAN\t2018-01-19\t3.03030303030303\nPHILIPPINE\tCHINA\t2018-01-19\t0.76923076923077\nBRITISH\tAUSTRALIA\t2018-01-19\t-1.72860847018151\nFARMER\tCOLLEGE\t2018-01-19\t1.81159420289856\nADMINISTRATION\tRUSSIA\t2018-01-19\t-5.20874751491054\nGERMANY\tADMINISTRATION\t2018-01-19\t-6.27062706270627\nCAMBODIAN\tAUSTRALIA\t2018-01-19\t-7.01298701298701\nFLORIDA\tSCHOOL\t2018-01-19\t-4.09090909090909\nUNITED STATES OF AMERICA\tMALAWI\t2018-01-19\t1.53846153846154\nTURKEY\tTERRORIST GROUP\t2018-01-19\t-1.321439819749975\nITALY\tAUTOMAKER\t2018-01-19\t-2.08\nGOVERNMENT\tAFGHAN\t2018-01-19\t-1.19047619047619\nSYRIA\tSTATE MEDIA\t2018-01-19\t-4.80916030534351\nBRAZIL\tMINIST OF DEFENCE\t2018-01-19\t-2.43055555555556\nNEWSPAPER\tHOSPITAL\t2018-01-19\t-2.52167060677698\nFRANCE\tSPAIN\t2018-01-19\t2.4896265560166\nCHILE\tVATICAN\t2018-01-19\t-6.15384615384615\nPAKISTAN\tMEDIA\t2018-01-19\t1.68634064080945\nSPOKESMAN\tATTORNEY\t2018-01-19\t-6.79245283018868\nADMINISTRATION\tUNITED STATES\t2018-01-19\t-9.09961685823757\nMALAWI\tUNITED STATES OF AMERICA\t2018-01-19\t1.53846153846154\nRUSSIA\tSASKATCHEWAN\t2018-01-19\t-5.84112149532711\nMYANMAR\tNEW MEXICO\t2018-01-19\t-1.34318334452652\nJORDAN\tCOMPANY\t2018-01-19\t0.82730093071355\nAFRICA\tAFRICAN UNION\t2018-01-19\t2.41935483870967\nTHE US\tNORTH KOREA\t2018-01-19\t-2.4730173850916866\nETHIOPIA\tPOLITICIAN\t2018-01-19\t-7.37463126843658\nRUSSIA\tLAWMAKER\t2018-01-19\t-3.25732899022801\nQATAR\tARAB EMIRATES\t2018-01-19\t-2.9874213836478\nSCHOOL\tTHE US\t2018-01-19\t-0.363161974929655\nGERMANY\tTHE WHITE HOUSE\t2018-01-19\t-6.780498718945127\nPRODUCER\tUNITED STATES\t2018-01-19\t0.66445182724253\nDAVOS\tUNITED KINGDOM\t2018-01-19\t0.0\nWASHINGTON\tHONDURAS\t2018-01-19\t-4.390135139220606\nLAWMAKER\tCOURT OF AUDITORS\t2018-01-19\t-4.390135139220606\nSAUDI ARABIA\tSAUDI ARABIA\t2018-01-19\t1.0230179028133\nMAYOR\tWASHINGTON\t2018-01-19\t-4.390135139220606\nISRAEL\tTHE WHITE HOUSE\t2018-01-19\t-7.694610615524786\nSUDAN\tOPPOSITION ACTIVIST\t2018-01-19\t-6.23311381290107\nBISHOP\tCHILE\t2018-01-19\t-4.475468409245657\nETHIOPIA\tPOLITICAL PRISONER\t2018-01-19\t-7.52118644067799\nAUSTRALIA\tPOLICE\t2018-01-19\t-6.66666666666666\nSYRIAN\tMILITIA\t2018-01-19\t-7.29166666666667\nBUSINESS\tCHINA\t2018-01-19\t0.0\nJAPAN\tFOREIGN MINIST\t2018-01-19\t-0.32441200324412\nUNITED KINGDOM\tCITIZEN\t2018-01-19\t-1.8413597733711\nMALTA\tHOSPITAL\t2018-01-19\t-2.52167060677698\nUNITED STATES\tSPOKESMAN\t2018-01-19\t-6.79245283018868\nADEN\tABU DHABI\t2018-01-19\t-3.125\nPRESIDENT\tEUROPEAN\t2018-01-19\t-1.20481927710844\nTHE US\tMOSCOW\t2018-01-19\t-4.83760319825894\nUNITED KINGDOM\tPRISON\t2018-01-19\t-5.14705882352941\nWASHINGTON\tNORTH KOREA\t2018-01-19\t-10.562464738636633\nVATICAN\tCHILE\t2018-01-19\t-6.15384615384615\nWASHINGTON\tISRAELI\t2018-01-19\t-2.81690140845071\nADMINISTRATION\tPAKISTAN\t2018-01-19\t-7.190273594977449\nCOMPANY\tEMPLOYEE\t2018-01-19\t2.5293790030632164\nISRAELI\tAMERICAN\t2018-01-19\t1.70261066969353\nSYRIAN\tTURKEY\t2018-01-19\t-7.32265446224256\nATTORNEY GENERAL\tOBAMA\t2018-01-19\t-4.28070175438596\nLAGOS\tCOMPANY\t2018-01-19\t-3.60360360360361\nTAMIL NADU\tTRIBUNAL\t2018-01-19\t-1.89873417721519\nISRAEL\tISRAEL\t2018-01-19\t-4.645367141508432\nWORLD ECONOMIC FORUM\tBUSINESS\t2018-01-19\t-6.061959323244955\nVIRGINIA\tPOLICE\t2018-01-19\t-4.21511627906977\nEGYPTIAN\tEGYPT\t2018-01-19\t-2.89855072463768\nKENTUCKY\tSTUDENT\t2018-01-19\t2.52336448598131\nNEW JERSEY\tTHE ASSOCIATED PRESS\t2018-01-19\t-2.42718446601941\nMEDIA\tPAKISTAN\t2018-01-19\t3.49344978165939\nISRAEL\tADMINISTRATION\t2018-01-19\t-8.16482268094226\nISLAMIC\tUNITED STATES\t2018-01-19\t-9.8591549295775\nUNITED STATES\tISLAMIC\t2018-01-19\t-9.8591549295775\nISRAEL\tPRESIDENT\t2018-01-19\t-3.73831775700935\nJERSEY\tSCHOOL\t2018-01-19\t-0.13495276653171\nCOMPANIES\tTENANTS\t2018-01-19\t-1.11731843575419\nISRAELI\tTHE WHITE HOUSE\t2018-01-19\t-6.923304411584992\nPHILIPPINE\tTURKEY\t2018-01-19\t0.0\nUNITED KINGDOM\tVILLAGE\t2018-01-19\t1.07816711590297\nEGYPT\tMILITARY\t2018-01-19\t-2.69058295964126\nMILITARY\tTERRORIST\t2018-01-19\t-10.6389981348415\nAFRICAN UNION\tAMBASSADOR\t2018-01-19\t-3.42857142857143\nNATIONAL COUNCIL\tPRESIDENT\t2018-01-19\t-1.862502992352175\nNEW JERSEY\tGOVERNOR\t2018-01-19\t0.67049808429119\nCOMPANIES\tUNITED STATES\t2018-01-19\t-1.11731843575419\nVICTORIA\tMYANMAR\t2018-01-19\t-3.44332855093257\nAFRICAN UNION\tEGYPT\t2018-01-19\t-3.42857142857143\nCOMPANY\tUNITED STATES\t2018-01-19\t0.42105263157895\nUNITED STATES\tMEDIA\t2018-01-19\t2.19298245614035\nCAMBODIAN\tSOUTH EAST ASIA\t2018-01-19\t-7.01298701298701\nTHE POPE\tCHILE\t2018-01-19\t-3.79904712357273\nPOLICE CHIEF\tCITIZEN\t2018-01-19\t-1.8413597733711\nBANGKOK\tMYANMAR\t2018-01-19\t-3.44332855093257\nBEIJING\tAFGHANISTAN\t2018-01-19\t-2.34375\nSYRIA\tSYRIA\t2018-01-19\t-5.4215832484513875\nSYRIAN\tTURKISH\t2018-01-19\t-7.291666666666669\nBUSINESS\tPRIME MINISTER\t2018-01-19\t-6.061959323244955\nWASHINGTON\tALBANIA\t2018-01-19\t-3.88888888888889\nUNITED STATES\tOBAMA\t2018-01-19\t0.22258395128715355\nCHIEF EXECUTIVE\tHOSPITAL\t2018-01-19\t-3.46083788706739\nTURKISH\tSYRIAN\t2018-01-19\t-4.0084388185654\nAMERICAN\tPHYSICIAN\t2018-01-19\t-3.84615384615384\nPRISON\tSUDAN\t2018-01-20\t-6.4935064935065\nISRAEL\tADMINISTRATION\t2018-01-20\t-8.23170731707317\nWELLINGTON\tTOURISM MINIST\t2018-01-20\t0.841750841750851\nNEW ZEALAND\tNEW ZEALAND\t2018-01-20\t0.841750841750851\nSUDAN\tOPPOSITION ACTIVIST\t2018-01-20\t-6.4935064935065\nGOVERNMENT\tTHE OPPOSITION\t2018-01-20\t-6.4935064935065\nTOURISM MINIST\tWELLINGTON\t2018-01-20\t0.841750841750851\nISRAEL\tTHE WHITE HOUSE\t2018-01-20\t-8.23170731707317\nNEW ZEALAND\tMAYOR\t2018-01-20\t0.841750841750851\nTHE OPPOSITION\tGOVERNMENT\t2018-01-20\t-6.4935064935065\nSYRIA\tTERRORIST GROUP\t2018-01-20\t-1.83767228177642\nPRISON\tOPPOSITION ACTIVIST\t2018-01-20\t-6.4935064935065\nMILITIA\tTURKEY\t2018-01-20\t-1.83767228177642\nWELLINGTON\tMAYOR\t2018-01-20\t0.841750841750851\nACTIVIST\tSUDAN\t2018-01-20\t-6.4935064935065\nMILITARY\tMUSLIM\t2018-02-11\t-1.21317157712305\nIRANIAN\tPOLICE\t2018-02-11\t-5.933016349683013\nCUBA\tWASHINGTON\t2018-02-11\t0.0\nUNITED STATES\tSCHOOL\t2018-02-11\t-3.291148088772908\nPRIME MINISTER\tTHE US\t2018-02-11\t-3.05602716468591\nUNITED KINGDOM\tKABUL\t2018-02-11\t-3.28227571115974\nBLOG\tOTTAWA\t2018-02-11\t1.21951219512195\nVICTORIA\tLAWYER\t2018-02-11\t-2.51518860090039\nLAWYER\tPAKISTAN\t2018-02-11\t-6.6015987341081495\nPRESIDENT\tLAW ENFORCEMENT AGENCY\t2018-02-11\t-5.76441102756892\nPOLICEMEN\tNIGERIA\t2018-02-11\t-0.90938833662116\nCOLORADO\tUNIVERSITY\t2018-02-11\t2.38095238095238\nAUSTRALIA\tMARINES\t2018-02-11\t-1.7946161515453702\nADMINISTRATION\tRUSSIAN\t2018-02-11\t-3.84615384615385\nSUDAN\tETHIOPIAN\t2018-02-11\t-3.42857142857143\nPRESIDENT\tFLORIDA\t2018-02-11\t-3.8669371328158797\nPRINCE\tDENMARK\t2018-02-11\t0.6372116530857045\nBUSINESS\tCOMMUNITY\t2018-02-11\t1.02040816326531\nBUSINESS\tONTARIO\t2018-02-11\t1.02040816326531\nGUYANA\tUNIVERSITY\t2018-02-11\t0.49751243781095\nSCHOOL\tLEGISLATOR\t2018-02-11\t-3.4610630407911\nSENATE\tGOVERNMENT\t2018-02-11\t-1.23022847100175\nIRELAND\tIRISH\t2018-02-11\t1.58730158730159\nSINGAPORE\tJAPAN\t2018-02-11\t-1.06007067137809\nHOSPITAL\tHARARE\t2018-02-11\t-6.9789066705819\nMAITHRIPALA SIRISENA\tMAHINDA RAJAPAKSE\t2018-02-11\t-4.79797979797979\nLAWYER\tMEDIA\t2018-02-11\t-5.867862938968551\nBRITISH\tUNITED KINGDOM\t2018-02-11\t-0.5952380952381\nDOCTOR\tUNITED STATES\t2018-02-11\t-0.77922077922078\nPRESIDENT\tKWAZULU NATAL\t2018-02-11\t3.18471337579617\nBUSINESS\tUNITED STATES\t2018-02-11\t-2.980735500853235\nTHE US\tJAPAN\t2018-02-11\t-1.06007067137809\nRUSSIAN\tIRAN\t2018-02-11\t1.8800966475385048\nEGYPTIAN\tKUWAIT\t2018-02-11\t2.88808664259928\nUNITED STATES\tCOMMUNITY\t2018-02-11\t-5.61757947643327\nUNITED STATES\tSTUDENT\t2018-02-11\t-0.73415355429082\nRUSSIAN\tMOSCOW\t2018-02-11\t-1.98019801980198\nMANILA\tKUWAIT\t2018-02-11\t-5.37634408602151\nKIMBERLEY\tDEPARTMENT OF EDUCATION\t2018-02-11\t-9.47368421052633\nIRISH\tIRELAND\t2018-02-11\t1.58730158730159\nCHINA\tCONGRESS\t2018-02-11\t-0.86455331412104\nGREECE\tMACEDONIA\t2018-02-11\t1.02880658436214\nMINNESOTA\tMONSANTO\t2018-02-11\t-2.85374554102259\nZIMBABWE\tMORGAN TSVANGIRAI\t2018-02-11\t-3.214095286554545\nUGANDA\tSTUDENT\t2018-02-11\t-0.90744101633393\nUNITED STATES\tMILITARY\t2018-02-11\t-6.3071297989031\nGERMAN\tIRAN\t2018-02-11\t-2.508481238218837\nONTARIO\tBUSINESS\t2018-02-11\t1.02040816326531\nIRISH\tAMBASSADOR\t2018-02-11\t1.58730158730159\nAUSTRALIA\tUNITED KINGDOM\t2018-02-11\t-5.4\nNASA\tTURKEY\t2018-02-11\t-5.52486187845304\nISRAELI\tARMY\t2018-02-11\t-6.308420005912545\nMALE\tWORKER\t2018-02-11\t-5.908992738401315\nLAWYER\tCORPORATION\t2018-02-11\t-1.7167381974249\nPRESIDENT\tAFRICA\t2018-02-11\t3.18471337579617\nRUSSIAN\tSYRIA\t2018-02-11\t-7.3313116116194115\nIRAN\tRUSSIAN\t2018-02-11\t1.8800966475385048\nMINIST\tBRITAIN\t2018-02-11\t-4.83005366726297\nGUNMEN\tNIGERIA\t2018-02-11\t-8.0\nIRAN\tMOSCOW\t2018-02-11\t1.73160173160173\nWORKER\tUNITED STATES\t2018-02-11\t-1.49892933618844\nUNITED KINGDOM\tUNITED KINGDOM\t2018-02-11\t-0.7185628742515\nABUJA\tNIGER\t2018-02-11\t2.80172413793103\nMINIST\tPALESTINIAN\t2018-02-11\t-1.09289617486339\nFLORIDA\tUNITED STATES\t2018-02-11\t-7.02087286527514\nBRITISH\tINDUSTRY\t2018-02-11\t0.0\nFISHER\tPOLICE\t2018-02-11\t-5.10948905109489\nAMBASSADOR\tTHE UN\t2018-02-11\t-4.12044374009509\nGOVERNMENT\tSENATE\t2018-02-11\t-1.23022847100175\nWASHINGTON\tSTUDENT\t2018-02-11\t-1.67696381288614\nAUCKLAND\tNEW ZEALAND\t2018-02-11\t-1.88034188034188\nONTARIO\tHOSPITAL\t2018-02-11\t-1.23456790123457\nCHINA\tCHINESE\t2018-02-11\t-1.59118727050183\nSENATOR\tUNITED STATES\t2018-02-11\t1.03480714957667\nSEOUL\tNORTH KOREA\t2018-02-11\t-3.62694300518135\nKUWAIT\tMANILA\t2018-02-11\t-5.37634408602151\nUNITED STATES\tFLORIDA\t2018-02-11\t-5.76441102756892\nMINIST\tLATVIAN\t2018-02-11\t-4.77568740955137\nIRAN\tISRAELI\t2018-02-11\t-4.94335839419967\nISRAELI\tSYRIA\t2018-02-11\t-4.004439277262147\nIRAQI\tIRAQ\t2018-02-11\t1.13924050632911\nUNITED STATES\tNETFLIX\t2018-02-11\t-1.0420977389865\nPARTY LEADER\tGERMANY\t2018-02-11\t2.55102040816326\nSRI LANKA\tPOLICE\t2018-02-11\t-4.02298850574713\nTHE US\tIRANIAN\t2018-02-11\t-6.17577197149643\nAFGHANISTAN\tREGIONAL GOVERNOR\t2018-02-11\t-4.787651530125637\nNON GOVERNMENTAL ORGANISATION\tNIGERIA\t2018-02-11\t-0.20533880903491\nRUSSIA\tIRAN\t2018-02-11\t2.32558139534883\nDEPUTY PRIME MINISTER\tSYDNEY\t2018-02-11\t-5.03259726603576\nNIGERIA\tPOLITICAL PARTIES\t2018-02-11\t0.1787310098302\nSTUDENT\tSENATOR\t2018-02-11\t-2.843042819916685\nUNITED STATES\tBUSINESS\t2018-02-11\t0.28144660314169\nWEST BANK\tMEDIA\t2018-02-11\t-5.867862938968551\nHOSPITAL\tZIMBABWE\t2018-02-11\t-7.58620689655172\nNILS MUIZNIEKS\tCOUNCIL OF EUROPE\t2018-02-11\t-3.74429223744292\nKUWAIT\tEGYPTIAN\t2018-02-11\t2.88808664259928\nPARIS\tNEW YORK\t2018-02-11\t0.76726342710998\nCOMPANY\tSTUDENT\t2018-02-11\t1.57766990291262\nABUJA\tSENATOR\t2018-02-11\t2.80172413793103\nAFRICA\tPRINCE\t2018-02-11\t-5.58139534883721\nREFUGEE\tBRAZIL\t2018-02-11\t-3.4965034965035\nHOSPITAL\tJEWISH\t2018-02-11\t-1.35135135135135\nGOVERNMENT\tDOCTOR\t2018-02-11\t-5.0632911392405\nSOMALIA\tMEDIA\t2018-02-11\t-7.54098360655738\nPREMIER\tCANADA\t2018-02-11\t-4.8\nFRENCH\tISRAELI\t2018-02-11\t-4.375\nCHIEF JUSTICE\tMALDIVE\t2018-02-11\t-0.71174377224199\nMAYOR\tLAWMAKER\t2018-02-11\t-3.68098159509203\nUNITED NATIONS\tKUWAITI\t2018-02-11\t-3.3091202582728\nCHICAGO\tUNITED STATES\t2018-02-11\t-0.026417752729829935\nCATHOLIC\tGOVERNMENT\t2018-02-11\t-6.99300699300704\nAUSTRALIA\tAUSTRALIA\t2018-02-11\t0.15673981191223\nSTATE GOVERNOR\tPOLICE\t2018-02-11\t-3.78863409770688\nDETECTIVE\tAUSTRALIA\t2018-02-11\t-4.77178423236514\nCOMPANY\tCHIEF EXECUTIVE\t2018-02-11\t-0.20345879959308\nRUSSIAN\tUKRAINIAN\t2018-02-11\t-4.46808510638298\nCHINA\tGOVERNMENT\t2018-02-11\t-0.40416326515704\nORGANISATION FOR ECONOMIC COOPERATION AND DEVELOPMENT\tNEW YORK\t2018-02-11\t-1.06524633821572\nBRITAIN\tMINIST\t2018-02-11\t-4.83005366726297\nUNITED STATES\tGUNMAN\t2018-02-11\t-5.116116754915919\nSYRIA\tEGYPT\t2018-02-11\t-1.32200188857412\nKIM YONG NAM\tNORTH KOREAN\t2018-02-11\t0.440829732382868\nSENATOR\tCUBA\t2018-02-11\t0.0\nBURKINA FASO\tPOLICE\t2018-02-11\t-7.026854439903164\nMINIST OF TRANSPORT\tTEL AVIV\t2018-02-11\t-1.0932944606414\nSTUDENT\tPOLITICIAN\t2018-02-11\t-2.843042819916685\nBERLIN\tUNITED STATES\t2018-02-11\t-6.20437956204379\nIRANIAN\tISRAELI\t2018-02-11\t-3.3749999999999947\nBLOGGER\tKENYA\t2018-02-11\t-0.25923525599482\nLAHORE\tPARTY LEADER\t2018-02-11\t3.23809523809524\nEUROPE\tJAPAN\t2018-02-11\t-1.06007067137809\nRUSSIA\tRUSSIAN\t2018-02-11\t-3.8652630116044797\nPHILIPPINE\tKUWAIT\t2018-02-11\t-5.09754942940887\nDOCTOR\tHEALTH OFFICIAL\t2018-02-11\t-3.1312946346822947\nSTUDENT\tWASHINGTON\t2018-02-11\t-1.9333985353402827\nUNITED STATES\tTHE UN\t2018-02-11\t-4.12044374009509\nRUSSIA\tBRITAIN\t2018-02-11\t-0.83905415713196\nEGYPT\tSUDAN\t2018-02-11\t-5.29100529100529\nEUROPEAN PARLIAMENT\tREFUGEE\t2018-02-11\t-1.75054704595186\nSOUTH KOREA\tJAPAN\t2018-02-11\t-1.06007067137809\nENGINEER\tZIMBABWE\t2018-02-11\t1.53846153846154\nUNITED KINGDOM\tRUSSIA\t2018-02-11\t-4.3884892086331\nUNITED ARAB EMIRATES\tPOLICE\t2018-02-11\t-2.09580838323354\nSENATOR\tABUJA\t2018-02-11\t2.80172413793103\nNON GOVERNMENTAL ORGANISATION\tHOUSE OF ASSEMBLY\t2018-02-11\t-0.20533880903491\nEGYPT\tKUWAIT\t2018-02-11\t2.88808664259928\nNEW YORK\tCOUNSEL\t2018-02-11\t-2.28174603174603\nGOVERNMENT\tKUWAIT\t2018-02-11\t-2.12765957446809\nGERMANY\tJAPAN\t2018-02-11\t-1.06007067137809\nUNITED STATES\tREPRESENTATIVES\t2018-02-11\t-0.95011876484561\nRUSSIA\tSCHOOL\t2018-02-11\t-7.38255033557047\nPARTY LEADER\tPAKISTAN\t2018-02-11\t3.23809523809524\nZIMBABWE\tAFRICA\t2018-02-11\t-2.013490965773123\nUNITED STATES\tSTATE OFFICIAL\t2018-02-11\t-0.95011876484561\nPRIME MINISTER\tAUSTRALIA\t2018-02-11\t-4.03225806451613\nUS STATE DEPARTMENT\tEUROPEAN\t2018-02-11\t-0.39331366764995\nCOMPANY\tUNITED STATES\t2018-02-11\t-0.20345879959308\nSCHOOL\tUNITED STATES\t2018-02-11\t-0.92031425364759\nEGYPT\tAMMAN\t2018-02-11\t-1.32200188857412\nCONGRESS\tAMBASSADOR\t2018-02-11\t-0.86455331412104\nBRUSSELS\tSYRIA\t2018-02-11\t-3.69068541300528\nNEW YORK\tNIGERIA\t2018-02-11\t-1.06524633821572\nCUBA\tSENATOR\t2018-02-11\t0.0\nUNITED STATES\tCHINESE\t2018-02-11\t-1.59118727050183\nSYRIA\tGOVERNMENT\t2018-02-11\t-3.3091202582728\nEAST AFRICAN COMMUNITY\tUGANDA\t2018-02-11\t2.80373831775701\nMAITHRIPALA SIRISENA\tSRI LANKA\t2018-02-11\t-5.26315789473684\nIRAN\tSYRIA\t2018-02-11\t-5.79710144927536\nUNITED STATES\tUNITED STATES\t2018-02-11\t-2.1756057532328876\nUNITED STATES\tCHICAGO\t2018-02-11\t2.94117647058824\nUNITED STATES\tDEPUTY\t2018-02-11\t-2.56410256410256\nGANG\tLAWYER\t2018-02-11\t-6.60262181480876\nEGYPTIAN\tSUDANESE\t2018-02-11\t-5.29100529100529\nSOUTH KOREAN\tNORTH KOREA\t2018-02-11\t0.544959128065397\nBILL ENGLISH\tWELLINGTON\t2018-02-11\t0.99626400996264\nMAITHRIPALA SIRISENA\tGOVERNMENT\t2018-02-11\t-5.26315789473684\nPRESIDENT\tIRAN\t2018-02-11\t-4.94186046511628\nINTELLIGENCE\tRUSSIA\t2018-02-11\t-1.03950103950104\nCHINA\tWU YI\t2018-02-11\t-0.719424460431652\nBURKINA FASO\tGOVERNOR\t2018-02-11\t-11.4990153353325\nBRITAIN\tCANADA\t2018-02-11\t1.61290322580645\nGOVERNOR\tPOLICE\t2018-02-11\t-7.614337490424427\nMALAYSIA\tSETTLER\t2018-02-11\t-2.46913580246914\nSRI LANKA\tMINIST OF FINANCE\t2018-02-11\t3.7037037037037\nKUWAIT\tEGYPT\t2018-02-11\t2.88808664259928\nSENATE PRESIDENT\tUNITED STATES\t2018-02-11\t-5.15463917525773\nNEW YORK\tUNITED STATES\t2018-02-11\t-2.28174603174603\nBRITAIN\tRUSSIA\t2018-02-11\t-0.83905415713196\nAFRICA\tZIMBABWE\t2018-02-11\t-1.7618045950514825\nSOUTH SUDAN\tSOUTH SUDAN\t2018-02-11\t-9.2024539877301\nLONDON\tAUSTRALIA\t2018-02-11\t-1.50812064965197\nSTUDENT\tFLORIDA\t2018-02-11\t-4.1938093432742685\nDELHI\tUNIVERSITY\t2018-02-11\t-1.08695652173913\nMINIST\tFRANCE\t2018-02-11\t-4.11946446961895\nIRAN\tPAKISTAN\t2018-02-11\t-5.59440559440559\nBANK\tHEAD OF STATE\t2018-02-11\t-2.19333874898456\nINTELLIGENCE CHIEF\tSENATOR\t2018-02-11\t-1.23022847100175\nIRELAND\tFOREIGN SECRETARY\t2018-02-11\t-2.96610169491526\nBAGHDAD\tGUERNSEY\t2018-02-11\t0.20703933747412\nCHINESE\tFARC\t2018-02-11\t-8.77192982456141\nSTUDENT\tMARCHE\t2018-02-11\t-2.78551532033426\nTHE ASSOCIATED PRESS\tCOMMUNITY\t2018-02-11\t-6.31313131313131\nINDONESIAN\tPAPUA\t2018-02-11\t-8.28025477707006\nAIRLINE\tNETHERLANDS\t2018-02-11\t-7.392330383480825\nISRAELI\tFRENCH\t2018-02-11\t-4.375\nZIMBABWE\tHOSPITAL\t2018-02-11\t-7.58620689655172\nJOURNALIST\tISRAEL\t2018-02-11\t-1.87861271676301\nSOUTH KOREA\tHEAD OF STATE\t2018-02-11\t-2.19333874898456\nRUSSIAN\tTUILAEPA SAILELE MALIELEGAOI\t2018-02-11\t5.97014925373134\nAIRLINE\tTELEVISION\t2018-02-11\t-1.92307692307692\nOKLAHOMA\tAPACHE\t2018-02-11\t1.43198090692124\nRUSSIA\tINTELLIGENCE\t2018-02-11\t-1.03950103950104\nUKRAINIAN\tRUSSIAN\t2018-02-11\t-4.46808510638298\nPORTLAND\tAFRICA\t2018-02-11\t-5.41921474077504\nIGLESIA NI CRISTO\tUNITED STATES\t2018-02-11\t1.86046511627907\nMAJOR GENERAL\tISRAEL\t2018-02-11\t-1.09289617486339\nMACEDONIA\tGREECE\t2018-02-11\t1.02880658436214\nTANZANIA\tGOVERNMENT\t2018-02-11\t-6.99300699300704\nISRAEL\tGAZA\t2018-02-11\t-5.18934081346423\nIRAQ\tMILITARY\t2018-02-11\t-6.3071297989031\nPOLICE\tDELHI\t2018-02-11\t-6.2962962962963\nPRINCE\tAFRICA\t2018-02-11\t-5.58139534883721\nISRAEL\tMAJOR GENERAL\t2018-02-11\t-1.09289617486339\nAMBASSADOR\tCONGRESS\t2018-02-11\t-0.86455331412104\nSECRETARIAT\tPORT MORESBY\t2018-02-11\t7.14285714285714\nRUSSIA\tHINDU\t2018-02-11\t-1.05633802816901\nNEWSPAPER\tPRESIDENT\t2018-02-11\t-2.14395099540582\nAUSTRALIA\tWASHINGTON\t2018-02-11\t0.15673981191223\nPRESIDENT\tUNITED STATES\t2018-02-11\t-3.39256865912762\nLONDON\tNEWSPAPER\t2018-02-11\t0.88300220750551\nMINIST\tISRAEL\t2018-02-11\t-1.09289617486339\nNEWSPAPER\tUNITED KINGDOM\t2018-02-11\t-4.8348106365834\nWASHINGTON\tCUBA\t2018-02-11\t0.0\nFRENCH\tFRENCH\t2018-02-11\t-7.92452830188679\nPRESIDENT\tINTELLIGENCE\t2018-02-11\t-1.03950103950104\nTHAILAND\tPROTESTER\t2018-02-11\t-7.32824427480916\nMILITARY\tISRAEL\t2018-02-11\t-1.21317157712305\nPRESIDENT\tAUSTRALIA\t2018-02-11\t0.15673981191223\nGERMANY\tISRAEL\t2018-02-11\t-4.18118466898955\nHARARE\tHOSPITAL\t2018-02-11\t-6.9789066705819\nKEVIN RUDD\tCHINA\t2018-02-11\t-0.40416326515704\nMALDIVE\tCHIEF JUSTICE\t2018-02-11\t-0.71174377224199\nFRANCE\tUNITED STATES\t2018-02-11\t0.76726342710998\nPAKISTAN\tPARTY LEADER\t2018-02-11\t3.23809523809524\nPHILADELPHIA\tSCHOOL\t2018-02-11\t2.87490287490287\nGOVERNOR\tUNITED STATES\t2018-02-11\t-5.15463917525773\nCANADA\tUNITED KINGDOM\t2018-02-11\t-2.67894516534114\nIRAN\tISRAEL\t2018-02-11\t-6.83091618614946\nNIGERIA\tWORLD BANK\t2018-02-11\t4.22077922077922\nSYRIA\tBRUSSELS\t2018-02-11\t-3.69068541300528\nSYRIA\tRUSSIA\t2018-02-11\t-8.606743444420694\nINTERIOR SECRETARY\tREBEL\t2018-02-11\t-3.25865580448065\nMARCHE\tSCHOOL\t2018-02-11\t-2.78551532033426\nAFRICA\tEAST AFRICAN COMMUNITY\t2018-02-11\t-4.7945205479452\nUNITED STATES\tNORTH AMERICA\t2018-02-11\t1.69491525423729\nJOURNALIST\tATTORNEY GENERAL\t2018-02-11\t-1.87861271676301\nISRAEL\tIRAN\t2018-02-11\t-6.070824099531253\nISRAELI\tISRAEL\t2018-02-11\t-5.206584263192287\nSUDAN\tNILE\t2018-02-11\t-1.98300283286119\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 1000 rows. Learn more about \u003cstrong\u003ezeppelin.spark.maxResult\u003c/strong\u003e\u003c/div\u003e"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://10.0.2.15:4040/jobs/job?id\u003d158",
+            "http://10.0.2.15:4040/jobs/job?id\u003d159",
+            "http://10.0.2.15:4040/jobs/job?id\u003d160",
+            "http://10.0.2.15:4040/jobs/job?id\u003d161",
+            "http://10.0.2.15:4040/jobs/job?id\u003d162",
+            "http://10.0.2.15:4040/jobs/job?id\u003d163",
+            "http://10.0.2.15:4040/jobs/job?id\u003d164",
+            "http://10.0.2.15:4040/jobs/job?id\u003d165",
+            "http://10.0.2.15:4040/jobs/job?id\u003d166",
+            "http://10.0.2.15:4040/jobs/job?id\u003d167"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151506155_167952066",
+      "id": "20190122-110506_100019030",
+      "dateCreated": "2019-01-22 11:05:06.155",
+      "dateStarted": "2019-01-22 11:58:52.350",
+      "dateFinished": "2019-01-22 11:59:02.566",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 5 processing : Number 2",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 12:04:39.389",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 5 processing : Number 2\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548153028959_-713022915",
+      "id": "20190122-113028_1440638106",
+      "dateCreated": "2019-01-22 11:30:28.959",
+      "dateStarted": "2019-01-22 12:04:39.378",
+      "dateFinished": "2019-01-22 12:04:39.397",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Events avg tone between country code\nval query_tone_country_daily \u003d \"SELECT  Actor1CountryName , Actor2CountryName , SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1CountryName, Actor2CountryName, SQLDATE Order by  SQLDATE ASC\"\nval df_tone_country_daily \u003d sqlContext.sql(query_tone_country_daily).filter(($\"Actor1CountryName\" !\u003d\u003d \"\") \u0026\u0026 ($\"Actor2CountryName\" !\u003d\u003d \"\"))\nz.show(df_tone_country_daily)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 12:03:21.141",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "Actor1CountryName": "string",
+                      "Actor2CountryName": "string",
+                      "SQLDATE": "string",
+                      "DailyAvgTone": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "query_tone_country_daily: String \u003d SELECT  Actor1CountryName , Actor2CountryName , SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1CountryName, Actor2CountryName, SQLDATE Order by  SQLDATE ASC\nwarning: there were two deprecation warnings; re-run with -deprecation for details\ndf_tone_country_daily: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Actor1CountryName: string, Actor2CountryName: string ... 2 more fields]\n"
+          },
+          {
+            "type": "TABLE",
+            "data": "Actor1CountryName\tActor2CountryName\tSQLDATE\tDailyAvgTone\nAustralia\tChina\t2008-02-21\t-1.19850187265917\nItaly\tItaly\t2017-02-18\t-0.34782608695652\nGermany\tGermany\t2017-02-18\t-2.76923076923077\nJapan\tIraq\t2017-02-18\t-2.3916292974589\nUnited States\tIraq\t2017-02-18\t-3.3070134103607227\nUnited States\tJapan\t2017-02-18\t-2.3916292974589\nIreland\tLibya\t2017-02-18\t2.04081632653061\nAustralia\tFiji\t2017-02-18\t4.69208211143695\nIraq\tAfghanistan\t2017-02-18\t-2.3916292974589\nSouth Korea\tSouth Korea\t2017-02-18\t1.92678227360309\nTurkey\tColumbia\t2017-02-18\t-2.76577355229041\nEgypt\tEgypt\t2017-02-18\t0.987654320987649\nSri Lanka\tChina\t2017-02-18\t3.2520325203252\nThailand\tChina\t2017-02-18\t-1.35658914728682\nUnited States\tChina\t2017-02-18\t1.2987012987013\nRussia\tSyria\t2017-02-18\t-4.62085308056872\nTurkey\tIran\t2017-02-18\t-5.29100529100529\nUnited States\tIran\t2017-02-18\t-6.9817216059990646\nTurkey\tIraq\t2017-02-18\t-5.29100529100529\nSyria\tUnited States\t2017-02-18\t2.82258064516129\nIran\tUnited States\t2017-02-18\t-6.996823413008386\nUnited States\tRussia\t2017-02-18\t-6.926025334914618\nUnited Kingdom\tLithuania\t2017-02-18\t3.7593984962406\nFrance\tChina\t2017-02-18\t2.72822665267576\nAustralia\tNew Zealand\t2017-02-18\t5.69105691056911\nRussia\tUkraine\t2017-02-18\t-1.01010101010101\nJapan\tMalaysia\t2017-02-18\t0.21321961620469\nEurope\tLithuania\t2017-02-18\t3.7593984962406\nChina\tRussia\t2017-02-18\t3.79746835443038\nIran\tPersian Gulf\t2017-02-18\t-3.09278350515464\nSyria\tRussia\t2017-02-18\t2.82258064516129\nUnited States\tAfghanistan\t2017-02-18\t-2.3916292974589\nSingapore\tChina\t2017-02-18\t2.29885057471265\nThailand\tMyanmar\t2017-02-18\t2.2323392201662\nFrance\tFrance\t2017-02-18\t-2.5974025974026\nVenezuela\tFrance\t2017-02-18\t0.99667774086379\nIraq\tIran\t2017-02-18\t-5.29100529100529\nSyria\tJordan\t2017-02-18\t2.82258064516129\nTurkey\tSudan\t2017-02-18\t1.96078431372549\nUnited States\tAustralia\t2017-02-18\t-4.919172292411665\nIsrael\tNew Zealand\t2017-02-18\t-3.24324324324324\nIraq\tUnited States\t2017-02-18\t-2.3916292974589\nNorth Korea\tNorth Korea\t2017-02-18\t1.51187904967603\nIndia\tAfghanistan\t2017-02-18\t-0.52369924347692\nUnited States\tTurkey\t2017-02-18\t-6.18892508143323\nPakistan\tPakistan\t2017-02-18\t-3.3357742573023983\nNew Zealand\tAustralia\t2017-02-18\t5.69105691056911\nSaudi Arabia\tSwitzerland\t2017-02-18\t0.9102593615715177\nAfghanistan\tIran\t2017-02-18\t1.19402985074627\nBrunei Darussalam\tTaiwan\t2017-02-18\t3.57142857142857\nUnited Kingdom\tUnited Kingdom\t2017-02-18\t-3.2549004947141498\nUnited Arab Emirates\tUnited States\t2017-02-18\t0.34071550255537\nChina\tFrance\t2017-02-18\t1.6713251430817764\nUnited States\tAfrica\t2017-02-18\t-3.4791814619006303\nAustralia\tAustralia\t2017-02-18\t-1.7711598746081498\nSudan\tTurkey\t2017-02-18\t1.96078431372549\nUnited Kingdom\tBarbados\t2017-02-18\t4.54545454545454\nSpain\tFrance\t2017-02-18\t-3.4086699955328967\nIran\tIran\t2017-02-18\t-1.4284440878905331\nChina\tBhutan\t2017-02-18\t-3.39943342776204\nJapan\tAfghanistan\t2017-02-18\t-2.3916292974589\nKenya\tCanada\t2017-02-18\t-4.57746478873239\nNigeria\tNigeria\t2017-02-18\t-0.02883493614802991\nAfghanistan\tPakistan\t2017-02-18\t-8.55457227138646\nSweden\tSweden\t2017-02-18\t-6.06451612903226\nUnited Kingdom\tFrance\t2017-02-18\t-1.26126126126126\nQatar\tQatar\t2017-02-18\t-2.9874213836478\nGuinea\tGuinea\t2017-02-18\t-4.33526011560694\nJapan\tUnited States\t2017-02-18\t-2.3916292974589\nIraq\tJordan\t2017-02-18\t-0.56179775280899\nIran\tSweden\t2017-02-18\t-6.13718411552346\nUnited Kingdom\tRussia\t2017-02-18\t-5.00895846940981\nEurope\tUnited Kingdom\t2017-02-18\t-1.8970189701897\nUnited States\tSpain\t2017-02-18\t-2.9957411496511344\nChad\tAfrica\t2017-02-18\t-8.55520968439256\nIraq\tSyria\t2017-02-18\t-6.354784411646669\nCanada\tCanada\t2017-02-18\t-0.6576179352752266\nSouth Africa\tAfrica\t2017-02-18\t-2.13922785104839\nLithuania\tEurope\t2017-02-18\t3.7593984962406\nSierra Leone\tUnited States\t2017-02-18\t-0.11933174224344\nAustralia\tCanada\t2017-02-18\t3.345620195132843\nLithuania\tUnited Kingdom\t2017-02-18\t3.7593984962406\nMalaysia\tEurope\t2017-02-18\t-1.59453302961276\nPoland\tPoland\t2017-02-18\t-4.40191387559809\nCanada\tKenya\t2017-02-18\t-4.57746478873239\nJapan\tThailand\t2017-02-18\t0.21321961620469\nUnited States\tDenmark\t2017-02-18\t1.77736202057998\nUnited States\tSierra Leone\t2017-02-18\t-0.11933174224344\nUnited States\tUnited States\t2017-02-18\t-2.1765933128670247\nLuxembourg\tGermany\t2017-02-18\t3.28638497652582\nEurope\tLuxembourg\t2017-02-18\t-4.43262411347518\nChina\tSingapore\t2017-02-18\t2.29885057471265\nJapan\tIndonesia\t2017-02-18\t0.21321961620469\nPakistan\tAfghanistan\t2017-02-18\t-8.55457227138646\nUzbekistan\tSouth Korea\t2017-02-18\t1.92678227360309\nPakistan\tRussia\t2017-02-18\t-0.58207217694994\nSouth Korea\tUzbekistan\t2017-02-18\t1.92678227360309\nUnited Kingdom\tEurope\t2017-02-18\t-0.058728291340127026\nSaint Vincent and the Grenadines\tUnited States\t2017-02-18\t-7.07870113025756\nVietnam\tUnited States\t2017-02-18\t1.10957004160888\nNigeria\tCanada\t2017-02-18\t0.952380952380952\nAfrica\tSouth Africa\t2017-02-18\t-2.13922785104839\nRussia\tPakistan\t2017-02-18\t-0.58207217694994\nAfrica\tUnited States\t2017-02-18\t-3.4791814619006303\nFrance\tCanada\t2017-02-18\t-0.5524861878453\nIran\tIraq\t2017-02-18\t-5.29100529100529\nSyria\tTurkey\t2017-02-18\t2.01342281879194\nUnited States\tCanada\t2017-02-18\t0.55325034578147\nTaiwan\tBrunei Darussalam\t2017-02-18\t3.57142857142857\nRussia\tUnited States\t2017-02-18\t-9.590745601244256\nSpain\tUnited States\t2017-02-18\t-3.2434984571801913\nIran\tTurkey\t2017-02-18\t2.01342281879194\nUnited States\tUnited Arab Emirates\t2017-02-18\t0.34071550255537\nGermany\tUnited States\t2017-02-18\t2.18579234972677\nPhilippines\tPhilippines\t2017-02-18\t-4.49438202247192\nRussia\tRussia\t2017-02-18\t-2.48995983935743\nTaiwan\tAustralia\t2017-02-18\t-1.19850187265917\nUnited States\tFrance\t2017-02-18\t4.814265369095657\nUnited States\tZimbabwe\t2017-02-18\t-0.29644355783144\nTurkey\tTurkey\t2017-02-18\t2.01342281879194\nKenya\tKenya\t2017-02-18\t-4.57746478873239\nRussia\tChina\t2017-02-18\t3.79746835443038\nIraq\tTurkey\t2017-02-18\t-5.29100529100529\nUnited States\tUnited Kingdom\t2017-02-18\t-14.5454545454545\nAfghanistan\tUnited States\t2017-02-18\t-2.3916292974589\nChina\tUnited States\t2017-02-18\t-0.44247787610619\nColumbia\tTurkey\t2017-02-18\t-2.76577355229041\nAfrica\tAfrica\t2017-02-18\t-6.54942056035346\nThailand\tUnited States\t2017-02-18\t-1.35658914728682\nIsrael\tIsrael\t2017-02-18\t-5.65371024734982\nKuwait\tKuwait\t2017-02-19\t-3.8759689922480605\nBrunei Darussalam\tTaiwan\t2017-02-19\t3.36134453781513\nIran\tIran\t2017-02-19\t0.94339622641509\nFiji\tFiji\t2017-02-19\t-6.32183908045977\nTaiwan\tBrunei Darussalam\t2017-02-19\t3.36134453781513\nSweden\tSweden\t2017-02-19\t-6.06860158311346\nCambodia\tAustralia\t2018-01-19\t-7.01298701298701\nAustralia\tUnited States\t2018-01-19\t2.19298245614035\nIsrael\tUnited States\t2018-01-19\t-5.632387361357219\nEgypt\tAfrica\t2018-01-19\t-3.42857142857143\nUnited Kingdom\tBrunei Darussalam\t2018-01-19\t-1.72860847018151\nTurkey\tSyria\t2018-01-19\t-4.3294488910828255\nGermany\tUnited States\t2018-01-19\t-6.780498718945127\nIran\tEurope\t2018-01-19\t-1.20481927710844\nHaiti\tHaiti\t2018-01-19\t3.61990950226244\nUnited Kingdom\tUnited States\t2018-01-19\t-1.34318334452652\nSudan\tBelgium\t2018-01-19\t-5.904039503802309\nUnited Kingdom\tUnited Kingdom\t2018-01-19\t-1.9845096739195949\nAfrica\tEgypt\t2018-01-19\t-3.42857142857143\nJapan\tJapan\t2018-01-19\t0.0\nSpain\tFrance\t2018-01-19\t2.4896265560166\nChina\tAfghanistan\t2018-01-19\t-2.34375\nEgypt\tSudan\t2018-01-19\t-3.42857142857143\nSyria\tSyria\t2018-01-19\t-5.4215832484513875\nAustralia\tMyanmar\t2018-01-19\t-3.44332855093257\nHonduras\tUnited States\t2018-01-19\t-4.38144329896907\nUnited Kingdom\tFrance\t2018-01-19\t3.00353356890459\nThailand\tMyanmar\t2018-01-19\t-3.44332855093257\nUnited States\tSouth Korea\t2018-01-19\t-1.92307692307692\nIsrael\tIsrael\t2018-01-19\t-4.645367141508432\nUnited States\tMyanmar\t2018-01-19\t-1.34318334452652\nChina\tBrunei Darussalam\t2018-01-19\t-1.97657393850659\nVatican City\tChile\t2018-01-19\t-6.15384615384615\nUnited States\tUnited States\t2018-01-19\t-3.8461749690281537\nChile\tVatican City\t2018-01-19\t-6.15384615384615\nQatar\tUnited Arab Emirates\t2018-01-19\t-2.9874213836478\nMalawi\tUnited States\t2018-01-19\t1.53846153846154\nUnited States\tAustralia\t2018-01-19\t2.19298245614035\nYemen\tUnited Arab Emirates\t2018-01-19\t-3.125\nUnited States\tAlbania\t2018-01-19\t-3.8888888888888897\nUnited States\tUnited Kingdom\t2018-01-19\t-1.34318334452652\nMyanmar\tUnited States\t2018-01-19\t-1.34318334452652\nUnited Kingdom\tAustralia\t2018-01-19\t-1.72860847018151\nEgypt\tEgypt\t2018-01-19\t-2.89855072463768\nUnited States\tRussia\t2018-01-19\t-4.83760319825894\nUnited Arab Emirates\tYemen\t2018-01-19\t-3.125\nRussia\tUnited States\t2018-01-19\t1.49253731343284\nAustralia\tCambodia\t2018-01-19\t-7.01298701298701\nIran\tUnited States\t2018-01-19\t-3.58744394618834\nPhilippines\tChina\t2018-01-19\t0.76923076923077\nUnited States\tHonduras\t2018-01-19\t-4.390135139220606\nPhilippines\tTurkey\t2018-01-19\t0.0\nUnited Kingdom\tChina\t2018-01-19\t-1.72860847018151\nFrance\tUnited Kingdom\t2018-01-19\t-1.632003093938725\nAfrica\tAfrica\t2018-01-19\t2.41935483870967\nSaudi Arabia\tSaudi Arabia\t2018-01-19\t1.0230179028133\nUnited States\tNorth Korea\t2018-01-19\t-6.51774106186416\nUnited States\tIran\t2018-01-19\t-3.58744394618834\nTurkey\tPhilippines\t2018-01-19\t0.0\nSyria\tTurkey\t2018-01-19\t-7.299413615560642\nMalaysia\tSoutheast Asia\t2018-01-19\t3.03030303030303\nUnited States\tMalawi\t2018-01-19\t1.53846153846154\nJordan\tNetherlands\t2018-01-19\t0.82730093071355\nSwitzerland\tUnited Kingdom\t2018-01-19\t0.0\nRussia\tCanada\t2018-01-19\t-5.84112149532711\nFrance\tSpain\t2018-01-19\t2.4896265560166\nRussia\tRussia\t2018-01-19\t-2.91005291005291\nAustralia\tUnited Kingdom\t2018-01-19\t-1.72860847018151\nCambodia\tSoutheast Asia\t2018-01-19\t-7.01298701298701\nUnited States\tIsrael\t2018-01-19\t-3.1276947398677772\nNew Zealand\tNew Zealand\t2018-01-20\t0.841750841750851\nIsrael\tUnited States\t2018-01-20\t-8.23170731707317\nAustralia\tUnited Kingdom\t2018-02-11\t-3.4540603248259854\nEgypt\tSyria\t2018-02-11\t-1.32200188857412\nUnited States\tRussia\t2018-02-11\t-5.324064048472144\nSamoa\tRussia\t2018-02-11\t5.97014925373134\nGermany\tIran\t2018-02-11\t-3.344832953604193\nKuwait\tIraq\t2018-02-11\t0.0\nSaudi Arabia\tRussia\t2018-02-11\t-0.6391449519411566\nUganda\tEastern Africa\t2018-02-11\t2.80373831775701\nSri Lanka\tSri Lanka\t2018-02-11\t-5.0770866560340195\nEgypt\tKuwait\t2018-02-11\t2.88808664259928\nUnited Kingdom\tCanada\t2018-02-11\t0.18228709542391996\nIsrael\tIran\t2018-02-11\t-5.545815143271969\nThe West\tUnited States\t2018-02-11\t-1.06524633821572\nCzech Republic\tJapan\t2018-02-11\t-1.06007067137809\nUnited States\tIran\t2018-02-11\t-6.17577197149643\nIraq\tIran\t2018-02-11\t-3.125\nChina\tColumbia\t2018-02-11\t-8.77192982456141\nNew Zealand\tNew Zealand\t2018-02-11\t-0.15437834615916807\nNew Zealand\tJapan\t2018-02-11\t-1.06007067137809\nColumbia\tChina\t2018-02-11\t-8.77192982456141\nUnited States\tTurkey\t2018-02-11\t-5.52486187845304\nNigeria\tUnited States\t2018-02-11\t-1.06524633821572\nUnited Kingdom\tIreland\t2018-02-11\t3.29218106995884\nAfrica\tUnited Arab Emirates\t2018-02-11\t0.36153289949385\nRussia\tUnited Kingdom\t2018-02-11\t-0.83905415713196\nNigeria\tNiger\t2018-02-11\t2.80172413793103\nJordan\tEgypt\t2018-02-11\t-1.32200188857412\nRussia\tRussia\t2018-02-11\t-4.424241467895052\nIsrael\tIsrael\t2018-02-11\t-4.48356663729744\nUnited States\tEurope\t2018-02-11\t-0.39331366764995\nUnited States\tAfrica\t2018-02-11\t-5.41921474077504\nFrance\tFrance\t2018-02-11\t-7.92452830188679\nGermany\tKuwait\t2018-02-11\t-2.12765957446809\nCuba\tUnited States\t2018-02-11\t0.0\nTurkey\tIraq\t2018-02-11\t-6.31578947368421\nNew Zealand\tAustralia\t2018-02-11\t-1.08864696734059\nNauru\tUnited States\t2018-02-11\t-6.17577197149643\nNigeria\tNigeria\t2018-02-11\t-8.0\nPakistan\tIran\t2018-02-11\t-5.59440559440559\nUnited States\tUnited States\t2018-02-11\t-2.6329042619600806\nLatvia\tEurope\t2018-02-11\t-3.74429223744292\nIndia\tIndia\t2018-02-11\t-1.08695652173913\nOman\tOman\t2018-02-11\t1.91570881226053\nAustralia\tAustralia\t2018-02-11\t0.15673981191223\nIsrael\tFrance\t2018-02-11\t-4.375\nMacedonia\tGreece\t2018-02-11\t1.0288065843621401\nFrance\tIsrael\t2018-02-11\t-4.375\nIndonesia\tIndonesia\t2018-02-11\t-8.28025477707006\nSyria\tIsrael\t2018-02-11\t-3.2881722711116232\nPhilippines\tKuwait\t2018-02-11\t-5.125428895070135\nGreece\tMacedonia\t2018-02-11\t1.0288065843621401\nZimbabwe\tAfrica\t2018-02-11\t-2.013490965773123\nMacedonia\tMacedonia\t2018-02-11\t1.0288065843621401\nUnited States\tCuba\t2018-02-11\t0.0\nAustralia\tNew Zealand\t2018-02-11\t-1.08864696734059\nGermany\tJapan\t2018-02-11\t-1.06007067137809\nUnited States\tChina\t2018-02-11\t-1.59118727050183\nSouth Korea\tJapan\t2018-02-11\t-1.06007067137809\nEthiopia\tSudan\t2018-02-11\t-3.42857142857143\nIreland\tUnited Kingdom\t2018-02-11\t3.29218106995884\nGermany\tUnited States\t2018-02-11\t-6.20437956204379\nAfrica\tZimbabwe\t2018-02-11\t-1.7618045950514825\nUnited Kingdom\tRussia\t2018-02-11\t-3.2053441914660534\nIran\tRussia\t2018-02-11\t1.9295949528507632\nIreland\tIreland\t2018-02-11\t1.58730158730159\nSudan\tEgypt\t2018-02-11\t-4.429265904242297\nFrance\tUnited States\t2018-02-11\t0.76726342710998\nUnited Kingdom\tUnited Kingdom\t2018-02-11\t-0.6569004847448\nIraq\tIraq\t2018-02-11\t1.13924050632911\nSyria\tBelgium\t2018-02-11\t-3.69068541300528\nEgypt\tSudan\t2018-02-11\t-4.636653532190674\nUnited Kingdom\tAfrica\t2018-02-11\t0.0\nUnited States\tAustralia\t2018-02-11\t-3.05602716468591\nIran\tIran\t2018-02-11\t-6.17577197149643\nNorth Korea\tNorth Korea\t2018-02-11\t0.440829732382868\nRussia\tSyria\t2018-02-11\t-7.57045508026965\nRussia\tIran\t2018-02-11\t1.9295949528507632\nAustralia\tChina\t2018-02-11\t-0.40416326515704\nUnited States\tJapan\t2018-02-11\t-1.06007067137809\nUnited Kingdom\tUnited States\t2018-02-11\t1.61290322580645\nSingapore\tJapan\t2018-02-11\t-1.06007067137809\nKuwait\tPhilippines\t2018-02-11\t-5.382469727299582\nUnited Kingdom\tAustralia\t2018-02-11\t-1.50812064965197\nUnited States\tNauru\t2018-02-11\t-6.17577197149643\nZimbabwe\tZimbabwe\t2018-02-11\t-2.263583921551328\nSyria\tRussia\t2018-02-11\t-7.525504253853143\nIran\tIsrael\t2018-02-11\t-5.500543484245108\nGermany\tEurope\t2018-02-11\t-2.5089605734767\nEastern Africa\tUganda\t2018-02-11\t2.8037383177570105\nSwitzerland\tUnited States\t2018-02-11\t1.31926121372032\nIsrael\tOccupied Palestinian Territory\t2018-02-11\t-2.45837772106367\nGermany\tIsrael\t2018-02-11\t-4.18118466898955\nSouth Korea\tNorth Korea\t2018-02-11\t-2.5839674718696632\nCanada\tUnited Kingdom\t2018-02-11\t-2.67894516534114\nUnited States\tFrance\t2018-02-11\t0.76726342710998\nUkraine\tRussia\t2018-02-11\t-4.46808510638298\nUnited States\tNigeria\t2018-02-11\t-1.06524633821572\nSomalia\tIran\t2018-02-11\t-5.16014234875445\nIreland\tLibya\t2018-02-11\t2.04081632653061\nIran\tPakistan\t2018-02-11\t-5.59440559440559\nChina\tChina\t2018-02-11\t-1.3732465679842853\nIran\tSyria\t2018-02-11\t-5.318056389509569\nRussia\tUkraine\t2018-02-11\t-4.420327567733052\nIsrael\tSyria\t2018-02-11\t-4.337065608803879\nSouth Korea\tUnited States\t2018-02-11\t-3.60501567398119\nNiger\tNigeria\t2018-02-11\t2.80172413793103\nUnited Kingdom\tAfghanistan\t2018-02-11\t-3.28227571115974\nRussia\tSamoa\t2018-02-11\t5.97014925373134\nEurope\tJapan\t2018-02-11\t-1.06007067137809\nKuwait\tEgypt\t2018-02-11\t2.88808664259928\nKuwait\tGermany\t2018-02-11\t-2.12765957446809\nBelgium\tSyria\t2018-02-11\t-3.69068541300528\nUnited States\tNorth America\t2018-02-11\t1.69491525423729\nAustralia\tUnited States\t2018-02-11\t-0.9141825136204833\nSudan\tEthiopia\t2018-02-11\t-3.42857142857143\nSyria\tEgypt\t2018-02-11\t-1.32200188857412\nAfrica\tEastern Africa\t2018-02-11\t-4.7945205479452\nSyria\tIran\t2018-02-11\t-5.6360708534621535\nEgypt\tJordan\t2018-02-11\t-1.32200188857412\nIsrael\tIran\t2018-02-12\t-4.01445202729827\nSolomon Islands\tSolomon Islands\t2018-02-12\t-1.58730158730159\nIsrael\tSyria\t2018-02-12\t-5.542986425339369\nIran\tIsrael\t2018-02-12\t-7.54716981132075\nIsrael\tIsrael\t2018-02-12\t-2.83687943262411\nSyria\tIsrael\t2018-02-12\t-5.54298642533937\nRussia\tIran\t2018-02-17\t-2.9469548133595302\nUnited States\tFrance\t2018-02-17\t-4.14312617702448\nIran\tIran\t2018-02-17\t-14.0625\nJordan\tLebanon\t2018-02-17\t-5.55555555555555\nZambia\tZambia\t2018-02-17\t1.78117048346055\nAustralia\tPapua New Guinea\t2018-02-17\t-0.28409090909091\nZimbabwe\tBotswana\t2018-02-17\t-1.4\nLebanon\tUnited States\t2018-02-17\t-4.235423542354237\nIsrael\tIsrael\t2018-02-17\t-4.508871752639069\nUnited States\tUnited States\t2018-02-17\t-5.13274336283186\nNigeria\tNiger\t2018-02-17\t1.77865612648221\nArmenia\tGermany\t2018-02-17\t0.0\nNetherlands\tNamibia\t2018-02-17\t-0.52770448548812\nAfghanistan\tAfghanistan\t2018-02-17\t-3.81165919282511\nIsrael\tLebanon\t2018-02-17\t-4.27631578947369\nUnited States\tUnited Kingdom\t2018-02-17\t-7.44466800804829\nSingapore\tSingapore\t2018-02-17\t1.5109890109890103\nUnited States\tLebanon\t2018-02-17\t-3.7953795379538\nIndonesia\tIndonesia\t2018-02-17\t-4.43037974683544\nJordan\tUnited States\t2018-02-17\t-5.55555555555555\nIsrael\tSyria\t2018-02-17\t-4.27631578947369\nPapua New Guinea\tPapua New Guinea\t2018-02-17\t-3.73831775700935\nGermany\tArmenia\t2018-02-17\t0.0\nMalaysia\tIndonesia\t2018-02-17\t-4.31778929188255\nUnited States\tTurkey\t2018-02-17\t-5.10314875135722\nIndia\tIndia\t2018-02-17\t1.25\nUganda\tUganda\t2018-02-17\t1.6783478179609364\nIndonesia\tMalaysia\t2018-02-17\t-4.31778929188255\nGermany\tUnited Kingdom\t2018-02-17\t-3.77733598409543\nRussia\tRussia\t2018-02-17\t-4.69583778014941\nPhilippines\tPhilippines\t2018-02-17\t-3.366778523489935\nNigeria\tNigeria\t2018-02-17\t-0.951909746177552\nLebanon\tIsrael\t2018-02-17\t-5.55555555555555\nPoland\tGermany\t2018-02-17\t-6.26959247648903\nItaly\tItaly\t2018-02-17\t2.24719101123596\nIsrael\tIran\t2018-02-17\t-6.09418282548477\nThailand\tThailand\t2018-02-17\t-1.45985401459854\nBangladesh\tBangladesh\t2018-02-17\t-9.00473933649289\nLatvia\tLatvia\t2018-02-17\t-2.72727272727273\nNigeria\tEthiopia\t2018-02-17\t-15.4411764705882\nEthiopia\tNigeria\t2018-02-17\t-15.4411764705882\nAustralia\tAustralia\t2018-02-17\t-2.489177489177485\nAustralia\tBangladesh\t2018-02-17\t-4.77326968973747\nFrance\tUnited States\t2018-02-17\t-4.14312617702448\nZimbabwe\tZimbabwe\t2018-02-17\t-3.9792087550664292\nBotswana\tZimbabwe\t2018-02-17\t-1.4\nUkraine\tUnited States\t2018-02-17\t-5.62130177514793\nIsrael\tOccupied Palestinian Territory\t2018-02-17\t-3.71621621621622\nOccupied Palestinian Territory\tOccupied Palestinian Territory\t2018-02-17\t-7.83847980997624\nAzerbaijan\tNorth Korea\t2018-02-17\t-6.10079575596817\nFrance\tUnited Kingdom\t2018-02-17\t-3.77733598409543\nBelize\tBelize\t2018-02-17\t-7.43243243243243\nGermany\tGermany\t2018-02-17\t0.61728395061729\nNamibia\tNetherlands\t2018-02-17\t-0.52770448548812\nRussia\tIreland\t2018-02-18\t-1.8072018004501118\nAfghanistan\tUnited States\t2018-02-18\t-3.407329425253811\nMorocco\tUganda\t2018-02-18\t-3.32829046898638\nEgypt\tGermany\t2018-02-18\t1.4030467874756014\nNetherlands\tArmenia\t2018-02-18\t-4.93421052631579\nEurope\tAustria\t2018-02-18\t-0.12562814070352\nSierra Leone\tKenya\t2018-02-18\t0.17361111111111\nIran\tOccupied Palestinian Territory\t2018-02-18\t-4.9327722201220485\nRussia\tSlovakia\t2018-02-18\t-1.85566573438427\nCzech Republic\tBulgaria\t2018-02-18\t-5.35117056856187\nNorth Korea\tRussia\t2018-02-18\t-4.47761194029851\nRwanda\tBurundi\t2018-02-18\t8.78787878787878\nEurope\tMyanmar\t2018-02-18\t-0.17807183364838997\nJapan\tSoutheast Asia\t2018-02-18\t0.21321961620469\nDenmark\tSingapore\t2018-02-18\t6.74019607843137\nNetherlands\tTurkey\t2018-02-18\t-2.5617748322503586\nNigeria\tFrance\t2018-02-18\t1.06382978723404\nQatar\tFrance\t2018-02-18\t2.04829686282841\nChina\tSaudi Arabia\t2018-02-18\t-1.6078468127648409\nMacedonia\tMacedonia\t2018-02-18\t-0.37105751391466\nIreland\tGhana\t2018-02-18\t-1.4423076923077\nAustria\tIsrael\t2018-02-18\t2.63462776228277\nUnited Kingdom\tColumbia\t2018-02-18\t-4.10628019323671\nAustralia\tSwitzerland\t2018-02-18\t1.102375960866525\nUnited Kingdom\tMalawi\t2018-02-18\t0.810810810810811\nIndonesia\tMalaysia\t2018-02-18\t-4.489982631105352\nPeru\tUnited States\t2018-02-18\t-7.769644600565664\nFiji\tSwitzerland\t2018-02-18\t-1.29367778374401\nEcuador\tUnited Kingdom\t2018-02-18\t-8.95295902883157\nTurkey\tCyprus\t2018-02-18\t-3.933661009613895\nAzerbaijan\tTurkey\t2018-02-18\t2.28758169934641\nKenya\tCanada\t2018-02-18\t-2.38639804355421\nPakistan\tPakistan\t2018-02-18\t-2.4843171292211568\nSri Lanka\tThailand\t2018-02-18\t5.69948186528497\nAfrica\tLesotho\t2018-02-18\t0.48038430744596\nGermany\tBulgaria\t2018-02-18\t-5.35117056856187\nUnited Kingdom\tFrance\t2018-02-18\t-2.1113831643991414\nIceland\tUnited Kingdom\t2018-02-18\t-0.477326968973747\nIsrael\tAlgeria\t2018-02-18\t-0.31897926634769\nEthiopia\tSudan\t2018-02-18\t-0.4602778754922161\nIndia\tPakistan\t2018-02-18\t-7.19795069519159\nSwitzerland\tGreece\t2018-02-18\t-0.03995889941774\nMyanmar\tCanada\t2018-02-18\t-8.68306801736614\nIsrael\tCanada\t2018-02-18\t-2.9066466392714205\nSingapore\tKuwait\t2018-02-18\t-4.36046511627907\nCanada\tMexico\t2018-02-18\t-2.469216883706615\nDenmark\tAfrica\t2018-02-18\t-0.97636588955776\nCroatia\tHungary\t2018-02-18\t4.46735395189003\nItaly\tItaly\t2018-02-18\t-0.404017758936033\nDenmark\tChina\t2018-02-18\t6.74019607843137\nSweden\tSyria\t2018-02-18\t-6.2124248496994\nQatar\tPakistan\t2018-02-18\t-1.7038519585329\nPhilippines\tPeru\t2018-02-18\t-5.17711171662125\nDemocratic Republic of the Congo\tGuyana\t2018-02-18\t-0.90225563909774\nUnited Kingdom\tBangladesh\t2018-02-18\t-2.6652097291215044\nPakistan\tIran\t2018-02-18\t-2.5133541113092264\nUnited Kingdom\tGreece\t2018-02-18\t1.00030362234661\nCanada\tHaiti\t2018-02-18\t0.54545454545455\nChina\tQatar\t2018-02-18\t-0.5024548402038\nMalta\tMalta\t2018-02-18\t-2.003782767576753\nIsrael\tEurope\t2018-02-18\t1.96107592502372\nAustria\tChina\t2018-02-18\t0.56327450244086\nMaldives\tEgypt\t2018-02-18\t0.0\nJordan\tGreece\t2018-02-18\t1.75015087507544\nGrenada\tRussia\t2018-02-18\t-5.12367491166078\nAlgeria\tHonduras\t2018-02-18\t1.8348623853211\nSamoa\tSamoa\t2018-02-18\t1.9108280254777\nAlbania\tAlbania\t2018-02-18\t-2.374977620422118\nMyanmar\tGermany\t2018-02-18\t-6.07187112763321\nNigeria\tItaly\t2018-02-18\t-1.9015054702445333\nBelgium\tAustralia\t2018-02-18\t-10.0864553314121\nCroatia\tFrance\t2018-02-18\t-6.26753975678204\nNepal\tSouth Korea\t2018-02-18\t-1.97224251278305\nSouth Korea\tBrazil\t2018-02-18\t-1.49439601494396\nHungary\tAzerbaijan\t2018-02-18\t4.22535211267605\nNetherlands\tUnited Kingdom\t2018-02-18\t-1.668759971459599\nLatvia\tUnited States\t2018-02-18\t-3.3064587188298487\nEthiopia\tIsrael\t2018-02-18\t1.6967427389887202\nGermany\tArmenia\t2018-02-18\t0.0\nNigeria\tSweden\t2018-02-18\t0.39525691699605\nUnited Kingdom\tBrazil\t2018-02-18\t4.373988673139155\nUnited Kingdom\tJordan\t2018-02-18\t0.28929604628737\nBrazil\tUnited States\t2018-02-18\t-5.5476213580898595\nUnited States\tTajikistan\t2018-02-18\t-4.16666666666667\nEstonia\tEstonia\t2018-02-18\t-1.89125295508275\nMalta\tChina\t2018-02-18\t-2.39520958083832\nSerbia\tSerbia\t2018-02-18\t2.07253886010363\nUnited States\tNorth America\t2018-02-18\t0.491005016554996\nLebanon\tYemen\t2018-02-18\t3.17460317460317\nIsrael\tUnited Kingdom\t2018-02-18\t-0.18867924528302\nDjibouti\tSudan\t2018-02-18\t-0.86750788643533\nSyria\tTurkey\t2018-02-18\t-4.944413767759591\nRussia\tGreece\t2018-02-18\t-2.5925925925925934\nSouth Korea\tTurkey\t2018-02-18\t4.83870967741935\nEcuador\tMexico\t2018-02-18\t-0.95794392523364\nBangladesh\tAustralia\t2018-02-18\t-2.7029411764705853\nPeru\tPeru\t2018-02-18\t-6.32911392405063\nSouth Africa\tJamaica\t2018-02-18\t-4.41768849570368\nPoland\tSpain\t2018-02-18\t-1.06382978723405\nUnited States\tLuxembourg\t2018-02-18\t0.0\nAustralia\tSouth Africa\t2018-02-18\t1.30763936682725\nCanada\tThailand\t2018-02-18\t-5.51470588235294\nUnited Arab Emirates\tChina\t2018-02-18\t1.5673492112532075\nGermany\tBurkina Faso\t2018-02-18\t1.30293159609121\nMoldova\tEurope\t2018-02-18\t-1.52761457109283\nTurkmenistan\tSpain\t2018-02-18\t-1.23456790123457\nSaudi Arabia\tIndia\t2018-02-18\t-0.19920318725099\nMexico\tVenezuela\t2018-02-18\t-0.846262341325811\nIsrael\tMorocco\t2018-02-18\t-3.32829046898638\nIndonesia\tSweden\t2018-02-18\t1.23076923076923\nZimbabwe\tBotswana\t2018-02-18\t-1.4\nTaiwan\tChina\t2018-02-18\t0.258347302680014\nVatican City\tChina\t2018-02-18\t1.10778969579743\nOccupied Palestinian Territory\tIreland\t2018-02-18\t0.234773944451365\nUnited States\tSaint Vincent and the Grenadines\t2018-02-18\t-2.196329280566788\nTurkey\tNetherlands\t2018-02-18\t-2.3370103987857958\nAustralia\tSudan\t2018-02-18\t2.21674876847291\nPoland\tUkraine\t2018-02-18\t-4.4446129514483195\nAustralia\tVietnam\t2018-02-18\t-0.75471698113208\nCuba\tIsrael\t2018-02-18\t-2.55813953488372\nThe West\tCyprus\t2018-02-18\t-6.257558153320845\nSan Marino\tIceland\t2018-02-18\t1.71306209850107\nBrazil\tGuyana\t2018-02-18\t-1.43790849673203\nSpain\tJapan\t2018-02-18\t3.67231638418079\nAfrica\tSouth Korea\t2018-02-18\t0.65406976744186\nAfghanistan\tEritrea\t2018-02-18\t-1.54185022026432\nChina\tMadagascar\t2018-02-18\t1.7283950617283999\nCanada\tSouth Asia\t2018-02-18\t0.8\nSouth Korea\tIran\t2018-02-18\t-5.11182108626198\nPeru\tChile\t2018-02-18\t-2.0535208990217466\nCambodia\tSyria\t2018-02-18\t0.839694656488549\nNetherlands\tBulgaria\t2018-02-18\t3.47222222222222\nRussia\tPoland\t2018-02-18\t-5.364370653978723\nRussia\tChina\t2018-02-18\t-1.3404586979136166\nJordan\tIsrael\t2018-02-18\t-2.8471363000941805\nJapan\tBulgaria\t2018-02-18\t-2.76439510310478\nDominican Republic\tSpain\t2018-02-18\t-3.84474551446357\nMalaysia\tNew Zealand\t2018-02-18\t-2.604486839780957\nPhilippines\tChile\t2018-02-18\t-6.61840744570838\nNorth Korea\tFrance\t2018-02-18\t4.16666666666667\nBrazil\tBrazil\t2018-02-18\t-3.716517321505451\nIsrael\tKuwait\t2018-02-18\t-1.18829981718465\nIsrael\tOccupied Palestinian Territory\t2018-02-18\t-5.646699319500548\nItaly\tBrazil\t2018-02-18\t6.66666666666667\nAfrica\tLiberia\t2018-02-18\t1.0152367408234764\nDenmark\tPoland\t2018-02-18\t2.19538968166849\nEgypt\tUganda\t2018-02-18\t2.02020202020202\nLibya\tTurkey\t2018-02-18\t-4.73083197389886\nEgypt\tEthiopia\t2018-02-18\t-2.8302648670015187\nOman\tKazakhstan\t2018-02-18\t2.05128205128205\nGermany\tIndia\t2018-02-18\t-0.985221674876847\nUnited Kingdom\tSolomon Islands\t2018-02-18\t1.17096018735363\nUnited States\tCanada\t2018-02-18\t-0.3792797883878707\nNetherlands\tEurope\t2018-02-18\t-1.08695652173914\nSpain\tTrinidad and Tobago\t2018-02-18\t0.0\nSaudi Arabia\tThailand\t2018-02-18\t-2.91970802919708\nSouth Africa\tAustralia\t2018-02-18\t-6.0543316881345\nGuyana\tDemocratic Republic of the Congo\t2018-02-18\t-0.90225563909774\nPhilippines\tSaudi Arabia\t2018-02-18\t1.6774891774891751\nChina\tColumbia\t2018-02-18\t5.34124629080119\nRussia\tUnited Kingdom\t2018-02-18\t-2.633623147390667\nEurope\tSyria\t2018-02-18\t-0.43604651162791\nThe West\tEurope\t2018-02-18\t-0.0467364798420532\nCuba\tMorocco\t2018-02-18\t-1.83749641113982\nRussia\tAustralia\t2018-02-18\t-5.739746719670886\nUzbekistan\tSouth Korea\t2018-02-18\t1.92678227360309\nUnited Arab Emirates\tDenmark\t2018-02-18\t0.7346189164371001\nCameroon\tCameroon\t2018-02-18\t-6.016827268804836\nSwitzerland\tPhilippines\t2018-02-18\t2.47678018575852\nVietnam\tAustralia\t2018-02-18\t-0.75471698113208\nBotswana\tRussia\t2018-02-18\t2.9940119760479\nTunisia\tSaudi Arabia\t2018-02-18\t-1.13100848256362\nJapan\tIreland\t2018-02-18\t2.64550264550265\nRussia\tEstonia\t2018-02-18\t-1.89125295508275\nMiddle East\tLibya\t2018-02-18\t-2.96803652968037\nIran\tIsrael\t2018-02-18\t-4.83645159575848\nUnited States\tLebanon\t2018-02-18\t-4.804263264731092\nRussia\tBarbados\t2018-02-18\t-6.43604183427192\nUnited Kingdom\tIreland\t2018-02-18\t0.45769907717404745\nChina\tIndonesia\t2018-02-18\t-2.3852838657307984\nNigeria\tBenin\t2018-02-18\t-5.548550605447397\nArgentina\tBrazil\t2018-02-18\t1.15606936416185\nSudan\tFrance\t2018-02-18\t-2.89855072463768\nItaly\tUnited States\t2018-02-18\t1.3445958372134807\nAfghanistan\tTurkey\t2018-02-18\t-4.34782608695652\nCzech Republic\tSouth Korea\t2018-02-18\t3.64963503649635\nItaly\tMexico\t2018-02-18\t5.16014234875445\nUnited States\tNigeria\t2018-02-18\t-0.8494339900449132\nArmenia\tTurkey\t2018-02-18\t-2.0325203252032504\nSudan\tItaly\t2018-02-18\t-5.85480093676815\nDjibouti\tTurkey\t2018-02-18\t-0.872786557321566\nSolomon Islands\tUnited Kingdom\t2018-02-18\t1.17096018735363\nBangladesh\tAlbania\t2018-02-18\t3.8726122308751374\nBangladesh\tIreland\t2018-02-18\t0.2929115407147\nGermany\tQatar\t2018-02-18\t-0.9867553709873382\nChina\tCameroon\t2018-02-18\t3.10679611650486\nSpain\tColumbia\t2018-02-18\t1.56739811912226\nCanada\tVenezuela\t2018-02-18\t-0.18867924528301\nAfrica\tEastern Africa\t2018-02-18\t-4.7945205479452\nTajikistan\tPakistan\t2018-02-18\t-4.16666666666667\nAfrica\tUnited Kingdom\t2018-02-18\t1.0707095999107057\nSouth Africa\tBotswana\t2018-02-18\t-11.7021276595745\nUnited States\tLibya\t2018-02-18\t-4.17412080910438\nEthiopia\tEritrea\t2018-02-18\t-11.4678899082568\nThailand\tMyanmar\t2018-02-18\t1.6286112566991955\nIndia\tSaudi Arabia\t2018-02-18\t1.70316301703163\nBahrain\tPersian Gulf\t2018-02-18\t-7.64364130962795\nBenin\tAfrica\t2018-02-18\t3.88059701492537\nUnited States\tJapan\t2018-02-18\t0.4046507279260921\nYemen\tIraq\t2018-02-18\t2.88808664259928\nFrance\tAfrica\t2018-02-18\t-4.41640378548896\nAlgeria\tIsrael\t2018-02-18\t-0.31897926634769\nPeople\u0027s Republic of the Congo\tAfrica\t2018-02-18\t2.15053763440861\nMonaco\tGermany\t2018-02-18\t0.6896551724138001\nUnited Kingdom\tRussia\t2018-02-18\t-2.109994419667468\nUnited Kingdom\tCzech Republic\t2018-02-18\t-1.3454702296346726\nEthiopia\tUnited States\t2018-02-18\t-3.4354153944103825\nUnited States\tSyria\t2018-02-18\t-4.185362155783987\nCanada\tIndia\t2018-02-18\t1.6283286248115847\nEurope\tChina\t2018-02-18\t-1.043373146660302\nAustralia\tSouth Korea\t2018-02-18\t2.23880597014925\nNigeria\tGhana\t2018-02-18\t-0.2621367544100733\nChina\tIndia\t2018-02-18\t-2.4181747444601465\nSaudi Arabia\tBahrain\t2018-02-18\t-0.5084745762711843\nSyria\tUnited Kingdom\t2018-02-18\t-3.169082125603867\nUnited Kingdom\tMexico\t2018-02-18\t3.59342915811088\nUnited States\tBahrain\t2018-02-18\t5.50826239359039\nSweden\tUkraine\t2018-02-18\t0.6453122343548704\nIreland\tAustralia\t2018-02-18\t0.17082530854937325\nCanada\tQatar\t2018-02-18\t1.65289256198347\nFrance\tNetherlands\t2018-02-18\t-3.6432757801362277\nAfghanistan\tSaudi Arabia\t2018-02-18\t-3.7179087059395934\nIndia\tIndia\t2018-02-18\t-2.484077968288615\nUnited States\tItaly\t2018-02-18\t0.625029697077809\nSouth Korea\tAfrica\t2018-02-18\t0.65406976744186\nEgypt\tFrance\t2018-02-18\t1.2263716890014429\nPoland\tAustralia\t2018-02-18\t5.50724637681159\nUnited Kingdom\tBahamas\t2018-02-18\t-2.82026768642448\nIndonesia\tAfghanistan\t2018-02-18\t1.48619957537155\nNigeria\tCameroon\t2018-02-18\t-4.685836842742342\nGermany\tBelarus\t2018-02-18\t-3.549287447779375\nPakistan\tIndia\t2018-02-18\t-1.7330696797141931\nBahrain\tYemen\t2018-02-18\t-10.2739726027398\nItaly\tNigeria\t2018-02-18\t-3.3281607921377394\nUnited Kingdom\tHaiti\t2018-02-18\t-4.809058642860326\nSouth Asia\tMaldives\t2018-02-18\t-0.315315315315311\nSpain\tSaudi Arabia\t2018-02-18\t-1.83749641113982\nSweden\tBulgaria\t2018-02-18\t-5.35117056856187\nLibya\tSierra Leone\t2018-02-18\t-3.13225058004641\nFiji\tFiji\t2018-02-18\t-1.0851774077972\nRussia\tCzech Republic\t2018-02-18\t-4.764432943655721\nIceland\tIreland\t2018-02-18\t-0.56980056980057\nFrance\tTurkey\t2018-02-18\t-3.270249870195164\nChina\tSri Lanka\t2018-02-18\t0.04020895198105423\nMaldives\tIraq\t2018-02-18\t-3.33778371161549\nFrance\tItaly\t2018-02-18\t-3.311295122401715\nIran\tAfghanistan\t2018-02-18\t0.566956088593902\nFrance\tNorth Korea\t2018-02-18\t4.16666666666667\nEurope\tBulgaria\t2018-02-18\t-8.38926174496644\nNetherlands\tDenmark\t2018-02-18\t1.67427701674277\nPakistan\tCanada\t2018-02-18\t3.55329949238579\nMexico\tUnited Kingdom\t2018-02-18\t3.59342915811088\nAfghanistan\tRussia\t2018-02-18\t-2.3181465825378726\nUnited Kingdom\tThe West\t2018-02-18\t0.16748121842879504\nIndia\tBelgium\t2018-02-18\t-2.132802952475085\nSierra Leone\tEgypt\t2018-02-18\t-2.05259781911481\nKiribati\tNew Zealand\t2018-02-18\t0.0\nTurkey\tChina\t2018-02-18\t0.45773862622658235\nAzerbaijan\tIran\t2018-02-18\t-6.89655172413793\nSweden\tSpain\t2018-02-18\t0.2247191011236\nIndia\tSyria\t2018-02-18\t4.48210641580807\nPoland\tIndia\t2018-02-18\t0.20040080160320003\nRussia\tCyprus\t2018-02-18\t-3.88888888888889\nUganda\tRwanda\t2018-02-18\t-4.61658841940532\nGermany\tMacedonia\t2018-02-18\t-6.6003616636528\nLiberia\tLebanon\t2018-02-18\t1.44717800289435\nUnited Kingdom\tZimbabwe\t2018-02-18\t0.06488731902290601\nEurope\tIsrael\t2018-02-18\t1.21028744326778\nLaos\tChina\t2018-02-18\t7.162588606227455\nOman\tMalta\t2018-02-18\t2.24089635854342\nUnited Kingdom\tChina\t2018-02-18\t0.5885794935891091\nCzech Republic\tHungary\t2018-02-18\t3.61111111111111\nItaly\tPhilippines\t2018-02-18\t0.29850746268656\nAfghanistan\tJordan\t2018-02-18\t-1.992972021419422\nGermany\tPoland\t2018-02-18\t-6.638889999386372\nSaint Lucia\tDominica\t2018-02-18\t3.31491712707182\nSouth Korea\tThailand\t2018-02-18\t0.8092538073940941\nUnited Arab Emirates\tCanada\t2018-02-18\t1.31826741996234\nThailand\tPakistan\t2018-02-18\t-3.23501427212179\nMexico\tEl Salvador\t2018-02-18\t-6.21546961325967\nSweden\tUnited Kingdom\t2018-02-18\t-6.28019323671498\nVietnam\tVietnam\t2018-02-18\t1.2283462644783618\nNorth Korea\tNorth Korea\t2018-02-18\t-1.8526065876513667\nUnited Kingdom\tQatar\t2018-02-18\t7.70925110132159\nItaly\tCameroon\t2018-02-18\t3.9799179591856966\nDominican Republic\tUnited States\t2018-02-18\t0.97028502122498\nIsrael\tEthiopia\t2018-02-18\t0.361169907233046\nUnited States\tJordan\t2018-02-18\t-0.8422274860211926\nSouth Africa\tIndia\t2018-02-18\t-0.92348284960422\nSudan\tEgypt\t2018-02-18\t-3.472925914886365\nAfrica\tNetherlands\t2018-02-18\t-0.23571007660578\nAzerbaijan\tIsrael\t2018-02-18\t-1.85728250244379\nCanada\tIran\t2018-02-18\t-0.38986354775828\nCanada\tChina\t2018-02-18\t3.4467043918502616\nTurkey\tKuwait\t2018-02-18\t-5.42635658914729\nNew Zealand\tIreland\t2018-02-18\t-0.65359477124183\nUnited Arab Emirates\tSouth Africa\t2018-02-18\t5.6198347107438\nThe West\tAfghanistan\t2018-02-18\t-4.89130434782609\nUnited Kingdom\tGambia\t2018-02-18\t-4.93562231759657\nIsrael\tTunisia\t2018-02-18\t-1.53186274509804\nIsrael\tNorway\t2018-02-18\t-3.52811466372657\nSyria\tLibya\t2018-02-18\t-9.24855491329479\nUnited Kingdom\tPhilippines\t2018-02-18\t-0.7446156970637401\nSwitzerland\tAustria\t2018-02-18\t-5.84415584415584\nItaly\tUnited Kingdom\t2018-02-18\t-2.579753625279317\nBotswana\tZimbabwe\t2018-02-18\t0.9793442126069367\nSoutheast Asia\tLibya\t2018-02-18\t0.98360655737705\nRussia\tUnited States\t2018-02-18\t-4.2915012669145565\nIran\tIndia\t2018-02-18\t0.5459882209239165\nSwitzerland\tSwitzerland\t2018-02-18\t-0.7526846268443258\nSouth Korea\tGermany\t2018-02-18\t-5.44239052404882\nIsrael\tEgypt\t2018-02-18\t-2.630151671941798\nIsrael\tUnited States\t2018-02-18\t-3.9825922850494355\nUnited Kingdom\tSpain\t2018-02-18\t-1.3162314332224863\nUruguay\tUruguay\t2018-02-18\t0.70921985815603\nItaly\tChile\t2018-02-18\t-6.07638888888889\nLebanon\tJordan\t2018-02-18\t-1.2809974651393268\nIreland\tMaldives\t2018-02-18\t3.96039603960396\nColumbia\tChina\t2018-02-18\t5.34124629080119\nSaudi Arabia\tSpain\t2018-02-18\t-1.83749641113982\nIran\tSwitzerland\t2018-02-18\t-3.3734540112780227\nRussia\tHungary\t2018-02-18\t0.26595744680852\nChina\tCanada\t2018-02-18\t3.3606881109564686\nUnited Arab Emirates\tAustralia\t2018-02-18\t3.18906605922551\nGermany\tAzerbaijan\t2018-02-18\t-1.2323943661971826\nArgentina\tChina\t2018-02-18\t-4.7536231884058\nTrinidad and Tobago\tUnited States\t2018-02-18\t1.10803324099723\nIndonesia\tNetherlands\t2018-02-18\t1.02739726027397\nPakistan\tSri Lanka\t2018-02-18\t0.32223415682062\nHungary\tCroatia\t2018-02-18\t4.46735395189003\nEstonia\tBulgaria\t2018-02-18\t-5.35117056856187\nAfghanistan\tEgypt\t2018-02-18\t2.63157894736842\nSyria\tYemen\t2018-02-18\t-5.81583198707593\nCambodia\tChad\t2018-02-18\t0.839694656488549\nIran\tQatar\t2018-02-18\t-5.31645569620253\nSwitzerland\tHungary\t2018-02-18\t-8.73900293255133\nVietnam\tSouth Korea\t2018-02-18\t0.58365758754864\nMaldives\tMaldives\t2018-02-18\t-2.06965536411292\nRussia\tVenezuela\t2018-02-18\t-6.91056910569105\nFrance\tGreece\t2018-02-18\t0.66666666666667\nChina\tFinland\t2018-02-18\t2.60223048327138\nIsrael\tAustralia\t2018-02-18\t-5.8073654390934895\nItaly\tIndia\t2018-02-18\t2.79569892473118\nUnited Kingdom\tYemen\t2018-02-18\t-4.116641255949948\nCanada\tSwitzerland\t2018-02-18\t-6.84931506849316\nUnited States\tBelgium\t2018-02-18\t0.20975280226362067\nItaly\tThailand\t2018-02-18\t-0.8460771857522267\nVatican City\tNigeria\t2018-02-18\t-1.0853478046374\nUnited States\tMonaco\t2018-02-18\t0.6101430290740149\nNew Zealand\tUnited Kingdom\t2018-02-18\t2.190322824463199\nCambodia\tMali\t2018-02-18\t0.839694656488549\nNetherlands\tAfrica\t2018-02-18\t-0.23571007660578\nThailand\tLaos\t2018-02-18\t-2.56347079778661\nUnited States\tBelize\t2018-02-18\t1.58102766798418\nBenin\tBelgium\t2018-02-18\t3.30788804071247\nHungary\tBelgium\t2018-02-18\t-3.55731225296443\nAzerbaijan\tEurope\t2018-02-18\t0.41736815373262726\nSao Tome and Principe\tNepal\t2018-02-18\t1.7364657814096\nGermany\tTurkey\t2018-02-18\t-3.2443470674573436\nNiger\tYemen\t2018-02-18\t-7.13187452914182\nBelgium\tUnited Kingdom\t2018-02-18\t-1.7534475639247447\nVatican City\tItaly\t2018-02-18\t1.8297419064585865\nThe West\tNorway\t2018-02-18\t-1.120689655172415\nGermany\tBelize\t2018-02-18\t-3.96570203644159\nMalaysia\tSaudi Arabia\t2018-02-18\t-0.6345195511232405\nSouth Korea\tJapan\t2018-02-18\t-1.6607088448851357\nAfrica\tSudan\t2018-02-18\t-10.4950495049505\nSwitzerland\tNetherlands\t2018-02-18\t2.6694045174538\nOman\tEgypt\t2018-02-18\t1.7153371320037996\nIran\tUnited States\t2018-02-18\t-3.2975536973634543\nTajikistan\tKazakhstan\t2018-02-18\t-4.16666666666667\nAfghanistan\tTajikistan\t2018-02-18\t-4.312335092348287\nEurope\tItaly\t2018-02-18\t-0.7200597014925354\nMonaco\tChina\t2018-02-18\t-12.8065395095368\nUnited Arab Emirates\tUnited States\t2018-02-18\t1.4648232878768197\nKyrgyzstan\tKyrgyzstan\t2018-02-18\t1.8599849079729207\nChina\tFrance\t2018-02-18\t-1.3630940670337597\nMyanmar\tBangladesh\t2018-02-18\t-5.191857663405335\nAustralia\tAustralia\t2018-02-18\t-2.8658260572135785\nUkraine\tTurkey\t2018-02-18\t-6.22895622895623\nYemen\tYemen\t2018-02-18\t-5.644290123456794\nLatvia\tMacedonia\t2018-02-18\t-2.0942408376963297\nEgypt\tSaudi Arabia\t2018-02-18\t0.08172123605467005\nGermany\tBangladesh\t2018-02-18\t0.0\nFrance\tMaldives\t2018-02-18\t0.99667774086379\nGermany\tNetherlands\t2018-02-18\t-1.12903225806451\nLebanon\tUnited States\t2018-02-18\t-4.510737529679319\nJordan\tSaudi Arabia\t2018-02-18\t0.5258541073986482\nDenmark\tFrance\t2018-02-18\t2.05803992207354\nMarshall Islands\tUnited States\t2018-02-18\t-2.64650283553875\nKuwait\tGuinea-Bissau\t2018-02-18\t-0.55045871559633\nKenya\tRwanda\t2018-02-18\t8.78787878787878\nRussia\tIsrael\t2018-02-18\t-2.907295306293011\nTurkey\tIndia\t2018-02-18\t-6.5173116089613\nAzerbaijan\tRussia\t2018-02-18\t-1.73913043478261\nDemocratic Republic of the Congo\tBurkina Faso\t2018-02-18\t1.30293159609121\nUnited States\tFinland\t2018-02-18\t-0.7532111421539278\nJordan\tUnited Kingdom\t2018-02-18\t-7.32217573221757\nJordan\tJapan\t2018-02-18\t-2.14974054855448\nPoland\tSlovakia\t2018-02-18\t1.93905817174515\nUnited Kingdom\tNorth Korea\t2018-02-18\t-0.55286800276434\nNigeria\tPakistan\t2018-02-18\t0.21344717182498\nIraq\tTurkey\t2018-02-18\t-5.7306261209469085\nEgypt\tSudan\t2018-02-18\t-3.83660294487146\nAfrica\tMalawi\t2018-02-18\t-12.446020433240898\nIndonesia\tSingapore\t2018-02-18\t0.53859964093357\nTurkey\tAustralia\t2018-02-18\t1.72754195459033\nGhana\tAustralia\t2018-02-18\t0.9943127224705683\nAustralia\tNew Zealand\t2018-02-18\t-1.3959641630941113\nEastern Africa\tUganda\t2018-02-18\t2.80373831775701\nEgypt\tCanada\t2018-02-18\t-8.05330243337196\nLithuania\tPoland\t2018-02-18\t1.5576323987539\nSyria\tAustralia\t2018-02-18\t-2.71739130434783\nSaudi Arabia\tMaldives\t2018-02-18\t-1.9027647556055098\nJamaica\tCanada\t2018-02-18\t0.4967942064177147\nSaudi Arabia\tYemen\t2018-02-18\t-7.0321548570626105\nLebanon\tLibya\t2018-02-18\t-11.4695340501792\nBelize\tUnited States\t2018-02-18\t1.58102766798418\nUnited States\tNicaragua\t2018-02-18\t-0.053988392495616\nIraq\tUnited Kingdom\t2018-02-18\t-6.403204658088313\nSlovakia\tUnited States\t2018-02-18\t-0.27069960448680497\nMacedonia\tCanada\t2018-02-18\t2.78969957081545\nIraq\tLibya\t2018-02-18\t-2.05259781911481\nUnited States\tSaudi Arabia\t2018-02-18\t-2.5239063481422916\nAfghanistan\tAfghanistan\t2018-02-18\t-3.8365541650138812\nGermany\tVietnam\t2018-02-18\t1.33333333333334\nIndia\tJapan\t2018-02-18\t0.4504504504504507\nUnited States\tBrazil\t2018-02-18\t-1.7325295777495262\nPortugal\tMorocco\t2018-02-18\t5.4561717352415\nOccupied Palestinian Territory\tSaudi Arabia\t2018-02-18\t-7.6822025664705835\nUnited Arab Emirates\tAfrica\t2018-02-18\t-1.2290140507577618\nJamaica\tChile\t2018-02-18\t-2.68817204301075\nThailand\tChina\t2018-02-18\t-0.5575389543225124\nArmenia\tGermany\t2018-02-18\t0.0\nThailand\tThailand\t2018-02-18\t-1.7069372523703292\nGermany\tFrance\t2018-02-18\t-1.6327886783163925\nBelarus\tUkraine\t2018-02-18\t-3.926033779360968\nUnited Kingdom\tEurope\t2018-02-18\t-1.0583718847599934\nThe West\tAlbania\t2018-02-18\t3.708025155242655\nChina\tBhutan\t2018-02-18\t1.24617366816625\nGermany\tSingapore\t2018-02-18\t-0.661200056361345\nAfghanistan\tGermany\t2018-02-18\t-7.02905342080599\nThailand\tUnited Kingdom\t2018-02-18\t0.0\nNorth Korea\tEurope\t2018-02-18\t-2.66272189349113\nJapan\tIran\t2018-02-18\t-5.11182108626198\nTurkey\tLebanon\t2018-02-18\t-1.32200188857412\nBurkina Faso\tGermany\t2018-02-18\t1.30293159609121\nLesotho\tLesotho\t2018-02-18\t-3.97553516819572\nAustralia\tCambodia\t2018-02-18\t-7.01298701298701\nAzerbaijan\tMoldova\t2018-02-18\t-1.9718309859155\nGhana\tSaudi Arabia\t2018-02-18\t5.24017467248908\nVenezuela\tVenezuela\t2018-02-18\t-3.1566997375183727\nYemen\tTurkey\t2018-02-18\t-6.834634472810928\nSouth Africa\tAfrica\t2018-02-18\t-1.774231527462533\nUnited States\tLiberia\t2018-02-18\t-4.0339272010120775\nDemocratic Republic of the Congo\tZambia\t2018-02-18\t5.40540540540541\nUnited States\tMalta\t2018-02-18\t-4.30463576158941\nHonduras\tAlgeria\t2018-02-18\t1.8348623853211\nVietnam\tUnited Kingdom\t2018-02-18\t7.72357723577235\nUnited States\tUnited Arab Emirates\t2018-02-18\t-1.3704099019779852\nAustralia\tSingapore\t2018-02-18\t0.28625954198473\nEgypt\tChina\t2018-02-18\t9.58083832335329\nPanama\tPakistan\t2018-02-18\t-4.2371079213184455\nUnited Kingdom\tUnited Arab Emirates\t2018-02-18\t-1.253769213306092\nUnited States\tAntigua and Barbuda\t2018-02-18\t0.2375296912114\nMalaysia\tTurkey\t2018-02-18\t2.290655913300985\nLuxembourg\tEurope\t2018-02-18\t1.65289256198347\nEgypt\tAfghanistan\t2018-02-18\t2.63157894736842\nAfghanistan\tIndonesia\t2018-02-18\t1.4861995753715502\nMacedonia\tGermany\t2018-02-18\t-6.6003616636528\nJapan\tSwitzerland\t2018-02-18\t6.71755725190839\nMalaysia\tEurope\t2018-02-18\t-3.51906158357771\nNetherlands\tMorocco\t2018-02-18\t-4.85175202156334\nNorway\tUnited States\t2018-02-18\t-0.15357786893367498\nEthiopia\tKenya\t2018-02-18\t-4.15716677064902\nUnited States\tUnited Kingdom\t2018-02-18\t0.1542157923708657\nOccupied Palestinian Territory\tEthiopia\t2018-02-18\t-5.078555702521349\nSuriname\tUnited States\t2018-02-18\t3.38809034907598\nChina\tMaldives\t2018-02-18\t-1.9446959361678575\nCanada\tSpain\t2018-02-18\t7.84313725490196\nSenegal\tMauritius\t2018-02-18\t-1.53256704980843\nEgypt\tRussia\t2018-02-18\t-3.934898145315028\nMalaysia\tSri Lanka\t2018-02-18\t-4.74006116207951\nIsrael\tUnited Arab Emirates\t2018-02-18\t-1.42394822006473\nQatar\tGermany\t2018-02-18\t-1.8361800332700717\nEthiopia\tGhana\t2018-02-18\t4.375\nTrinidad and Tobago\tAfrica\t2018-02-18\t-0.3304419661297\nRwanda\tAfrica\t2018-02-18\t1.4868332977630638\nSyria\tUnited States\t2018-02-18\t-4.566046879212903\nUganda\tUganda\t2018-02-18\t-0.1281890642961487\nUnited States\tSpain\t2018-02-18\t0.40543117972317133\nIreland\tLuxembourg\t2018-02-18\t-3.93700787401575\nYemen\tGermany\t2018-02-18\t5.47945205479452\nUnited States\tSri Lanka\t2018-02-18\t-2.919186122921661\nGreece\tEurope\t2018-02-18\t-3.1380521100751033\nSwitzerland\tNew Zealand\t2018-02-18\t0.7537688442211\nUnited States\tArgentina\t2018-02-18\t-2.3349051403444103\nAustria\tUnited Kingdom\t2018-02-18\t0.9385161099615734\nIndonesia\tIndonesia\t2018-02-18\t-2.7889489447300644\nPakistan\tChina\t2018-02-18\t-1.7367424873008446\nIsrael\tJordan\t2018-02-18\t-2.3870981573001613\nSwaziland\tUnited States\t2018-02-18\t0.26362038664324\nSaudi Arabia\tPhilippines\t2018-02-18\t1.98807157057654\nFrance\tCanada\t2018-02-18\t-0.49996182272418355\nUnited States\tEquatorial Guinea\t2018-02-18\t-1.81818181818181\nMalaysia\tNetherlands\t2018-02-18\t-4.74006116207951\nMongolia\tTurkey\t2018-02-18\t1.21396054628224\nPortugal\tEgypt\t2018-02-18\t4.7808764940239\nIreland\tHaiti\t2018-02-18\t-2.83687943262412\nGermany\tOccupied Palestinian Territory\t2018-02-18\t-5.36506655909641\nSpain\tQatar\t2018-02-18\t4.1335453100159\nGermany\tKuwait\t2018-02-18\t-0.94979647218454\nRussia\tNew Zealand\t2018-02-18\t-8.224348191757782\nDenmark\tUnited States\t2018-02-18\t1.69829946494572\nEritrea\tEgypt\t2018-02-18\t3.342504377089065\nThe West\tUkraine\t2018-02-18\t-0.1319609395618889\nBelgium\tUnited States\t2018-02-18\t0.6245058359279289\nGermany\tThe West\t2018-02-18\t0.32159907386263803\nBulgaria\tEurope\t2018-02-18\t-0.26814380188169346\nGermany\tMorocco\t2018-02-18\t-4.63917525773196\nIsrael\tGermany\t2018-02-18\t-5.755076372762307\nRussia\tCanada\t2018-02-18\t-2.3952352475708336\nAfghanistan\tUnited Kingdom\t2018-02-18\t0.20341127171577034\nTurkmenistan\tUnited States\t2018-02-18\t0.68836045056321\nEgypt\tTunisia\t2018-02-18\t0.7005443845176661\nPakistan\tNepal\t2018-02-18\t-0.315315315315311\nSweden\tRussia\t2018-02-18\t0.0\nKazakhstan\tAfghanistan\t2018-02-18\t-4.16666666666667\nTurkey\tAzerbaijan\t2018-02-18\t-4.66321243523316\nSouth Africa\tIraq\t2018-02-18\t-3.51878269139325\nSwitzerland\tSpain\t2018-02-18\t-2.28690228690229\nPakistan\tSaudi Arabia\t2018-02-18\t-0.6692737103508639\nSenegal\tCanada\t2018-02-18\t-6.07399471413433\nThe West\tMacedonia\t2018-02-18\t2.78969957081545\nUnited Kingdom\tEcuador\t2018-02-18\t-8.95295902883157\nIraq\tIsrael\t2018-02-18\t-4.49191803841833\nIndia\tNepal\t2018-02-18\t0.6365934769868246\nColumbia\tRussia\t2018-02-18\t-6.3647190696371\nQatar\tSomalia\t2018-02-18\t0.374531835205992\nMexico\tMyanmar\t2018-02-18\t-2.67175572519084\nSouth Korea\tQatar\t2018-02-18\t-2.10526315789474\nMalaysia\tThailand\t2018-02-18\t2.80046674445741\nUnited Arab Emirates\tItaly\t2018-02-18\t3.22033898305084\nTunisia\tLibya\t2018-02-18\t-1.7679422650593248\nIsrael\tPoland\t2018-02-18\t-7.668518453288578\nTajikistan\tTurkey\t2018-02-18\t-1.23456790123457\nUnited States\tBahamas\t2018-02-18\t-2.82026768642448\nKenya\tSudan\t2018-02-18\t-5.26315789473685\nPersian Gulf\tIran\t2018-02-18\t-5.94059405940594\nDemocratic Republic of the Congo\tUnited States\t2018-02-18\t-0.90225563909774\nJapan\tLatvia\t2018-02-18\t-1.04712041884817\nVietnam\tCuba\t2018-02-18\t4.28388746803069\nKuwait\tOman\t2018-02-18\t4.1152263374485605\nNigeria\tTurkey\t2018-02-18\t-5.4368932038835\nThailand\tKenya\t2018-02-18\t0.20942408376964\nUganda\tEurope\t2018-02-18\t-3.38983050847458\nKuwait\tSaudi Arabia\t2018-02-18\t-1.06951871657754\nIsrael\tOman\t2018-02-18\t-6.239946513587716\nSri Lanka\tMalaysia\t2018-02-18\t-4.74006116207951\nAustralia\tIraq\t2018-02-18\t-5.35917901938427\nMicronesia\tUnited States\t2018-02-18\t-3.41296928327645\nLebanon\tEgypt\t2018-02-18\t-1.6553341590340909\nKuwait\tPhilippines\t2018-02-18\t-2.8671409071352296\nJapan\tCambodia\t2018-02-18\t-0.79681274900398\nAustralia\tIreland\t2018-02-18\t1.34529147982063\nRwanda\tPeople\u0027s Republic of the Congo\t2018-02-18\t-0.05998710277290667\nTurkey\tUnited Kingdom\t2018-02-18\t-3.30434782608696\nUnited States\tNew Zealand\t2018-02-18\t1.6643953674442833\nZimbabwe\tNamibia\t2018-02-18\t0.41067761806982\nTurkey\tMacedonia\t2018-02-18\t5.71428571428571\nMexico\tEurope\t2018-02-18\t-0.64043915827996\nRussia\tPhilippines\t2018-02-18\t-1.47058823529412\nUzbekistan\tKyrgyzstan\t2018-02-18\t-4.16666666666667\nIran\tEurope\t2018-02-18\t-1.8427506317701632\nTurkey\tRussia\t2018-02-18\t-2.373093134041791\nSouth Africa\tNigeria\t2018-02-18\t-2.0016051372803534\nJordan\tAfghanistan\t2018-02-18\t-2.051915598850394\nHaiti\tLiberia\t2018-02-18\t-6.45812310797175\nIsrael\tMalta\t2018-02-18\t0.84033613445378\nSaudi Arabia\tItaly\t2018-02-18\t3.9799179591856966\nKyrgyzstan\tQatar\t2018-02-18\t1.68067226890756\nCayman Islands\tGermany\t2018-02-18\t0.52840158520475\nChina\tNorway\t2018-02-18\t-1.11524163568773\nBurundi\tKenya\t2018-02-18\t8.78787878787878\nCosta Rica\tUnited States\t2018-02-18\t1.1022927689594375\nSouth Korea\tSwitzerland\t2018-02-18\t-0.94488188976378\nUnited States\tGuatemala\t2018-02-18\t-0.7006685277696199\nSyria\tIraq\t2018-02-18\t-4.448394676563698\nMalaysia\tIsrael\t2018-02-18\t-7.673566370759693\nUnited States\tFrance\t2018-02-18\t0.5541624054604556\nUnited States\tGrenada\t2018-02-18\t-5.2757793764988\nBurundi\tBurundi\t2018-02-18\t-3.16742081447963\nSudan\tGermany\t2018-02-18\t-2.557689742563688\nLibya\tTunisia\t2018-02-18\t1.43171806167401\nEurope\tIran\t2018-02-18\t-3.652896085359876\nSwitzerland\tUnited Arab Emirates\t2018-02-18\t6.272439963021091\nArgentina\tSri Lanka\t2018-02-18\t1.90174326465927\nBarbados\tBarbados\t2018-02-18\t-0.9537632179141601\nSaudi Arabia\tOman\t2018-02-18\t3.47887476919735\nRussia\tColumbia\t2018-02-18\t-4.0983606557377\nBrazil\tAustralia\t2018-02-18\t-2.94117647058823\nChina\tNorth Korea\t2018-02-18\t-5.09838998211091\nQatar\tTurkey\t2018-02-18\t-1.5313283564299656\nGermany\tUnited States\t2018-02-18\t-2.1432257253293145\nSpain\tUnited Arab Emirates\t2018-02-18\t1.38248847926268\nHungary\tSerbia\t2018-02-18\t-1.6756537974435641\nSudan\tUnited Kingdom\t2018-02-18\t0.7610350076103501\nVietnam\tJapan\t2018-02-18\t0.8534809779684602\nUnited Arab Emirates\tRussia\t2018-02-18\t0.68493150684932\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 1000 rows. Learn more about \u003cstrong\u003ezeppelin.spark.maxResult\u003c/strong\u003e\u003c/div\u003e"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://10.0.2.15:4040/jobs/job?id\u003d178",
+            "http://10.0.2.15:4040/jobs/job?id\u003d179",
+            "http://10.0.2.15:4040/jobs/job?id\u003d180",
+            "http://10.0.2.15:4040/jobs/job?id\u003d181",
+            "http://10.0.2.15:4040/jobs/job?id\u003d182",
+            "http://10.0.2.15:4040/jobs/job?id\u003d183",
+            "http://10.0.2.15:4040/jobs/job?id\u003d184",
+            "http://10.0.2.15:4040/jobs/job?id\u003d185",
+            "http://10.0.2.15:4040/jobs/job?id\u003d186",
+            "http://10.0.2.15:4040/jobs/job?id\u003d187"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548151697553_78498885",
+      "id": "20190122-110817_609297071",
+      "dateCreated": "2019-01-22 11:08:17.553",
+      "dateStarted": "2019-01-22 12:02:59.817",
+      "dateFinished": "2019-01-22 12:03:18.990",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548153311912_-397616552",
+      "id": "20190122-113511_299363600",
+      "dateCreated": "2019-01-22 11:35:11.912",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "gdeltDatasetEngineering_EvMen_SK",
+  "id": "2E4BM59MW",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
