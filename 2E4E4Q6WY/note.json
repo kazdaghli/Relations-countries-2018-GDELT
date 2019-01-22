@@ -1,0 +1,1831 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md # Restart spark interpreter before running this",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:08:11.198",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eRestart spark interpreter before running this\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548173223539_2065699107",
+      "id": "20190122-160703_1391443342",
+      "dateCreated": "2019-01-22 16:07:03.540",
+      "dateStarted": "2019-01-22 16:08:00.013",
+      "dateFinished": "2019-01-22 16:08:00.022",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%spark.dep\nz.load(\"datastax:spark-cassandra-connector:2.3.0-s_2.11\")\nz.load(\"com.amazonaws:aws-java-sdk:1.3.10\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:33:29.799",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res0: org.apache.zeppelin.dep.Dependency \u003d org.apache.zeppelin.dep.Dependency@6fcefa2e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548172675805_-1663649326",
+      "id": "20190122-155755_1024099936",
+      "dateCreated": "2019-01-22 15:57:55.805",
+      "dateStarted": "2019-01-22 16:33:30.536",
+      "dateFinished": "2019-01-22 16:33:52.883",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## Creation of RDD from Data\nDans ce notebook nous allons charger les données dans des RDD",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 14:57:39.839",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreation of RDD from Data\u003c/h2\u003e\n\u003cp\u003eDans ce notebook nous allons charger les données dans des RDD\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059830_1420318370",
+      "id": "20181212-102323_67420128",
+      "dateCreated": "2019-01-22 14:57:39.831",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import com.amazonaws.services.s3.AmazonS3Client\nimport com.amazonaws.auth.BasicAWSCredentials\nimport org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\nimport org.apache.spark.sql.functions.{col, min, max, mean, var_pop, count}\nimport java.io.File\nimport scala.io.Source.{fromFile}\nimport java.net.{HttpURLConnection, URL}\nimport scala.language.postfixOps\nimport scala.sys.process._",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:33:58.043",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import com.amazonaws.services.s3.AmazonS3Client\nimport com.amazonaws.auth.BasicAWSCredentials\nimport org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\nimport org.apache.spark.sql.functions.{col, min, max, mean, var_pop, count}\nimport java.io.File\nimport scala.io.Source.fromFile\nimport java.net.{HttpURLConnection, URL}\nimport scala.language.postfixOps\nimport scala.sys.process._\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059840_1414580930",
+      "id": "20190121-180038_1381998713",
+      "dateCreated": "2019-01-22 14:57:39.840",
+      "dateStarted": "2019-01-22 16:33:58.393",
+      "dateFinished": "2019-01-22 16:35:00.054",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val bucket_name \u003d \"du-weijia-telecom-gdelt2018\"\nval AWS_ID \u003d \"AKIAJOZH2VNBCRDJMTFA\" //(1) ID du fichier credentials\nval AWS_KEY \u003d \"dg0JP7o/ycrH566aQpLGmzouqqkpQn2p099Inmow\" //(2) Secret du fichier credentials\nval awsClient \u003d new AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY))\nsc.hadoopConfiguration.set(\"fs.s3a.access.key\", AWS_ID) \nsc.hadoopConfiguration.set(\"fs.s3a.secret.key\", AWS_KEY) \nsc.hadoopConfiguration.set(\"fs.s3a.connection.maximum\",\"100000\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:34:05.866",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "bucket_name: String \u003d du-weijia-telecom-gdelt2018\nAWS_ID: String \u003d AKIAJOZH2VNBCRDJMTFA\nAWS_KEY: String \u003d dg0JP7o/ycrH566aQpLGmzouqqkpQn2p099Inmow\nwarning: there was one deprecation warning; re-run with -deprecation for details\nawsClient: com.amazonaws.services.s3.AmazonS3Client \u003d com.amazonaws.services.s3.AmazonS3Client@7b4e2c5d\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059841_-737361361",
+      "id": "20171217-230735_1688540039",
+      "dateCreated": "2019-01-22 14:57:39.841",
+      "dateStarted": "2019-01-22 16:34:06.468",
+      "dateFinished": "2019-01-22 16:35:05.350",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md Les fichiers sont stockés compressés, on a besoin d\u0027un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0027on les lit depuis S3:",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 14:57:39.841",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eLes fichiers sont stockés compressés, on a besoin d\u0026rsquo;un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0026rsquo;on les lit depuis S3:\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059841_597057591",
+      "id": "20181212-102329_808049084",
+      "dateCreated": "2019-01-22 14:57:39.841",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "def fileDownloader(urlOfFileToDownload: String, file: File) \u003d {\n    val parentDirName \u003d new File(file.getParent())\n    if (! parentDirName.exists()){\n        parentDirName.mkdirs();\n    }\n    val url \u003d new URL(urlOfFileToDownload)\n    val connection \u003d url.openConnection().asInstanceOf[HttpURLConnection]\n    connection.setConnectTimeout(5000)\n    connection.setReadTimeout(5000)\n    connection.connect()\n    if(connection.getResponseCode \u003e\u003d 400){\n        println(\"error\")\n    }\n    else {\n        url #\u003e file !!\n    }\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 14:57:39.842",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "fileDownloader: (urlOfFileToDownload: String, file: java.io.File)Any\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059842_-1865049999",
+      "id": "20190121-181413_1774031819",
+      "dateCreated": "2019-01-22 14:57:39.842",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "def RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n        case (name: String, content: PortableDataStream) \u003d\u003e\n            try {\n                val zis \u003d new ZipInputStream(content.open)\n                Stream.continually(zis.getNextEntry).\n                    takeWhile(_ !\u003d null).\n                    flatMap { _ \u003d\u003e\n                        val br \u003d new BufferedReader(new InputStreamReader(zis))\n                        Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                    }\n            } catch {\n                case e : Exception \u003d\u003e\n                None\n            }\n    }\n    return resultRDD\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:04.576",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "RDDDownloader: (fileName: String)org.apache.spark.rdd.RDD[String]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059842_501396559",
+      "id": "20190122-092242_1695948710",
+      "dateCreated": "2019-01-22 14:57:39.842",
+      "dateStarted": "2019-01-22 16:35:05.062",
+      "dateFinished": "2019-01-22 16:35:09.046",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val local_path \u003d System.getProperty(\"user.dir\")\n\nfileDownloader(\"https://www.gdeltproject.org/data/lookups/CAMEO.knowngroup.txt\", new File(local_path + \"/CAMEO.knowngroup.txt\"))\nnew AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY)).putObject(bucket_name, \"CAMEO.knowngroup.txt\", local_path + \"/CAMEO.knowngroup.txt\")\n\nfileDownloader(\"https://www.gdeltproject.org/data/lookups/CAMEO.country.txt\", new File(local_path + \"/CAMEO.country.txt\"))\nnew AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY)).putObject(bucket_name, \"CAMEO.country.txt\", local_path + \"/CAMEO.country.txt\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 14:57:39.843",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "local_path: String \u003d /mnt/var/lib/zeppelin\nres20: Any \u003d \"\"\nwarning: there was one deprecation warning; re-run with -deprecation for details\nres21: com.amazonaws.services.s3.model.PutObjectResult \u003d com.amazonaws.services.s3.model.PutObjectResult@1bd6dba0\nres22: Any \u003d \"\"\nwarning: there was one deprecation warning; re-run with -deprecation for details\nres23: com.amazonaws.services.s3.model.PutObjectResult \u003d com.amazonaws.services.s3.model.PutObjectResult@4028ce08\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059843_981439190",
+      "id": "20190121-181435_2076071535",
+      "dateCreated": "2019-01-22 14:57:39.843",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Export Events\nval eventsRDD \u003d RDDDownloader(\"s3a://\" + bucket_name + \"/events/201801*.export.CSV.zip\")\nval mentionsRDD \u003d RDDDownloader(\"s3a://\" + bucket_name + \"/mentions/201801*.CSV.zip\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:11.254",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "eventsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[1] at flatMap at \u003cconsole\u003e:43\nmentionsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[3] at flatMap at \u003cconsole\u003e:43\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059843_-1137961569",
+      "id": "20190121-175851_504012144",
+      "dateCreated": "2019-01-22 14:57:39.843",
+      "dateStarted": "2019-01-22 16:35:11.475",
+      "dateFinished": "2019-01-22 16:35:14.478",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val cachedEvents \u003d eventsRDD.cache // RDD\nval cachedMentions \u003d mentionsRDD.cache",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:15.580",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "cachedEvents: eventsRDD.type \u003d MapPartitionsRDD[1] at flatMap at \u003cconsole\u003e:43\ncachedMentions: mentionsRDD.type \u003d MapPartitionsRDD[3] at flatMap at \u003cconsole\u003e:43\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059844_-78301983",
+      "id": "20190107-102856_946427568",
+      "dateCreated": "2019-01-22 14:57:39.844",
+      "dateStarted": "2019-01-22 16:35:15.883",
+      "dateFinished": "2019-01-22 16:35:17.428",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Event(GLOBALEVENTID: Int,\nSQLDATE: String,\nMonthYear: String,\nYear: Int,\nFractionDate: Double,\nActor1Code: String,\nActor1Name: String,\nActor1CountryCode: String,\nActor1KnownGroupCode: String,\nActor1EthnicCode: String,\nActor1Religion1Code: String,\nActor1Religion2Code: String,\nActor1Type1Code: String,\nActor1Type2Code: String,\nActor1Type3Code: String,\nActor2Code: String,\nActor2Name: String,\nActor2CountryCode: String,\nActor2KnownGroupCode: String,\nActor2EthnicCode: String,\nActor2Religion1Code: String,\nActor2Religion2Code: String,\nActor2Type1Code: String,\nActor2Type2Code: String,\nActor2Type3Code: String,\nIsRootEvent: Int,\nEventCode: String,\nEventBaseCode: String,\nEventRootCode: String,\nQuadClass: Int,\nGoldsteinScale: Double,\nNumMentions: Int,\nNumSources: Int,\nNumArticles: Int,\nAvgTone: Double,\nActor1Geo_Type: Int,\nActor1Geo_FullName: String,\nActor1Geo_CountryCode: String,\nActor1Geo_ADM1Code: String,\nActor1Geo_ADM2Code: String,\nActor1Geo_Lat: Double,\nActor1Geo_Long: Double,\nActor1Geo_FeatureID: String,\nActor2Geo_Type: Int,\nActor2Geo_FullName: String,\nActor2Geo_CountryCode: String,\nActor2Geo_ADM1Code: String,\nActor2Geo_ADM2Code: String,\nActor2Geo_Lat: Double,\nActor2Geo_Long: Double,\nActor2Geo_FeatureID: String,\nActionGeo_Type: Int,\nActionGeo_FullName: String,\nActionGeo_CountryCode: String,\nActionGeo_ADM1Code: String,\nActionGeo_ADM2Code: String,\nActionGeo_Lat: Double,\nActionGeo_Long: Double,\nActionGeo_FeatureID: String,\nDATEADDED: String,\nSOURCEURL: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:17.670",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Event\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059844_-706103678",
+      "id": "20190107-095023_1048093380",
+      "dateCreated": "2019-01-22 14:57:39.844",
+      "dateStarted": "2019-01-22 16:35:17.892",
+      "dateFinished": "2019-01-22 16:35:19.906",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class Mention(GLOBALEVENTID: Int,\nEventTimeDate: String,\nMentionTimeDate: String,\nMentionType: Int,\nMentionSourceName: String,\nMentionIdentifier: String,\nSentenceID: Int,\nActor1CharOffset: Int,\nActor2CharOffset: Int,\nActionCharOffset: Int,\nInRawText: Int,\nConfidence: Int,\nMentionDocLen: Int,\nMentionDocTone: Double,\nMentionDocTranslationInfo: String)//,\n//Extras: String)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:20.847",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Mention\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059845_1731342118",
+      "id": "20190109-085959_371186108",
+      "dateCreated": "2019-01-22 14:57:39.845",
+      "dateStarted": "2019-01-22 16:35:21.091",
+      "dateFinished": "2019-01-22 16:35:22.339",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.text.SimpleDateFormat\n\ndef toDouble(s : String): Double \u003d {\n    if (s.isEmpty) 0  \n    else {\n        try {\n            s.toDouble\n        } catch {\n            case e: Exception \u003d\u003e 0\n        }\n    }\n}\n\ndef toInt(s : String): Int \u003d {\n    if (s.isEmpty) 0  \n    else {\n        try {\n            s.toInt\n        } catch {\n            case e: Exception \u003d\u003e 0\n        }\n    }\n}\n\ndef toBigInt(s : String): BigInt \u003d {\n    if (s.isEmpty) BigInt(0) \n    else {\n        try {\n            BigInt(s)\n        } catch {\n            case e: Exception \u003d\u003e BigInt(0) \n        }\n    }\n}\n \nval inputFormat_ymd \u003d new SimpleDateFormat(\"yyyyMMdd\")\nval outputFormat_ymd \u003d new SimpleDateFormat(\"yyyy-MM-dd\")\n\nval inputFormat_ym \u003d new SimpleDateFormat(\"yyyyMM\")\nval outputFormat_ym \u003d new SimpleDateFormat(\"yyyy-MM\")\n\nval inputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyyMMddhhmmss\")\nval outputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyy-MM-dd hh:mm:ss\")\n    \ndef parse_date(s : String, inputFormat : SimpleDateFormat, outputFormat : SimpleDateFormat):\n    String \u003d if (s.isEmpty) s else  outputFormat.format(inputFormat.parse(s))   \n\n\ncachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDS.createOrReplaceTempView(\"events\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:23.286",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.text.SimpleDateFormat\ntoDouble: (s: String)Double\ntoInt: (s: String)Int\ntoBigInt: (s: String)BigInt\ninputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@ef87e460\noutputFormat_ymd: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@f67a0200\ninputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d55c4fe0\noutputFormat_ym: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@d62d344d\ninputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@88c7dd60\noutputFormat_ymdhms: java.text.SimpleDateFormat \u003d java.text.SimpleDateFormat@e863f5a0\nparse_date: (s: String, inputFormat: java.text.SimpleDateFormat, outputFormat: java.text.SimpleDateFormat)String\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169059850_1863147617",
+      "id": "20190120-164044_87848048",
+      "dateCreated": "2019-01-22 14:57:39.850",
+      "dateStarted": "2019-01-22 16:35:23.617",
+      "dateFinished": "2019-01-22 16:35:47.144",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val ds1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDS\n\nval ds2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDS\n\nval ds3 \u003d ds1.union(ds2)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:26.123",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "ds1: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds2: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds3: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169272131_-232627450",
+      "id": "20190122-150112_2145771244",
+      "dateCreated": "2019-01-22 15:01:12.131",
+      "dateStarted": "2019-01-22 16:35:26.513",
+      "dateFinished": "2019-01-22 16:35:51.463",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var events \u003d cachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDF()\n\nevents \u003d events.withColumn(\"SQLDate_date\",$\"SQLDATE\".cast(\"date\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:29.106",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 59 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 60 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169387684_1582990119",
+      "id": "20190122-150307_1363487609",
+      "dateCreated": "2019-01-22 15:03:07.684",
+      "dateStarted": "2019-01-22 16:35:47.961",
+      "dateFinished": "2019-01-22 16:35:54.740",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var df1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDF()\n\nvar df2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDF()\n\nvar mentions \u003d df1.union(df2).toDF()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:50.654",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "df1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\ndf2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nmentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169397829_-296305692",
+      "id": "20190122-150317_187399109",
+      "dateCreated": "2019-01-22 15:03:17.829",
+      "dateStarted": "2019-01-22 16:35:51.736",
+      "dateFinished": "2019-01-22 16:35:58.308",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val Cameolocation \u003d \"s3a://\" + bucket_name + \"/CameoFolder\"\nval file_Country \u003d \"CAMEO.country.txt\"\nval file_Ethnic \u003d \"CAMEO.ethnic.txt\"\nval file_Eventcodes \u003d \"CAMEO.eventcodes.txt\"\nval file_Knowngroup \u003d \"CAMEO.knowngroup.txt\"\nval file_Religion \u003d \"CAMEO.religion.txt\"\nval file_Type \u003d \"CAMEO.type.txt\"\nval file_Quad \u003d \"CAMEO.QuadClass.txt\"\nval file_GeoType \u003d \"CAMEO.GeoType.txt\"\nval file_FIPSCountryCode \u003d \"CAMEO.FIPSCountyCode.txt\"\nval file_Language \u003d \"CAMEO.language.txt\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:54.160",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Cameolocation: String \u003d s3a://du-weijia-telecom-gdelt2018/CameoFolder\nfile_Country: String \u003d CAMEO.country.txt\nfile_Ethnic: String \u003d CAMEO.ethnic.txt\nfile_Eventcodes: String \u003d CAMEO.eventcodes.txt\nfile_Knowngroup: String \u003d CAMEO.knowngroup.txt\nfile_Religion: String \u003d CAMEO.religion.txt\nfile_Type: String \u003d CAMEO.type.txt\nfile_Quad: String \u003d CAMEO.QuadClass.txt\nfile_GeoType: String \u003d CAMEO.GeoType.txt\nfile_FIPSCountryCode: String \u003d CAMEO.FIPSCountyCode.txt\nfile_Language: String \u003d CAMEO.language.txt\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169405935_1562040061",
+      "id": "20190122-150325_1253504812",
+      "dateCreated": "2019-01-22 15:03:25.935",
+      "dateStarted": "2019-01-22 16:35:54.987",
+      "dateFinished": "2019-01-22 16:36:02.703",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// creation of the mapping dataset\nval country_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Country)\n\nval ethnic_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Ethnic)\n\nval eventCodes_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Eventcodes)\n\nval group_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Knowngroup)\n\nval religion_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Religion)\n\nval type_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Type)\n\nval quad_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Quad)\n    \nval geoType_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_GeoType)\n    \nval FIPS_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_FIPSCountryCode)\n    \nval language_transco \u003d spark.read.\n    format(\"csv\").\n    option(\"header\", true).\n    option(\"delimiter\", \"\\t\").\n    load(Cameolocation+\"/\"+file_Language)\n    \n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:35:58.341",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "country_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nethnic_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\neventCodes_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngroup_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nreligion_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ntype_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nquad_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngeoType_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nFIPS_transco: org.apache.spark.sql.DataFrame \u003d [LABEL: string, CODE: string]\nlanguage_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\n"
+          }
+        ]
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d0",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d1",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d2",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d3",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d4",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d5",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d6",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d7",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d8",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d9"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169575266_727341703",
+      "id": "20190122-150615_2062727155",
+      "dateCreated": "2019-01-22 15:06:15.266",
+      "dateStarted": "2019-01-22 16:35:58.716",
+      "dateFinished": "2019-01-22 16:36:36.281",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events \u003d events.join(country_transco, events(\"Actor1CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor1CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\nevents \u003d events.join(country_transco, events(\"Actor2CountryCode\")\u003d\u003d\u003dcountry_transco(\"CODE\"), \"left\").withColumn(\"Actor2CountryName\", col(\"LABEL\")).drop(country_transco.columns: _*)\n\nevents \u003d events.join(ethnic_transco, events(\"Actor1EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor1EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\nevents \u003d events.join(ethnic_transco, events(\"Actor2EthnicCode\")\u003d\u003d\u003dethnic_transco(\"CODE\"), \"left\").withColumn(\"Actor2EthnicName\", col(\"LABEL\")).drop(ethnic_transco.columns: _*)\n\nevents \u003d events.join(eventCodes_transco, events(\"EventCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventBaseCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventBaseCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\nevents \u003d events.join(eventCodes_transco, events(\"EventRootCode\")\u003d\u003d\u003deventCodes_transco(\"CODE\"), \"left\").withColumn(\"EventRootCodeDesc\", col(\"LABEL\")).drop(eventCodes_transco.columns: _*)\n\nevents \u003d events.join(group_transco, events(\"Actor1KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor1KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\nevents \u003d events.join(group_transco, events(\"Actor2KnownGroupCode\")\u003d\u003d\u003dgroup_transco(\"CODE\"), \"left\").withColumn(\"Actor2KnownGroupName\", col(\"LABEL\")).drop(group_transco.columns: _*)\n\nevents \u003d events.join(religion_transco, events(\"Actor1Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor1Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor1Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion1Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion1Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\nevents \u003d events.join(religion_transco, events(\"Actor2Religion2Code\")\u003d\u003d\u003dreligion_transco(\"CODE\"), \"left\").withColumn(\"Actor2Religion2Name\", col(\"LABEL\")).drop(religion_transco.columns: _*)\n\nevents \u003d events.join(type_transco, events(\"Actor1Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor1Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor1Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type1Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type1Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type2Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type2Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\nevents \u003d events.join(type_transco, events(\"Actor2Type3Code\")\u003d\u003d\u003dtype_transco(\"CODE\"), \"left\").withColumn(\"Actor2Type3Name\", col(\"LABEL\")).drop(type_transco.columns: _*)\n\nevents \u003d events.join(quad_transco, events(\"QuadClass\")\u003d\u003d\u003dquad_transco(\"CODE\"), \"left\").withColumn(\"QuadClassType\", col(\"LABEL\")).drop(quad_transco.columns: _*)\n\nevents \u003d events.join(geoType_transco, events(\"Actor1Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"Actor2Geo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\nevents \u003d events.join(geoType_transco, events(\"ActionGeo_Type\")\u003d\u003d\u003dgeoType_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_Name\", col(\"LABEL\")).drop(geoType_transco.columns: _*)\n\nevents \u003d events.join(FIPS_transco, events(\"Actor1Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor1Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"Actor2Geo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"Actor2Geo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)\nevents \u003d events.join(FIPS_transco, events(\"ActionGeo_CountryCode\")\u003d\u003d\u003dFIPS_transco(\"CODE\"), \"left\").withColumn(\"ActionGeo_CountryName\", col(\"LABEL\")).drop(FIPS_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:36:03.596",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 61 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 62 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 63 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 64 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 65 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 66 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 67 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 68 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 69 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 70 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 71 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 72 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 73 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 74 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 75 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 76 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 77 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 78 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 79 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 80 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 81 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 82 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 83 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 84 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 85 more fields]\nevents: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 86 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169662965_-169515204",
+      "id": "20190122-150742_902504965",
+      "dateCreated": "2019-01-22 15:07:42.965",
+      "dateStarted": "2019-01-22 16:36:03.972",
+      "dateFinished": "2019-01-22 16:37:03.560",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "mentions \u003d mentions.join(language_transco, mentions(\"MentionDocTranslationInfo\")\u003d\u003d\u003dlanguage_transco(\"CODE\"), \"left\").withColumn(\"Language\", col(\"LABEL\")).drop(language_transco.columns: _*)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:36:38.596",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "mentions: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 14 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169730935_-1768137455",
+      "id": "20190122-150850_614536411",
+      "dateCreated": "2019-01-22 15:08:50.935",
+      "dateStarted": "2019-01-22 16:36:38.913",
+      "dateFinished": "2019-01-22 16:37:04.478",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:09:24.841",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nSQLDATE\nMonthYear\nYear\nFractionDate\nActor1Code\nActor1Name\nActor1CountryCode\nActor1KnownGroupCode\nActor1EthnicCode\nActor1Religion1Code\nActor1Religion2Code\nActor1Type1Code\nActor1Type2Code\nActor1Type3Code\nActor2Code\nActor2Name\nActor2CountryCode\nActor2KnownGroupCode\nActor2EthnicCode\nActor2Religion1Code\nActor2Religion2Code\nActor2Type1Code\nActor2Type2Code\nActor2Type3Code\nIsRootEvent\nEventCode\nEventBaseCode\nEventRootCode\nQuadClass\nGoldsteinScale\nNumMentions\nNumSources\nNumArticles\nAvgTone\nActor1Geo_Type\nActor1Geo_FullName\nActor1Geo_CountryCode\nActor1Geo_ADM1Code\nActor1Geo_ADM2Code\nActor1Geo_Lat\nActor1Geo_Long\nActor1Geo_FeatureID\nActor2Geo_Type\nActor2Geo_FullName\nActor2Geo_CountryCode\nActor2Geo_ADM1Code\nActor2Geo_ADM2Code\nActor2Geo_Lat\nActor2Geo_Long\nActor2Geo_FeatureID\nActionGeo_Type\nActionGeo_FullName\nActionGeo_CountryCode\nActionGeo_ADM1Code\nActionGeo_ADM2Code\nActionGeo_Lat\nActionGeo_Long\nActionGeo_FeatureID\nDATEADDED\nSOURCEURL\nSQLDate_date\nActor1CountryName\nActor2CountryName\nActor1EthnicName\nActor2EthnicName\nEventCodeDesc\nEventBaseCodeDesc\nEventRootCodeDesc\nActor1KnownGroupName\nActor2KnownGroupName\nActor1Religion1Name\nActor1Religion2Name\nActor2Religion1Name\nActor2Religion2Name\nActor1Type1Name\nActor1Type2Name\nActor1Type3Name\nActor2Type1Name\nActor2Type2Name\nActor2Type3Name\nQuadClassType\nActor1Geo_Name\nActor2Geo_Name\nActionGeo_Name\nActor1Geo_CountryName\nActor2Geo_CountryName\nActionGeo_CountryName\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169752728_-981119521",
+      "id": "20190122-150912_1762934260",
+      "dateCreated": "2019-01-22 15:09:12.728",
+      "dateStarted": "2019-01-22 15:09:24.907",
+      "dateFinished": "2019-01-22 15:09:25.863",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "mentions.columns.foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:09:31.723",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "GLOBALEVENTID\nEventTimeDate\nMentionTimeDate\nMentionType\nMentionSourceName\nMentionIdentifier\nSentenceID\nActor1CharOffset\nActor2CharOffset\nActionCharOffset\nInRawText\nConfidence\nMentionDocLen\nMentionDocTone\nMentionDocTranslationInfo\nLanguage\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169764841_-1431032062",
+      "id": "20190122-150924_2001798567",
+      "dateCreated": "2019-01-22 15:09:24.841",
+      "dateStarted": "2019-01-22 15:09:31.796",
+      "dateFinished": "2019-01-22 15:09:32.417",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 1 processing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:10:02.648",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 1 processing\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169800650_-1749034024",
+      "id": "20190122-151000_420246314",
+      "dateCreated": "2019-01-22 15:10:00.650",
+      "dateStarted": "2019-01-22 15:10:02.653",
+      "dateFinished": "2019-01-22 15:10:05.452",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val mentions_bis \u003d mentions.select($\"GLOBALEVENTID\", $\"MentionIdentifier\", $\"Language\").distinct\nval events_bis \u003d events.select($\"GLOBALEVENTID\", $\"SQLDATE\", $\"ActionGeo_CountryName\").where(\"ActionGeo_CountryName is not null\")\nval df_fin \u003d events_bis.join(mentions_bis, Seq(\"GLOBALEVENTID\"), \"inner\")\n\ndf_fin.createOrReplaceTempView(\"table_query_1\")\n\n//print(df_fin.count())",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:36:46.755",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "mentions_bis: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [GLOBALEVENTID: int, MentionIdentifier: string ... 1 more field]\nevents_bis: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [GLOBALEVENTID: int, SQLDATE: string ... 1 more field]\ndf_fin: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLDATE: string ... 3 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169771723_939146619",
+      "id": "20190122-150931_1639174643",
+      "dateCreated": "2019-01-22 15:09:31.723",
+      "dateStarted": "2019-01-22 16:37:04.284",
+      "dateFinished": "2019-01-22 16:37:08.087",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "z.show(sql(\"\"\"select * from table_query_1 limit 10\"\"\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:36:03.950",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "GLOBALEVENTID": "string",
+                      "SQLDATE": "string",
+                      "ActionGeo_CountryName": "string",
+                      "MentionIdentifier": "string",
+                      "Language": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "GLOBALEVENTID\tSQLDATE\tActionGeo_CountryName\tMentionIdentifier\tLanguage\n719029605\t2018-01-01\tBOSNIA AND HERZEGOVINA\thttps://naslovi.net/2018-01-01/blic/u-2018-usli-sa-colom-i-leksington-bendom/21003309\tSerbian\n719029670\t2018-01-01\tJORDAN\thttp://alwatannews.net/article/751529/Arab/%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86%D9%8A%D9%88%D9%86-%D9%8A%D9%88%D8%AF%D8%B9%D9%88%D9%86-2017-%D8%A8%D8%A7%D9%84%D8%AF%D9%81%D8%A7%D8%B9-%D8%B9%D9%86-%D8%A7%D9%84%D9%82%D8%AF%D8%B3\tArabic\n719031847\t2018-01-01\tIRAN\thttps://www.iraqakhbar.com/679458\tArabic\n719031847\t2018-01-01\tIRAN\thttp://www.athina984.gr/2018/01/01/synechizonte-taraches-sto-iran/\tModern Greek (since 1453–)\n719031847\t2018-01-01\tIRAN\thttp://www.freepen.co/1056064.html\tArabic\n719031847\t2018-01-01\tIRAN\thttp://www.alhaya.ps/ar_page.php?id\u003d374ea9ay57993882Y374ea9a\tArabic\n719031865\t2018-01-01\tUNITED STATES\thttps://www.taringa.net/posts/paranormal/20100606/Trabajador-del-Area-51-afirma-que-piloteo-un-ovni.html\tSpanish, Castilian\n719031865\t2018-01-01\tUNITED STATES\thttp://www.elcaribe.com.do/2018/01/01/293056/\tSpanish, Castilian\n719031865\t2018-01-01\tUNITED STATES\thttp://rancherita.com.mx/noticias/detalles/45929/ante-las-bajas-temperaturas-piden-a-indocumentados-evitar-cruzar-a-eu.html\tSpanish, Castilian\n719031865\t2018-01-01\tUNITED STATES\thttp://ebtekarnews.com/index.php?newsid\u003d98152\tPersian\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170661021_896232248",
+      "id": "20190122-152421_1661109495",
+      "dateCreated": "2019-01-22 15:24:21.021",
+      "dateStarted": "2019-01-22 15:36:04.018",
+      "dateFinished": "2019-01-22 15:44:41.984",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 2 processing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:10:18.841",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 2 processing\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169781036_1637426445",
+      "id": "20190122-150941_520019705",
+      "dateCreated": "2019-01-22 15:09:41.037",
+      "dateStarted": "2019-01-22 15:10:18.856",
+      "dateFinished": "2019-01-22 15:10:18.893",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var events_by_actor1 \u003d  events.select(\"Actor1Name\", \"SQLDATE\", \"GLOBALEVENTID\", \n\"Actor1CountryName\", \"Actor1KnownGroupName\" ,\"Actor1EthnicName\", \"Actor1Religion1Name\", \"Actor1Religion2Name\", \"Actor1Type1Name\", \"Actor1Type2Name\", \"Actor1Type3Name\", \n\"Actor2Name\", \"Actor2CountryName\", \"Actor2KnownGroupName\" ,\"Actor2EthnicName\", \"Actor2Religion1Name\", \"Actor2Religion2Name\", \"Actor2Type1Name\", \"Actor2Type2Name\", \"Actor2Type3Name\", \n\"Actor1Geo_Name\", \"Actor1Geo_FullName\", \"Actor1Geo_CountryName\", \"Actor1Geo_Lat\", \"Actor1Geo_Long\", \n\"Actor2Geo_Name\" , \"Actor2Geo_FullName\", \"Actor2Geo_CountryName\", \"Actor2Geo_Lat\", \"Actor2Geo_Long\",\n\"ActionGeo_Name\",  \"ActionGeo_FullName\",  \"ActionGeo_CountryName\", \"ActionGeo_Lat\", \"ActionGeo_Long\",\n\"EventCodeDesc\" , \"EventBaseCodeDesc\", \"EventRootCodeDesc\", \"QuadClassType\", \"GoldsteinScale\", \"NumMentions\", \"NumSources\", \"NumArticles\", \"AvgTone\", \"SOURCEURL\").\n                        withColumnRenamed(\"Actor1Name\", \"Actor_Name\").\n                        withColumnRenamed(\"SQLDATE\", \"Event_Date\").\n                        withColumnRenamed(\"GLOBALEVENTID\", \"Event_ID\").\n                        withColumnRenamed(\"Actor1CountryName\", \"Actor_Country\").\n                        withColumnRenamed(\"Actor1KnownGroupName\", \"Actor_KnowGroup\").\n                        withColumnRenamed(\"Actor1EthnicName\", \"Actor_EthnicCode\").\n                        withColumnRenamed(\"Actor1Religion1Name\", \"Actor_Religion1\").\n                        withColumnRenamed(\"Actor1Religion2Name\", \"Actor_Religion2\").\n                        withColumnRenamed(\"Actor1Type1Name\", \"Actor_Type1\").\n                        withColumnRenamed(\"Actor1Type2Name\", \"Actor_Type2\").\n                        withColumnRenamed(\"Actor1Type3Name\", \"Actor_Type3\").\n                        withColumnRenamed(\"Actor2Name\", \"Co_Actor_Name\").\n                        withColumnRenamed(\"Actor2CountryName\", \"Co_Actor_Country\").\n                        withColumnRenamed(\"Actor2KnownGroupName\", \"Co_Actor_KnowGroup\").\n                        withColumnRenamed(\"Actor2EthnicName\", \"Co_Actor_EthnicCode\").\n                        withColumnRenamed(\"Actor2Religion1Name\", \"Co_Actor_Religion1\").\n                        withColumnRenamed(\"Actor2Religion2Name\", \"Co_Actor_Religion2\").\n                        withColumnRenamed(\"Actor2Type1Name\", \"Co_Actor_Type1\").\n                        withColumnRenamed(\"Actor2Type2Name\", \"Co_Actor_Type2\").\n                        withColumnRenamed(\"Actor2Type3Name\", \"Co_Actor_Type3\").\n                        withColumnRenamed(\"Actor1Geo_Name\", \"Actor_Event_Type\").\n                        withColumnRenamed(\"Actor1Geo_FullName\", \"Actor_Event_Localisation\").\n                        withColumnRenamed(\"Actor1Geo_CountryName\", \"Actor_Event_Country\").\n                        withColumnRenamed(\"Actor1Geo_Lat\", \"Actor_Event_Lat\").\n                        withColumnRenamed(\"Actor1Geo_Long\", \"Actor_Event_Long\").\n                        withColumnRenamed(\"Actor2Geo_Name\", \"Co_Actor_Event_Type\").\n                        withColumnRenamed(\"Actor2Geo_FullName\", \"Co_Actor_Event_Localisation\").\n                        withColumnRenamed(\"Actor2Geo_CountryName\", \"Co_Actor_Event_Country\").\n                        withColumnRenamed(\"Actor2Geo_Lat\", \"Co_Actor_Event_Lat\").\n                        withColumnRenamed(\"Actor2Geo_Long\", \"Co_Actor_Event_Long\").\n                        withColumnRenamed(\"ActionGeo_Name\", \"Action_Type\").\n                        withColumnRenamed(\"ActionGeo_FullName\", \"Action_Localisation\").\n                        withColumnRenamed(\"ActionGeo_CountryName\", \"Action_Country\").\n                        withColumnRenamed(\"ActionGeo_Lat\", \"Action_Lat\").\n                        withColumnRenamed(\"ActionGeo_Long\", \"Action_Long\").\n                        withColumnRenamed(\"EventCodeDesc\", \"Event_Description\").\n                        withColumnRenamed(\"EventBaseCodeDesc\", \"Event_Base_Description\").\n                        withColumnRenamed(\"EventRootCodeDesc\", \"Event_Root_Description\").\n                        withColumnRenamed(\"QuadClassType\", \"Event_QuadClass\").\n                        withColumnRenamed(\"GoldsteinScale\", \"Event_GoldsteinScale\").\n                        withColumnRenamed(\"NumMentions\", \"Event_NumMentions\").\n                        withColumnRenamed(\"NumSources\", \"Event_NumSources\").\n                        withColumnRenamed(\"NumArticles\", \"Event_Articles\").\n                        withColumnRenamed(\"AvgTone\", \"Event_AvgTone\").\n                        withColumnRenamed(\"SOURCEURL\", \"Event_URL\").\n                        withColumn(\"Action_Performed_by_Actor\", lit(true))\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:09.876",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events_by_actor1: org.apache.spark.sql.DataFrame \u003d [Actor_Name: string, Event_Date: string ... 44 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548169818704_-1276055842",
+      "id": "20190122-151018_285679246",
+      "dateCreated": "2019-01-22 15:10:18.704",
+      "dateStarted": "2019-01-22 16:37:10.041",
+      "dateFinished": "2019-01-22 16:37:16.335",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var events_by_actor2 \u003d  events.select(\"Actor2Name\", \"SQLDATE\", \"GLOBALEVENTID\", \n\"Actor1Name\",\"Actor1CountryName\", \"Actor1KnownGroupName\" ,\"Actor1EthnicName\", \"Actor1Religion1Name\", \"Actor1Religion2Name\", \"Actor1Type1Name\", \"Actor1Type2Name\", \"Actor1Type3Name\", \n\"Actor2CountryName\", \"Actor2KnownGroupName\" ,\"Actor2EthnicName\", \"Actor2Religion1Name\", \"Actor2Religion2Name\", \"Actor2Type1Name\", \"Actor2Type2Name\", \"Actor2Type3Name\", \n\"Actor1Geo_Name\", \"Actor1Geo_FullName\", \"Actor1Geo_CountryName\", \"Actor1Geo_Lat\", \"Actor1Geo_Long\", \n\"Actor2Geo_Name\" , \"Actor2Geo_FullName\", \"Actor2Geo_CountryName\", \"Actor2Geo_Lat\", \"Actor2Geo_Long\",\n\"ActionGeo_Name\",  \"ActionGeo_FullName\",  \"ActionGeo_CountryName\", \"ActionGeo_Lat\", \"ActionGeo_Long\",\n\"EventCodeDesc\" , \"EventBaseCodeDesc\", \"EventRootCodeDesc\", \"QuadClassType\", \"GoldsteinScale\", \"NumMentions\", \"NumSources\", \"NumArticles\", \"AvgTone\", \"SOURCEURL\").\n                        withColumnRenamed(\"Actor2Name\", \"Actor_Name\").\n                        withColumnRenamed(\"SQLDATE\", \"Event_Date\").\n                        withColumnRenamed(\"GLOBALEVENTID\", \"Event_ID\").\n                        withColumnRenamed(\"Actor2CountryName\", \"Actor_Country\").\n                        withColumnRenamed(\"Actor2KnownGroupName\", \"Actor_KnowGroup\").\n                        withColumnRenamed(\"Actor2EthnicName\", \"Actor_EthnicCode\").\n                        withColumnRenamed(\"Actor2Religion1Name\", \"Actor_Religion1\").\n                        withColumnRenamed(\"Actor2Religion2Name\", \"Actor_Religion2\").\n                        withColumnRenamed(\"Actor2Type1Name\", \"Actor_Type1\").\n                        withColumnRenamed(\"Actor2Type2Name\", \"Actor_Type2\").\n                        withColumnRenamed(\"Actor2Type3Name\", \"Actor_Type3\").\n                        withColumnRenamed(\"Actor1Name\", \"Co_Actor_Name\").\n                        withColumnRenamed(\"Actor1CountryName\", \"Co_Actor_Country\").\n                        withColumnRenamed(\"Actor1KnownGroupName\", \"Co_Actor_KnowGroup\").\n                        withColumnRenamed(\"Actor1EthnicName\", \"Co_Actor_EthnicCode\").\n                        withColumnRenamed(\"Actor1Religion1Name\", \"Co_Actor_Religion1\").\n                        withColumnRenamed(\"Actor1Religion2Name\", \"Co_Actor_Religion2\").\n                        withColumnRenamed(\"Actor1Type1Name\", \"Co_Actor_Type1\").\n                        withColumnRenamed(\"Actor1Type2Name\", \"Co_Actor_Type2\").\n                        withColumnRenamed(\"Actor1Type3Name\", \"Co_Actor_Type3\").\n                        withColumnRenamed(\"Actor2Geo_Name\", \"Actor_Event_Type\").\n                        withColumnRenamed(\"Actor2Geo_FullName\", \"Actor_Event_Localisation\").\n                        withColumnRenamed(\"Actor2Geo_CountryName\", \"Actor_Event_Country\").\n                        withColumnRenamed(\"Actor2Geo_Lat\", \"Actor_Event_Lat\").\n                        withColumnRenamed(\"Actor2Geo_Long\", \"Actor_Event_Long\").\n                        withColumnRenamed(\"Actor1Geo_Name\", \"Co_Actor_Event_Type\").\n                        withColumnRenamed(\"Actor1Geo_FullName\", \"Co_Actor_Event_Localisation\").\n                        withColumnRenamed(\"Actor1Geo_CountryName\", \"Co_Actor_Event_Country\").\n                        withColumnRenamed(\"Actor1Geo_Lat\", \"Co_Actor_Event_Lat\").\n                        withColumnRenamed(\"Actor1Geo_Long\", \"Co_Actor_Event_Long\").\n                        withColumnRenamed(\"ActionGeo_Name\", \"Action_Type\").\n                        withColumnRenamed(\"ActionGeo_FullName\", \"Action_Localisation\").\n                        withColumnRenamed(\"ActionGeo_CountryName\", \"Action_Country\").\n                        withColumnRenamed(\"ActionGeo_Lat\", \"Action_Lat\").\n                        withColumnRenamed(\"ActionGeo_Long\", \"Action_Long\").\n                        withColumnRenamed(\"EventCodeDesc\", \"Event_Description\").\n                        withColumnRenamed(\"EventBaseCodeDesc\", \"Event_Base_Description\").\n                        withColumnRenamed(\"EventRootCodeDesc\", \"Event_Root_Description\").\n                        withColumnRenamed(\"QuadClassType\", \"Event_QuadClass\").\n                        withColumnRenamed(\"GoldsteinScale\", \"Event_GoldsteinScale\").\n                        withColumnRenamed(\"NumMentions\", \"Event_NumMentions\").\n                        withColumnRenamed(\"NumSources\", \"Event_NumSources\").\n                        withColumnRenamed(\"NumArticles\", \"Event_Articles\").\n                        withColumnRenamed(\"AvgTone\", \"Event_AvgTone\").\n                        withColumnRenamed(\"SOURCEURL\", \"Event_URL\").\n                        withColumn(\"Action_Performed_by_Actor\", lit(false))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:14.647",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events_by_actor2: org.apache.spark.sql.DataFrame \u003d [Actor_Name: string, Event_Date: string ... 44 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170196403_1849667899",
+      "id": "20190122-151636_1430712374",
+      "dateCreated": "2019-01-22 15:16:36.403",
+      "dateStarted": "2019-01-22 16:37:14.812",
+      "dateFinished": "2019-01-22 16:37:22.908",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//  Filtetered on empty and null values and year is not 2018\nval events_by_actor1_filtered \u003d events_by_actor1.filter($\"Actor_Name\"  \u003d!\u003d \"\").\n                                            filter(\"Actor_Name is not null\").\n                                            filter($\"Event_Date\"  \u003d!\u003d \"\").\n                                            filter(\"Event_Date is not null\").\n                                            filter(\"Event_ID is not null\").\n                                            filter(year($\"Event_Date\")\u003d\u003d\u003d\"2018\")\n\n\nval events_by_actor2_filtered \u003d events_by_actor2.filter($\"Actor_Name\"  \u003d!\u003d \"\").\n                                            filter(\"Actor_Name is not null\").\n                                            filter($\"Event_Date\"  \u003d!\u003d \"\").\n                                            filter(\"Event_Date is not null\").\n                                            filter(\"Event_ID is not null\").\n                                            filter(year($\"Event_Date\")\u003d\u003d\u003d\"2018\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:19.961",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events_by_actor1_filtered: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Actor_Name: string, Event_Date: string ... 44 more fields]\nevents_by_actor2_filtered: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Actor_Name: string, Event_Date: string ... 44 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170208174_-1149415832",
+      "id": "20190122-151648_379491646",
+      "dateCreated": "2019-01-22 15:16:48.174",
+      "dateStarted": "2019-01-22 16:37:20.160",
+      "dateFinished": "2019-01-22 16:37:28.598",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val events_by_actor \u003d events_by_actor1_filtered.union(events_by_actor1_filtered)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:26.398",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "events_by_actor: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Actor_Name: string, Event_Date: string ... 44 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170389990_-1508358446",
+      "id": "20190122-151949_1316270902",
+      "dateCreated": "2019-01-22 15:19:49.991",
+      "dateStarted": "2019-01-22 16:37:26.767",
+      "dateFinished": "2019-01-22 16:37:29.748",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 3 processing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:20:07.850",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 3 processing\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170374672_-1389644087",
+      "id": "20190122-151934_598773202",
+      "dateCreated": "2019-01-22 15:19:34.672",
+      "dateStarted": "2019-01-22 15:20:07.855",
+      "dateFinished": "2019-01-22 15:20:07.864",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "var joined_df \u003d events.select($\"GLOBALEVENTID\", $\"SQLDate_date\", $\"Actor1Name\", $\"Actor2Name\",$\"Actor1Code\", $\"Actor2Code\", $\"ActionGeo_CountryName\").withColumn(\"SQLMonth\",month($\"SQLDate_date\")).join(mentions.select($\"GLOBALEVENTID\" , $\"MentionDocTone\", $\"Language\"), Seq(\"GLOBALEVENTID\"), \"inner\").drop(\"SQLDate_date\")\njoined_df \u003d joined_df.withColumn(\"Positive\", when( $\"MentionDocTone\"\u003e0, $\"MentionDocTone\").otherwise(0))\njoined_df \u003d joined_df.withColumn(\"Negative\", when( $\"MentionDocTone\"\u003c0,  $\"MentionDocTone\").otherwise(0)).drop(\"MentionDocTone\")\n\nvar df_actor1 \u003d joined_df.filter( \"Actor1Name !\u003d \u0027\u0027\").withColumn(\"ActorCode\", $\"Actor1Code\").withColumn(\"ActorName\", $\"Actor1Name\").drop(\"Actor1Name\").drop(\"Actor2Name\").drop(\"Actor1Code\").drop(\"Actor2Code\")\nvar df_actor2 \u003d joined_df.filter( \"Actor2Name !\u003d \u0027\u0027\").withColumn(\"ActorCode\", $\"Actor2Code\").withColumn(\"ActorName\", $\"Actor2Name\").drop(\"Actor1Name\").drop(\"Actor2Name\").drop(\"Actor1Code\").drop(\"Actor2Code\")\n\njoined_df \u003d df_actor1.union(df_actor2)\n\nvar df_query3 \u003d joined_df.groupBy(\"GLOBALEVENTID\",  \"SQLMonth\",  \"ActionGeo_CountryName\", \"Language\", \"ActorCode\", \"ActorName\").agg(sum(\"Positive\").as(\"Positive\"),sum(\"Negative\").as(\"Negative\"))\n\n//z.show(df_query3)",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:30.997",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "joined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, Actor1Name: string ... 7 more fields]\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, Actor1Name: string ... 8 more fields]\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, Actor1Name: string ... 8 more fields]\ndf_actor1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, ActionGeo_CountryName: string ... 6 more fields]\ndf_actor2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, ActionGeo_CountryName: string ... 6 more fields]\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, ActionGeo_CountryName: string ... 6 more fields]\ndf_query3: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, SQLMonth: int ... 6 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170407759_33268538",
+      "id": "20190122-152007_430034468",
+      "dateCreated": "2019-01-22 15:20:07.759",
+      "dateStarted": "2019-01-22 16:37:31.118",
+      "dateFinished": "2019-01-22 16:37:37.918",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 4 processing",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:21:24.414",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 4 processing\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170481407_2125287633",
+      "id": "20190122-152121_1251653524",
+      "dateCreated": "2019-01-22 15:21:21.407",
+      "dateStarted": "2019-01-22 15:21:24.428",
+      "dateFinished": "2019-01-22 15:21:24.488",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val tableA \u003d events.filter(($\"Actor1Name\"  !\u003d\u003d \"\") || ($\"Actor1CountryName\"  !\u003d\u003d \"\") || ($\"Actor1KnownGroupName\"  !\u003d\u003d \"\")).select(\"SQLDATE\", \"Actor1Code\", \"Actor1CountryName\", \"Actor1KnownGroupName\", \"GLOBALEVENTID\")\n\nval tableM \u003d mentions.select(\"GLOBALEVENTID\", \"MentionDocTone\")\n\nval actor_final \u003d tableA.\n    join(tableM, \"GLOBALEVENTID\").\n    groupBy(\"GLOBALEVENTID\").\n    agg(max(col(\"SQLDATE\")),max(col(\"Actor1Code\")),max(col(\"Actor1CountryName\")),max(col(\"Actor1KnownGroupName\")),var_pop(col(\"MentionDocTone\")), count(col(\"GLOBALEVENTID\"))).\n    toDF(\"GLOBALEVENTID\",\"DATE\",\"ACTOR\",\"COUNTRY\",\"ORGANIZATION\",\"VARIANCE\",\"NB_ARTICLE\").\n    select(\"DATE\",\"ACTOR\",\"COUNTRY\",\"ORGANIZATION\",\"GLOBALEVENTID\", \"VARIANCE\",\"NB_ARTICLE\").\n    sort(asc(\"DATE\"), asc(\"ACTOR\"), asc(\"COUNTRY\"), asc(\"ORGANIZATION\"), asc(\"GLOBALEVENTID\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:33.813",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "warning: there were three deprecation warnings; re-run with -deprecation for details\ntableA: org.apache.spark.sql.DataFrame \u003d [SQLDATE: string, Actor1Code: string ... 3 more fields]\ntableM: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MentionDocTone: double]\nactor_final: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [DATE: string, ACTOR: string ... 5 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170451953_1704654112",
+      "id": "20190122-152051_1099234903",
+      "dateCreated": "2019-01-22 15:20:51.953",
+      "dateStarted": "2019-01-22 16:37:34.065",
+      "dateFinished": "2019-01-22 16:37:40.898",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 5 processing : Number 1",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 15:22:04.675",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 5 processing : Number 1\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170495468_743178040",
+      "id": "20190122-152135_1664805664",
+      "dateCreated": "2019-01-22 15:21:35.468",
+      "dateStarted": "2019-01-22 15:22:04.686",
+      "dateFinished": "2019-01-22 15:22:04.723",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Events avg tone between actors\nevents.createOrReplaceTempView(\"events\")\nval query_tone_actors_daily \u003d \"SELECT  Actor1Name, Actor2Name, SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1Name, Actor2Name, SQLDATE Order by  SQLDATE ASC \"\nval df_tone_actors_daily\u003d sqlContext.sql(query_tone_actors_daily).filter(($\"Actor1Name\" !\u003d\u003d \"\") \u0026\u0026 ($\"Actor2Name\" !\u003d\u003d \"\") )",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:39.486",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "query_tone_actors_daily: String \u003d \"SELECT  Actor1Name, Actor2Name, SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1Name, Actor2Name, SQLDATE Order by  SQLDATE ASC \"\nwarning: there were two deprecation warnings; re-run with -deprecation for details\ndf_tone_actors_daily: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Actor1Name: string, Actor2Name: string ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170503330_-270820041",
+      "id": "20190122-152143_980315696",
+      "dateCreated": "2019-01-22 15:21:43.330",
+      "dateStarted": "2019-01-22 16:37:39.750",
+      "dateFinished": "2019-01-22 16:37:44.019",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Query 5 processing : Number 2",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:03:22.706",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eQuery 5 processing : Number 2\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170519363_742032736",
+      "id": "20190122-152159_906663149",
+      "dateCreated": "2019-01-22 15:21:59.363",
+      "dateStarted": "2019-01-22 16:03:22.717",
+      "dateFinished": "2019-01-22 16:03:22.753",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val query_tone_country_daily \u003d \"SELECT  Actor1CountryName , Actor2CountryName , SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1CountryName, Actor2CountryName, SQLDATE Order by  SQLDATE ASC\"\nval df_tone_country_daily \u003d sqlContext.sql(query_tone_country_daily).filter(($\"Actor1CountryName\" !\u003d\u003d \"\") \u0026\u0026 ($\"Actor2CountryName\" !\u003d\u003d \"\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:37:42.788",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "query_tone_country_daily: String \u003d SELECT  Actor1CountryName , Actor2CountryName , SQLDATE, AVG(AvgTone) as DailyAvgTone FROM events Group by Actor1CountryName, Actor2CountryName, SQLDATE Order by  SQLDATE ASC\nwarning: there were two deprecation warnings; re-run with -deprecation for details\ndf_tone_country_daily: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Actor1CountryName: string, Actor2CountryName: string ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170562639_1630329756",
+      "id": "20190122-152242_763239087",
+      "dateCreated": "2019-01-22 15:22:42.640",
+      "dateStarted": "2019-01-22 16:37:43.113",
+      "dateFinished": "2019-01-22 16:37:46.291",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md # Cassandra",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:03:31.225",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eCassandra\u003c/h1\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548170587772_181143000",
+      "id": "20190122-152307_1566105733",
+      "dateCreated": "2019-01-22 15:23:07.772",
+      "dateStarted": "2019-01-22 16:03:20.212",
+      "dateFinished": "2019-01-22 16:03:20.264",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import com.datastax.spark.connector._\nimport org.apache.spark.sql.cassandra._\nimport com.datastax.spark.connector.cql._ //(Optional) Imports java driver helper functions",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 17:13:27.244",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import com.datastax.spark.connector._\nimport org.apache.spark.sql.cassandra._\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548172737277_670681163",
+      "id": "20190122-155857_241242202",
+      "dateCreated": "2019-01-22 15:58:57.277",
+      "dateStarted": "2019-01-22 16:37:47.605",
+      "dateFinished": "2019-01-22 16:37:48.391",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val c \u003d CassandraConnector(sc.getConf)\nc.withSessionDo ( session \u003d\u003e session.execute(\"CREATE KEYSPACE tone_actors_daily WITH replication\u003d{\u0027class\u0027:\u0027SimpleStrategy\u0027, \u0027replication_factor\u0027:1}\"))\nc.withSessionDo ( session \u003d\u003e session.execute(\"CREATE TABLE tone_actors_daily.test_1 (k int PRIMARY KEY, v int)\"))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 16:59:19.136",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "c: com.datastax.spark.connector.cql.CassandraConnector \u003d com.datastax.spark.connector.cql.CassandraConnector@169c4a40\ncom.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace tone_actors_daily already exists\n  at com.datastax.driver.core.exceptions.AlreadyExistsException.copy(AlreadyExistsException.java:111)\n  at com.datastax.driver.core.DriverThrowables.propagateCause(DriverThrowables.java:37)\n  at com.datastax.driver.core.DefaultResultSetFuture.getUninterruptibly(DefaultResultSetFuture.java:245)\n  at com.datastax.driver.core.AbstractSession.execute(AbstractSession.java:68)\n  at com.datastax.driver.core.AbstractSession.execute(AbstractSession.java:43)\n  at sun.reflect.GeneratedMethodAccessor292.invoke(Unknown Source)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at com.datastax.spark.connector.cql.SessionProxy.invoke(SessionProxy.scala:37)\n  at com.sun.proxy.$Proxy81.execute(Unknown Source)\n  at sun.reflect.GeneratedMethodAccessor292.invoke(Unknown Source)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at com.datastax.spark.connector.cql.SessionProxy.invoke(SessionProxy.scala:37)\n  at com.sun.proxy.$Proxy82.execute(Unknown Source)\n  at $anonfun$1.apply(\u003cconsole\u003e:56)\n  at $anonfun$1.apply(\u003cconsole\u003e:56)\n  at com.datastax.spark.connector.cql.CassandraConnector$$anonfun$withSessionDo$1.apply(CassandraConnector.scala:112)\n  at com.datastax.spark.connector.cql.CassandraConnector$$anonfun$withSessionDo$1.apply(CassandraConnector.scala:111)\n  at com.datastax.spark.connector.cql.CassandraConnector.closeResourceAfterUse(CassandraConnector.scala:145)\n  at com.datastax.spark.connector.cql.CassandraConnector.withSessionDo(CassandraConnector.scala:111)\n  ... 62 elided\nCaused by: com.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace tone_actors_daily already exists\n  at com.datastax.driver.core.exceptions.AlreadyExistsException.copy(AlreadyExistsException.java:130)\n  at com.datastax.driver.core.Responses$Error.asException(Responses.java:140)\n  at com.datastax.driver.core.DefaultResultSetFuture.onSet(DefaultResultSetFuture.java:179)\n  at com.datastax.driver.core.RequestHandler.setFinalResult(RequestHandler.java:177)\n  at com.datastax.driver.core.RequestHandler.access$2500(RequestHandler.java:46)\n  at com.datastax.driver.core.RequestHandler$SpeculativeExecution.setFinalResult(RequestHandler.java:799)\n  at com.datastax.driver.core.RequestHandler$SpeculativeExecution.onSet(RequestHandler.java:633)\n  at com.datastax.driver.core.Connection$Dispatcher.channelRead0(Connection.java:1070)\n  at com.datastax.driver.core.Connection$Dispatcher.channelRead0(Connection.java:993)\n  at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)\n  at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1359)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:935)\n  at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollInReady(AbstractEpollStreamChannel.java:801)\n  at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:404)\n  at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:304)\n  at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)\n  at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)\n  ... 1 more\nCaused by: com.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace tone_actors_daily already exists\n  at com.datastax.driver.core.Responses$Error$1.decode(Responses.java:85)\n  at com.datastax.driver.core.Responses$Error$1.decode(Responses.java:37)\n  at com.datastax.driver.core.Message$ProtocolDecoder.decode(Message.java:289)\n  at com.datastax.driver.core.Message$ProtocolDecoder.decode(Message.java:269)\n  at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:88)\n  ... 18 more\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548173203759_1562135838",
+      "id": "20190122-160643_1930092285",
+      "dateCreated": "2019-01-22 16:06:43.760",
+      "dateStarted": "2019-01-22 16:59:19.227",
+      "dateFinished": "2019-01-22 16:59:20.436",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_tone_actors_daily.createCassandraTable(\n   \"tone_actors_daily\",\n   \"test_1\",\n   partitionKeyColumns \u003d Some(Seq(\"Actor1Name\",\"Actor2Name\")),\n   clusteringKeyColumns \u003d Some(Seq(\"SQLDATE\")))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 17:13:15.096",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1548172827370_439404935",
+      "id": "20190122-160027_594923435",
+      "dateCreated": "2019-01-22 16:00:27.371",
+      "dateStarted": "2019-01-22 16:59:34.658",
+      "dateFinished": "2019-01-22 16:59:37.565",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_tone_actors_daily.write.cassandraFormat(\"test_1\", \"tone_actors_daily\").save()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-22 17:00:10.625",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d10",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d11",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d12",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d13",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d14",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d16",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d17",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d18",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d15",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d19",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d20",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d21",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d22",
+            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d23"
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1548176393734_1628722014",
+      "id": "20190122-165953_497721390",
+      "dateCreated": "2019-01-22 16:59:53.734",
+      "dateStarted": "2019-01-22 17:00:10.721",
+      "dateFinished": "2019-01-22 17:09:48.181",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548176274371_14709147",
+      "id": "20190122-165754_162859065",
+      "dateCreated": "2019-01-22 16:57:54.371",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "gdeltDatasetEngineering_PP",
+  "id": "2E4E4Q6WY",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "md:shared_process": [],
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
