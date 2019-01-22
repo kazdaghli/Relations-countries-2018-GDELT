@@ -1,0 +1,6 @@
+CODE	LABEL
+1	Country
+2	UsState
+3	UsCity
+4	WorldCity
+5	WorldState
