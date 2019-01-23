@@ -87,16 +87,17 @@
     {
       "text": "%angular\n\u003ch3\u003eImport Highcharts library\u003c/h3\u003e\n\u003cscript src\u003d\"https://code.highcharts.com/maps/modules/map.js\"\u003e\u003c/script\u003e\n\u003cscript src\u003d\"https://code.highcharts.com/mapdata/custom/world-lowres.js\"\u003e\u003c/script\u003e\n\u003cscript src\u003d\"https://code.highcharts.com/modules/exporting.js\"\u003e\u003c/script\u003e\n\u003cscript src\u003d\"https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js\"\u003e\u003c/script\u003e\n\u003cscript\u003e\n\n// Add the background image to the container\nHighcharts.wrap(Highcharts.Chart.prototype, \u0027getContainer\u0027, function (proceed) {\n\tproceed.call(this);\n\tthis.container.style.background \u003d\n\t\t\u0027url(http://www.highcharts.com/samples/graphics/sand.png)\u0027;\n});\n\nHighcharts.theme \u003d {\n\tcolors: [\u0027#f45b5b\u0027, \u0027#8085e9\u0027, \u0027#8d4654\u0027, \u0027#7798BF\u0027, \u0027#aaeeee\u0027,\n\t\t\u0027#ff0066\u0027, \u0027#eeaaee\u0027, \u0027#55BF3B\u0027, \u0027#DF5353\u0027, \u0027#7798BF\u0027, \u0027#aaeeee\u0027],\n\tchart: {\n\t\tbackgroundColor: null,\n\t\tstyle: {\n\t\t\tfontFamily: \u0027Signika, serif\u0027\n\t\t}\n\t},\n\ttitle: {\n\t\tstyle: {\n\t\t\tcolor: \u0027black\u0027,\n\t\t\tfontSize: \u002716px\u0027,\n\t\t\tfontWeight: \u0027bold\u0027\n\t\t}\n\t},\n\tsubtitle: {\n\t\tstyle: {\n\t\t\tcolor: \u0027black\u0027\n\t\t}\n\t},\n\ttooltip: {\n\t\tborderWidth: 0\n\t},\n\tlegend: {\n\t\titemStyle: {\n\t\t\tfontWeight: \u0027bold\u0027,\n\t\t\tfontSize: \u002713px\u0027\n\t\t}\n\t},\n\txAxis: {\n\t\tlabels: {\n\t\t\tstyle: {\n\t\t\t\tcolor: \u0027#6e6e70\u0027\n\t\t\t}\n\t\t}\n\t},\n\tyAxis: {\n\t\tlabels: {\n\t\t\tstyle: {\n\t\t\t\tcolor: \u0027#6e6e70\u0027\n\t\t\t}\n\t\t}\n\t},\n\tplotOptions: {\n\t\tseries: {\n\t\t\tshadow: true\n\t\t},\n\t\tcandlestick: {\n\t\t\tlineColor: \u0027#404048\u0027\n\t\t},\n\t\tmap: {\n\t\t\tshadow: false\n\t\t}\n\t},\n\n\t// Highstock specific\n\tnavigator: {\n\t\txAxis: {\n\t\t\tgridLineColor: \u0027#D0D0D8\u0027\n\t\t}\n\t},\n\trangeSelector: {\n\t\tbuttonTheme: {\n\t\t\tfill: \u0027white\u0027,\n\t\t\tstroke: \u0027#C0C0C8\u0027,\n\t\t\t\u0027stroke-width\u0027: 1,\n\t\t\tstates: {\n\t\t\t\tselect: {\n\t\t\t\t\tfill: \u0027#D0D0D8\u0027\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t},\n\tscrollbar: {\n\t\ttrackBorderColor: \u0027#C0C0C8\u0027\n\t},\n\n\t// General\n\tbackground2: \u0027#E0E0E8\u0027\n\n};\n\n// Apply the theme\nHighcharts.setOptions(Highcharts.theme);\n\u003c/script\u003e",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 14:57:17.684",
+      "dateUpdated": "2019-01-23 16:06:11.579",
       "config": {
-        "tableHide": true,
+        "tableHide": false,
         "editorSetting": {
           "language": "text",
-          "editOnDblClick": true
+          "editOnDblClick": true,
+          "completionSupport": false
         },
         "colWidth": 12.0,
         "editorMode": "ace/mode/undefined",
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true,
         "fontSize": 9.0
@@ -118,8 +119,9 @@
       "jobName": "paragraph_1548165430421_839221822",
       "id": "20171226-120644_1309894606",
       "dateCreated": "2019-01-22 14:57:10.421",
-      "status": "READY",
-      "errorMessage": "",
+      "dateStarted": "2019-01-23 16:06:11.580",
+      "dateFinished": "2019-01-23 16:06:11.584",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -198,9 +200,9 @@
     {
       "text": "%angular\n\u003cform id\u003d\"filters\"\u003e\n    \u003cdiv class\u003d\"row form-group\"\u003e\n        \u003clabel for\u003d\"date_mode\" class\u003d\"col-sm-2 col-form-label\"\u003eMode: \u003c/label\u003e\n        \u003cdiv class\u003d\"col-sm-3\"\u003e\n            \u003cselect id\u003d\"date_mode\" class\u003d\"form-control\" ng-model\u003d\"date_mode\"\u003e\n            \u003coption value\u003d\"-1\" ng-selected\u003d-1\u003eSELECT DATE MODE:\u003c/option\u003e\n            \u003coption value\u003d\"1\"\u003eDAY\u003c/option\u003e\n            \u003coption value\u003d\"2\"\u003eMONTH\u003c/option\u003e\n            \u003c/select\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n    \u003cdiv id\u003d\"div_month\" class\u003d\"row form-group\" style\u003d\"display:none\"\u003e\n        \u003clabel for\u003d\"date_month\" class\u003d\"col-sm-2 col-form-label\"\u003eMonth: \u003c/label\u003e\n        \u003cdiv class\u003d\"col-sm-3\"\u003e\n            \u003cinput id\u003d\"date_month\" type\u003d\"month\" class\u003d\"form-control\" ng-model\u003d\"date_month\"/\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n    \u003cdiv id\u003d\"div_day\" class\u003d\"row form-group\"\u003e\n        \u003clabel for\u003d\"date_day\" class\u003d\"col-sm-2 col-form-label\"\u003eDate: \u003c/label\u003e\n        \u003cdiv class\u003d\"col-sm-3\"\u003e\n            \u003cinput id\u003d\"date_day\" type\u003d\"date\" class\u003d\"form-control\" ng-model\u003d\"date_day\"/\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n    \u003cdiv class\u003d\"row form-group\"\u003e\n        \u003clabel for\u003d\"event_code_filter\" class\u003d\"col-sm-2 col-form-label\"\u003eEventRootCode: \u003c/label\u003e\n        \u003cdiv class\u003d\"col-sm-4\"\u003e\n            \u003cselect id\u003d\"event_code_filter\" class\u003d\"form-control\" ng-model\u003d\"event_code_filter\"\u003e\n            \u003c/select\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n    \u003cinput id\u003d\"date_month_parsed\" type\u003d\"text\" class\u003d\"form-control\" ng-model\u003d\"date_month_parsed\" style\u003d\"display:none\"/\u003e\n    \u003cinput id\u003d\"date_day_parsed\" type\u003d\"text\" class\u003d\"form-control\" ng-model\u003d\"date_day_parsed\" style\u003d\"display:none\"/\u003e\n    \u003cbutton type\u003d\"submit\" class\u003d\"btn btn-primary\" ng-click\u003d\"z.angularBind(\u0027date_mode\u0027,date_mode,\u002720171223-131255_1307712631\u0027);z.angularBind(\u0027date_day_parsed\u0027,date_day_parsed,\u002720171223-131255_1307712631\u0027);z.angularBind(\u0027date_month_parsed\u0027,date_month_parsed,\u002720171223-131255_1307712631\u0027);z.angularBind(\u0027event_code_filter\u0027,event_code_filter,\u002720171223-131255_1307712631\u0027);z.runParagraph(\u002720171223-131139_365208091\u0027);z.runParagraph(\u002720171223-131255_1307712631\u0027);z.runParagraph(\u002720171227-155110_1278707108\u0027)\"\u003eLoad Data\u003c/button\u003e\n\u003c/form\u003e\n\n\u003cscript\u003e\n    function getEventCodeList(){\n        var json_text\u003dJSON.parse($(\"#event_code_list\").text())\n        $(\u0027#event_code_filter\u0027).find(\u0027option\u0027).remove()\n        $(\u0027#event_code_filter\u0027).append($(\u0027\u003coption\u003e\u0027, {\n                value: -1,\n                text: \"SELECT EVENT TYPE:\",\n                selected: \"selected\"\n            }));\n        for (i \u003d 0; i \u003c json_text.length; i++){\n            $(\u0027#event_code_filter\u0027).append($(\u0027\u003coption\u003e\u0027, {\n                value: json_text[i].values[0],\n                text: json_text[i].values[1]\n            }));\n        }\n    }\n\n    $(\"#event_code_filter\").focus(function(){getEventCodeList()})\n    $(\"#date_mode\").click(function(){\n        if ($(\"#date_mode\").val()\u003d\u003d\u003d\"2\"){\n            $(\"#div_day\").hide()\n            $(\"#div_month\").show()\n        }else{\n            $(\"#div_day\").show()\n            $(\"#div_month\").hide()\n        }\n    })\n     \n    $(\"#date_day\").change(function(){\n        var scope \u003d angular.element($(this)).scope();\n        scope.$apply(function(){\n            scope.date_day_parsed \u003d $(\"#date_day\").val().replace(/-/g,\"\");\n        })\n    })\n    \n    $(\"#date_month\").change(function(){\n        var scope \u003d angular.element($(this)).scope();\n        scope.$apply(function(){\n            scope.date_month_parsed \u003d $(\"#date_month\").val().substr(0,7).replace(/-/g,\"\");\n        })        \n    })    \n    \n\u003c/script\u003e",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 16:39:53.531",
+      "dateUpdated": "2019-01-23 16:22:23.070",
       "config": {
-        "tableHide": true,
+        "tableHide": false,
         "editorSetting": {
           "language": "text",
           "editOnDblClick": true,
@@ -230,8 +232,9 @@
       "jobName": "paragraph_1548165430421_970127730",
       "id": "20180107-011603_997728817",
       "dateCreated": "2019-01-22 14:57:10.421",
-      "status": "READY",
-      "errorMessage": "",
+      "dateStarted": "2019-01-23 16:06:16.818",
+      "dateFinished": "2019-01-23 16:06:16.822",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -743,18 +746,20 @@
     {
       "text": "%angular\n\u003cbutton type\u003d\"submit\" class\u003d\"btn btn-primary\" ng-click\u003d\"z.runParagraph(\u002720171226-120644_1309894606\u0027)\"\u003eLoad Library\u003c/button\u003e\n\u003cbutton type\u003d\"submit\" class\u003d\"btn btn-primary btn-success\" onclick\u003d\"carto_impact();\" ng-click\u003d\"z.runParagraph(\u002720171227-105616_236604505\u0027);z.runParagraph(\u002720171226-215110_1953155161\u0027)\"\u003eShow Results\u003c/button\u003e\n\u003cscript\u003e\n// Prepare demo data\n// Data is joined to map using value of \u0027hc-key\u0027 property by default.\n// See API docs for \u0027joinBy\u0027 for more info on linking data and map.\nfunction carto_impact(){\n        var json_text\u003dJSON.parse($(\"#country_impact\").text())\n        var data_map \u003d new Array();\n        var data_line \u003d new Array();\n        var origin\u003d$(\"#event_country_code\").text()\n\n        for (i \u003d 0; i \u003c json_text.length; i++){\n            data_map.push(new Array(2))\n            data_line.push({})\n            data_map[i][0] \u003d json_text[i].values[0];\n            data_map[i][1] \u003d json_text[i].values[3];\n            data_line[i][\"id\"] \u003d json_text[i].values[0];\n            data_line[i][\"lat\"] \u003d json_text[i].values[1];\n            data_line[i][\"lon\"] \u003d json_text[i].values[2];\n            data_line[i][\"count\"] \u003d json_text[i].values[3];\n        }\ndata\u003ddata_map\n//console.log(data_line)\n// Create the data\nHighcharts.mapChart(\u0027container-impact\u0027, {\n    chart: {\n        map: \u0027custom/world-lowres\u0027,\n    },\n    \n    credits:false,\n\n    title: {\n        text: \u0027Impact on countries\u0027\n    },\n\n    subtitle: {\n        text: \u0027Source map: \u003ca href\u003d\"http://code.highcharts.com/mapdata/custom/world-lowres.js\"\u003eWorld, Miller projection, low resolution\u003c/a\u003e\u0027\n    },\n\n    mapNavigation: {\n        enabled: true,\n        buttonOptions: {\n            verticalAlign: \u0027bottom\u0027\n        },\n        enableMouseWheelZoom: false\n    },\n\n    colorAxis: {\n        min: 1,\n        type: \u0027logarithmic\u0027,\n        minColor: \u0027#ffe6e6\u0027,\n        maxColor: \u0027#b30000\u0027,\n    },\n\n    series: [{\n        cursor: \u0027pointer\u0027,\n        data: data,\n        joinBy: [\u0027iso-a2\u0027, \"hc-key\"],\n        name: \u0027Impacted country\u0027,\n        borderColor: \u0027black\u0027,\n        borderWidth: 0.2,\n        states: {\n            hover: {\n                color: \u0027#BADA55\u0027,\n                borderWidth: 1\n            },\n        },\n        dataLabels: {\n            enabled: true,\n            format: \u0027{point.name}\u0027\n        }\n    },\n    {\n        // Specify points using lat/lon\n        type: \u0027mappoint\u0027,\n        name: \u0027Countries\u0027,\n        visible: false,\n        color: Highcharts.getOptions().colors[1],\n        data: data_line\n    } \n    ],\n\n});\n\nfunction getlinewidth(nb) {\n    var nb \u003d parseInt(nb)\n    return 1 + Math.log(nb)/2\n  }\n\nvar chart\u003d$(\u0027#container-impact\u0027).highcharts()\norigin_point\u003dchart.get(origin)\n\nvar destinations\u003d[]\nfor (i \u003d 0; i\u003cchart.series[1].data.length;i++){\n    var line\u003dchart.series[1].data[i]\n    if (line.id!\u003d\u003dorigin){\n        destination\u003d{}\n        destination[\"id\"]\u003dline.id\n        destination[\"path\"]\u003dpointsToPath(origin_point,line)\n        destination[\"lineWidth\"]\u003dgetlinewidth(line.count)\n        destination[\"color\"]\u003dHighcharts.getOptions().colors[1]\n        destinations.push(destination)\n    }\n}\n\nfunction pointsToPath(from, to, invertArc) {\n/*    var arcPointX \u003d (from.x + to.x) / (invertArc ? 0 : 2),\n        arcPointY \u003d (from.y + to.y) / (invertArc ? 0 : 2);*/\nvar arcPointX \u003d ((from.x + to.x) * 1.05) / 2,\n  arcPointY \u003d ((from.y + to.y) * 1.05) / 2;\nreturn \u0027M\u0027 + from.x + \u0027,\u0027 + from.y + \u0027Q\u0027 + arcPointX + \u0027 \u0027 + arcPointY + \u0027,\u0027 + to.x + \u0027 \u0027 + to.y;\n}\n\nchart.addSeries({\n  name: \u0027Impact\u0027,\n  type: \u0027mapline\u0027,\n  data: destinations,\n  visible: true,\n});\n\n}\n\u003c/script\u003e\n",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 14:57:10.423",
+      "dateUpdated": "2019-01-23 16:05:53.342",
       "config": {
         "tableHide": false,
         "editorSetting": {
           "language": "text",
-          "editOnDblClick": true
+          "editOnDblClick": true,
+          "completionSupport": false
         },
         "colWidth": 12.0,
         "editorMode": "ace/mode/undefined",
         "editorHide": true,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "fontSize": 9.0
       },
       "settings": {
         "params": {},
@@ -773,25 +778,28 @@
       "jobName": "paragraph_1548165430423_742347974",
       "id": "20171227-002843_1377096364",
       "dateCreated": "2019-01-22 14:57:10.423",
-      "status": "READY",
-      "errorMessage": "",
+      "dateStarted": "2019-01-23 16:05:53.342",
+      "dateFinished": "2019-01-23 16:05:55.640",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%angular\n\u003cdiv id\u003d\"container-impact\" style\u003d\"min-height:550px\"\u003e\u003c/div\u003e",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 14:57:10.423",
+      "dateUpdated": "2019-01-23 16:05:47.120",
       "config": {
         "tableHide": false,
         "editorSetting": {
           "language": "text",
-          "editOnDblClick": true
+          "editOnDblClick": true,
+          "completionSupport": false
         },
         "colWidth": 8.0,
         "editorMode": "ace/mode/undefined",
         "editorHide": true,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "fontSize": 9.0
       },
       "settings": {
         "params": {},
@@ -817,12 +825,14 @@
     {
       "text": "%sql\nselect Actor, count(*) as nb_mentions\nfrom event_actors\ngroup by Actor\norder by count(*) desc, Actor",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 14:57:14.026",
+      "dateUpdated": "2019-01-23 16:02:39.662",
       "config": {
         "tableHide": false,
         "editorSetting": {
           "language": "sql",
-          "editOnDblClick": true
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
         },
         "colWidth": 4.0,
         "editorMode": "ace/mode/sql",
@@ -885,7 +895,7 @@
     {
       "text": "%sql\nselect GLOBALEVENTID,date,MentionIdentifier,Confidence from mentions_details\nwhere confidence \u003e\u003d ${confidence\u003d0}\norder by date desc",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 14:57:14.145",
+      "dateUpdated": "2019-01-23 16:02:17.647",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -894,7 +904,7 @@
         },
         "colWidth": 12.0,
         "editorMode": "ace/mode/sql",
-        "editorHide": true,
+        "editorHide": false,
         "results": {
           "0": {
             "graph": {
@@ -963,7 +973,7 @@
     {
       "text": "%angular\n\u003cstyle\u003e\n.video {height: 600px}\n.video img {position: absolute; display: block; right: 0; left: 0; width: 800px; height: 600px; z-index: 20; cursor: pointer; margin:auto }\n.video:after { content: \"\"; position: absolute; display: block; \n    background: url(play-button.png) no-repeat 0 0; \n    top: 45%; left: 45%; width: 46px; height: 36px; z-index: 30; cursor: pointer; } \n.video iframe { position: absolute; right: 0; left: 0; width: 800px; height: 600px; margin:auto }\n \n/* image poster clicked, player class added using js */\n.video.player img { display: none; }\n.video.player:after { display: none; }\n\u003c/style\u003e\n\n\u003ccenter\u003e\n\u003cdiv class\u003d\"video\"\u003e\n    \u003cimg src\u003d\"https://decemberprojects.files.wordpress.com/2012/12/the-end.jpeg\"\u003e\n    \u003c!--\u003ciframe  src\u003d\"https://www.youtube.com/embed/KdKkRRf5uE8?rel\u003d0\u0026amp;showinfo\u003d0\u0026autoplay\u003d1\" frameborder\u003d\"0\" gesture\u003d\"media\" allow\u003d\"encrypted-media\" allowfullscreen \u003e\u003c/iframe\u003e--\u003e\n\u003c/div\u003e\n\u003c/center\u003e\n\n\n\n\u003cscript\u003e\n$(function() { \n    var videos  \u003d $(\".video\");\n \n        videos.on(\"click\", function(){\n            var elm \u003d $(this),\n                conts   \u003d elm.contents(),\n                le      \u003d conts.length,\n                ifr     \u003d null;\n \n            for(var i \u003d 0; i\u003cle; i++){\n              if(conts[i].nodeType \u003d\u003d 8) ifr \u003d conts[i].textContent;\n            }\n \n            elm.addClass(\"player\").html(ifr);\n            elm.off(\"click\");\n        });\n});\n\u003c/script\u003e",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 14:57:10.424",
+      "dateUpdated": "2019-01-23 16:01:12.852",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -972,9 +982,10 @@
         },
         "colWidth": 12.0,
         "editorMode": "ace/mode/undefined",
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "fontSize": 9.0
       },
       "settings": {
         "params": {},
@@ -1047,28 +1058,71 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "\u003ciframe src\u003d\"https://localhost:8090/#/notebook/2DZVW5CBG/paragraph/20190123-140317_1194933934?asIframe\" height\u003d\"\" width\u003d\"\" \u003e\u003c/iframe\u003e",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 14:57:10.424",
+      "dateUpdated": "2019-01-23 15:58:35.400",
       "config": {
         "tableHide": false,
         "editorSetting": {
-          "language": "scala"
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
         },
         "colWidth": 12.0,
         "editorMode": "ace/mode/scala",
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "fontSize": 9.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res91: scala.xml.Elem \u003d \u003ciframe src\u003d\"https://localhost:8090/#/notebook/2DZVW5CBG/paragraph/20190123-140317_1194933934?asIframe\" height\u003d\"\" width\u003d\"\"\u003e\u003c/iframe\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548165430424_-1413455783",
+      "id": "20171230-113805_689360875",
+      "dateCreated": "2019-01-22 14:57:10.424",
+      "dateStarted": "2019-01-23 15:58:35.423",
+      "dateFinished": "2019-01-23 15:58:35.836",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-23 15:59:07.430",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
       },
       "settings": {
         "params": {},
         "forms": {}
       },
       "apps": [],
-      "jobName": "paragraph_1548165430424_-1413455783",
-      "id": "20171230-113805_689360875",
-      "dateCreated": "2019-01-22 14:57:10.424",
+      "jobName": "paragraph_1548255178073_1340364855",
+      "id": "20190123-155258_1551931043",
+      "dateCreated": "2019-01-23 15:52:58.073",
       "status": "READY",
-      "errorMessage": "",
       "progressUpdateIntervalMs": 500
     }
   ],
@@ -1079,7 +1133,8 @@
   "angularObjects": {
     "md:shared_process": [],
     "angular:shared_process": [],
-    "spark:shared_process": []
+    "spark:shared_process": [],
+    "cassandra:shared_process": []
   },
   "config": {
     "isZeppelinNotebookCronEnable": false

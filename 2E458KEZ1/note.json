@@ -117,7 +117,7 @@
     {
       "text": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\n\n\ndef RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n       case (name: String, content: PortableDataStream) \u003d\u003e\n          val zis \u003d new ZipInputStream(content.open)\n          Stream.continually(zis.getNextEntry).\n                takeWhile(_ !\u003d null).\n                flatMap { _ \u003d\u003e\n                    val br \u003d new BufferedReader(new InputStreamReader(zis))\n                    Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                }\n    }\n    return resultRDD\n}\n// Export Events\nval eventsRDD \u003d RDDDownloader(\"/Users/weijia/Documents/Nosql/GDELTData/translation/events/*.export.CSV.zip\")\nval mentionsRDD \u003d RDDDownloader(\"/Users/weijia/Documents/Nosql/GDELTData/translation/mentions/*.CSV.zip\")\nval gkgRDD \u003d RDDDownloader(\"/Users/weijia/Documents/Nosql/GDELTData/translation/gkg/*.csv.zip\")\n\n",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:06:36.946",
+      "dateUpdated": "2019-01-23 11:37:27.395",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -140,7 +140,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\nRDDDownloader: (fileName: String)org.apache.spark.rdd.RDD[String]\neventsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[1442] at flatMap at \u003cconsole\u003e:107\nmentionsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[1444] at flatMap at \u003cconsole\u003e:107\ngkgRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[1446] at flatMap at \u003cconsole\u003e:107\n"
+            "data": "import org.apache.spark.input.PortableDataStream\nimport java.util.zip.ZipInputStream\nimport java.io.BufferedReader\nimport java.io.InputStreamReader\nRDDDownloader: (fileName: String)org.apache.spark.rdd.RDD[String]\neventsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[1] at flatMap at \u003cconsole\u003e:33\nmentionsRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[3] at flatMap at \u003cconsole\u003e:33\ngkgRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[5] at flatMap at \u003cconsole\u003e:33\n"
           }
         ]
       },
@@ -148,15 +148,15 @@
       "jobName": "paragraph_1547908115416_-776659505",
       "id": "20171217-232457_1732696781",
       "dateCreated": "2019-01-19 15:28:35.416",
-      "dateStarted": "2019-01-22 12:06:36.968",
-      "dateFinished": "2019-01-22 12:06:38.986",
+      "dateStarted": "2019-01-23 11:37:27.432",
+      "dateFinished": "2019-01-23 11:37:36.186",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "val cachedEvents \u003d eventsRDD.cache // RDD\nval cachedMentions \u003d mentionsRDD.cache\nval cachedGKG \u003d gkgRDD.cache",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:06:40.332",
+      "dateUpdated": "2019-01-23 11:37:41.044",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -179,7 +179,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "cachedEvents: eventsRDD.type \u003d MapPartitionsRDD[1442] at flatMap at \u003cconsole\u003e:107\ncachedMentions: mentionsRDD.type \u003d MapPartitionsRDD[1444] at flatMap at \u003cconsole\u003e:107\ncachedGKG: gkgRDD.type \u003d MapPartitionsRDD[1446] at flatMap at \u003cconsole\u003e:107\n"
+            "data": "cachedEvents: eventsRDD.type \u003d MapPartitionsRDD[1] at flatMap at \u003cconsole\u003e:33\ncachedMentions: mentionsRDD.type \u003d MapPartitionsRDD[3] at flatMap at \u003cconsole\u003e:33\ncachedGKG: gkgRDD.type \u003d MapPartitionsRDD[5] at flatMap at \u003cconsole\u003e:33\n"
           }
         ]
       },
@@ -187,15 +187,15 @@
       "jobName": "paragraph_1547908115417_-1938566460",
       "id": "20190107-102856_946427568",
       "dateCreated": "2019-01-19 15:28:35.417",
-      "dateStarted": "2019-01-22 12:06:40.356",
-      "dateFinished": "2019-01-22 12:06:41.238",
+      "dateStarted": "2019-01-23 11:37:41.083",
+      "dateFinished": "2019-01-23 11:37:41.593",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "case class Event(GLOBALEVENTID: Int,\nSQLDATE: String,\nMonthYear: String,\nYear: Int,\nFractionDate: Double,\nActor1Code: String,\nActor1Name: String,\nActor1CountryCode: String,\nActor1KnownGroupCode: String,\nActor1EthnicCode: String,\nActor1Religion1Code: String,\nActor1Religion2Code: String,\nActor1Type1Code: String,\nActor1Type2Code: String,\nActor1Type3Code: String,\nActor2Code: String,\nActor2Name: String,\nActor2CountryCode: String,\nActor2KnownGroupCode: String,\nActor2EthnicCode: String,\nActor2Religion1Code: String,\nActor2Religion2Code: String,\nActor2Type1Code: String,\nActor2Type2Code: String,\nActor2Type3Code: String,\nIsRootEvent: Int,\nEventCode: String,\nEventBaseCode: String,\nEventRootCode: String,\nQuadClass: Int,\nGoldsteinScale: Double,\nNumMentions: Int,\nNumSources: Int,\nNumArticles: Int,\nAvgTone: Double,\nActor1Geo_Type: Int,\nActor1Geo_FullName: String,\nActor1Geo_CountryCode: String,\nActor1Geo_ADM1Code: String,\nActor1Geo_ADM2Code: String,\nActor1Geo_Lat: Double,\nActor1Geo_Long: Double,\nActor1Geo_FeatureID: String,\nActor2Geo_Type: Int,\nActor2Geo_FullName: String,\nActor2Geo_CountryCode: String,\nActor2Geo_ADM1Code: String,\nActor2Geo_ADM2Code: String,\nActor2Geo_Lat: Double,\nActor2Geo_Long: Double,\nActor2Geo_FeatureID: String,\nActionGeo_Type: Int,\nActionGeo_FullName: String,\nActionGeo_CountryCode: String,\nActionGeo_ADM1Code: String,\nActionGeo_ADM2Code: String,\nActionGeo_Lat: Double,\nActionGeo_Long: Double,\nActionGeo_FeatureID: String,\nDATEADDED: String,\nSOURCEURL: String)",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:06:42.226",
+      "dateUpdated": "2019-01-23 11:37:42.670",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -226,15 +226,15 @@
       "jobName": "paragraph_1547908115417_1117349021",
       "id": "20190107-095023_1048093380",
       "dateCreated": "2019-01-19 15:28:35.417",
-      "dateStarted": "2019-01-22 12:06:42.252",
-      "dateFinished": "2019-01-22 12:06:42.718",
+      "dateStarted": "2019-01-23 11:37:42.719",
+      "dateFinished": "2019-01-23 11:37:43.382",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "case class Mention(GLOBALEVENTID: Int,\nEventTimeDate: String,\nMentionTimeDate: String,\nMentionType: Int,\nMentionSourceName: String,\nMentionIdentifier: String,\nSentenceID: Int,\nActor1CharOffset: Int,\nActor2CharOffset: Int,\nActionCharOffset: Int,\nInRawText: Int,\nConfidence: Int,\nMentionDocLen: Int,\nMentionDocTone: Double,\nMentionDocTranslationInfo: String)//,\n//Extras: String)",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:06:44.388",
+      "dateUpdated": "2019-01-23 11:37:45.688",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -266,15 +266,15 @@
       "jobName": "paragraph_1547908115417_380318615",
       "id": "20190109-085959_371186108",
       "dateCreated": "2019-01-19 15:28:35.417",
-      "dateStarted": "2019-01-22 12:06:44.410",
-      "dateFinished": "2019-01-22 12:06:44.768",
+      "dateStarted": "2019-01-23 11:37:45.735",
+      "dateFinished": "2019-01-23 11:37:46.063",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "case class GKG(GKGRECORDID: String,\nDATE: String,\nSourceCollectionIdentifier: Int,\nSourceCommonName: String,\nDocumentIdentifier: String,\nCounts: String,\nV2Counts: String,\nThemes: String,\nV2Themes: String,\nLocations: String,\nV2Locations: String,\nPersons: String,\nV2Persons: String,\nOrganizations: String,\nV2Organizations: String,\nV2Tone: String,\nDates: String,\nGCAM: String,\nSharingImage: String,\nRelatedImages: String,\nSocialImageEmbeds: String,\nSocialVideoEmbeds: String,\nQuotations: String,\nAllNames: String,\nAmounts: String,\nTranslationInfo: String,\nExtras: String)",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:06:46.072",
+      "dateUpdated": "2019-01-23 11:37:48.203",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -306,15 +306,15 @@
       "jobName": "paragraph_1547908115417_-1643916372",
       "id": "20190109-090309_1597622425",
       "dateCreated": "2019-01-19 15:28:35.417",
-      "dateStarted": "2019-01-22 12:06:46.094",
-      "dateFinished": "2019-01-22 12:06:46.431",
+      "dateStarted": "2019-01-23 11:37:48.241",
+      "dateFinished": "2019-01-23 11:37:48.562",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "import java.text.SimpleDateFormat\n\ndef toDouble(s : String): Double \u003d if (s.isEmpty) 0 else s.toDouble\ndef toInt(s : String): Int \u003d if (s.isEmpty) 0  else s.toInt\ndef toBigInt(s : String): BigInt \u003d if (s.isEmpty) BigInt(0) else BigInt(s)\n \nval inputFormat_ymd \u003d new SimpleDateFormat(\"yyyyMMdd\")\nval outputFormat_ymd \u003d new SimpleDateFormat(\"yyyy-MM-dd\")\n\nval inputFormat_ym \u003d new SimpleDateFormat(\"yyyyMM\")\nval outputFormat_ym \u003d new SimpleDateFormat(\"yyyy-MM\")\n\nval inputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyyMMddhhmmss\")\nval outputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyy-MM-dd hh:mm:ss\")\n    \ndef parse_date(s : String, inputFormat : SimpleDateFormat, outputFormat : SimpleDateFormat):\n    String \u003d if (s.isEmpty) s else  outputFormat.format(inputFormat.parse(s))   \n\n\ncachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDS.createOrReplaceTempView(\"events\")",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:06:48.291",
+      "dateUpdated": "2019-01-23 11:37:50.509",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -346,15 +346,15 @@
       "jobName": "paragraph_1547908115418_570001380",
       "id": "20190107-095130_1656507834",
       "dateCreated": "2019-01-19 15:28:35.418",
-      "dateStarted": "2019-01-22 12:06:48.312",
-      "dateFinished": "2019-01-22 12:06:51.538",
+      "dateStarted": "2019-01-23 11:37:50.548",
+      "dateFinished": "2019-01-23 11:37:54.818",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "val events_bis \u003d cachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDF()",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:06:51.384",
+      "dateUpdated": "2019-01-23 11:37:53.828",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -385,15 +385,15 @@
       "jobName": "paragraph_1547908115418_1012272548",
       "id": "20190115-171519_142057712",
       "dateCreated": "2019-01-19 15:28:35.418",
-      "dateStarted": "2019-01-22 12:06:51.407",
-      "dateFinished": "2019-01-22 12:06:52.367",
+      "dateStarted": "2019-01-23 11:37:53.867",
+      "dateFinished": "2019-01-23 11:37:55.464",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "\ncachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14))\n\n).toDS.createOrReplaceTempView(\"mentions\")",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:07:00.857",
+      "dateUpdated": "2019-01-23 11:37:56.225",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -420,15 +420,15 @@
       "jobName": "paragraph_1547908115418_-1851374677",
       "id": "20190109-093906_657341265",
       "dateCreated": "2019-01-19 15:28:35.418",
-      "dateStarted": "2019-01-22 12:07:00.877",
-      "dateFinished": "2019-01-22 12:07:01.605",
+      "dateStarted": "2019-01-23 11:37:56.257",
+      "dateFinished": "2019-01-23 11:37:56.746",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "val mentions_bis \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14))\n\n).toDF()",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:07:02.939",
+      "dateUpdated": "2019-01-23 11:37:57.732",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -459,8 +459,8 @@
       "jobName": "paragraph_1547908115419_206246022",
       "id": "20190115-172036_796410920",
       "dateCreated": "2019-01-19 15:28:35.419",
-      "dateStarted": "2019-01-22 12:07:02.962",
-      "dateFinished": "2019-01-22 12:07:03.649",
+      "dateStarted": "2019-01-23 11:37:57.764",
+      "dateFinished": "2019-01-23 11:37:58.218",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -560,7 +560,7 @@
     {
       "text": "//modifie\n\nimport org.apache.spark.sql.functions._\nval mentions_tri \u003d mentions_bis.select($\"GLOBALEVENTID\" , $\"MentionDocTone\", substring(col(\"MentionDocTranslationInfo\"), 7, 3).as(\"language\"))\nval joined_df \u003d events_bis.select($\"GLOBALEVENTID\", $\"MonthYear\", $\"Actor1Name\", $\"Actor2Name\",$\"Actor1Code\", $\"Actor2Code\", $\"ActionGeo_CountryCode\").join(mentions_tri, Seq(\"GLOBALEVENTID\"), \"inner\")\nval newDf1 \u003d joined_df.withColumn(\"Positive\", when( $\"MentionDocTone\"\u003e0, $\"MentionDocTone\").otherwise(0))\nval newDf2 \u003d newDf1.withColumn(\"Negative\", when( $\"MentionDocTone\"\u003c0,  $\"MentionDocTone\").otherwise(0))\nval df_actor1 \u003d newDf2.filter( \"Actor1Name !\u003d \u0027\u0027\").withColumn(\"ActorCode\", $\"Actor1Code\").withColumn(\"ActorName\", $\"Actor1Name\").drop(\"Actor1Name\").drop(\"Actor2Name\").drop(\"Actor1Code\").drop(\"Actor2Code\")\nval df_actor2 \u003d newDf2.filter( \"Actor2Name !\u003d \u0027\u0027\").withColumn(\"ActorCode\", $\"Actor2Code\").withColumn(\"ActorName\", $\"Actor2Name\").drop(\"Actor1Name\").drop(\"Actor2Name\").drop(\"Actor1Code\").drop(\"Actor2Code\")\nval df_fin \u003d df_actor1.union(df_actor2)\nval df_query3 \u003d df_fin.groupBy(\"GLOBALEVENTID\",  \"MonthYear\",  \"ActionGeo_CountryCode\", \"language\", \"ActorCode\", \"ActorName\").agg(sum(\"Positive\").as(\"Positive\"),sum(\"Negative\").as(\"Negative\"))\nprint(df_actor1.count())\nprint(df_actor2.count())\nprint(df_fin.count())",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 12:07:08.377",
+      "dateUpdated": "2019-01-23 11:38:09.116",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -579,11 +579,11 @@
         "forms": {}
       },
       "results": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "msg": [
           {
             "type": "TEXT",
-            "data": "import org.apache.spark.sql.functions._\nmentions_tri: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MentionDocTone: double ... 1 more field]\njoined_df: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MonthYear: string ... 7 more fields]\nnewDf1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MonthYear: string ... 8 more fields]\nnewDf2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MonthYear: string ... 9 more fields]\ndf_actor1: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MonthYear: string ... 7 more fields]\ndf_actor2: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MonthYear: string ... 7 more fields]\ndf_fin: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [GLOBALEVENTID: int, MonthYear: string ... 7 more fields]\ndf_query3: org.apache.spark.sql.DataFrame \u003d [GLOBALEVENTID: int, MonthYear: string ... 6 more fields]\n186713063173"
+            "data": "java.net.SocketException: Connection reset\n\tat java.net.SocketInputStream.read(SocketInputStream.java:210)\n\tat java.net.SocketInputStream.read(SocketInputStream.java:141)\n\tat java.io.BufferedInputStream.fill(BufferedInputStream.java:246)\n\tat java.io.BufferedInputStream.read1(BufferedInputStream.java:286)\n\tat java.io.BufferedInputStream.read(BufferedInputStream.java:345)\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:127)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:274)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:258)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter$4.call(RemoteInterpreter.java:233)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter$4.call(RemoteInterpreter.java:229)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.callRemoteFunction(RemoteInterpreterProcess.java:135)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:228)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:437)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:188)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:307)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n"
           }
         ]
       },
@@ -594,9 +594,9 @@
           "tooltip": "View in Spark web UI",
           "group": "spark",
           "values": [
-            "http://localhost:4040/jobs/job?id\u003d336",
-            "http://localhost:4040/jobs/job?id\u003d337",
-            "http://localhost:4040/jobs/job?id\u003d338"
+            "http://localhost:4040/jobs/job?id\u003d0",
+            "http://localhost:4040/jobs/job?id\u003d1",
+            "http://localhost:4040/jobs/job?id\u003d2"
           ],
           "interpreterSettingId": "spark"
         }
@@ -605,9 +605,10 @@
       "jobName": "paragraph_1547908115419_-1860882235",
       "id": "20190118-171131_2065275947",
       "dateCreated": "2019-01-19 15:28:35.419",
-      "dateStarted": "2019-01-22 12:07:08.400",
-      "dateFinished": "2019-01-22 12:07:18.687",
-      "status": "FINISHED",
+      "dateStarted": "2019-01-23 11:38:09.148",
+      "dateFinished": "2019-01-23 13:39:52.184",
+      "status": "ABORT",
+      "errorMessage": "java.net.SocketException: Connection reset\n\tat java.net.SocketInputStream.read(SocketInputStream.java:210)\n\tat java.net.SocketInputStream.read(SocketInputStream.java:141)\n\tat java.io.BufferedInputStream.fill(BufferedInputStream.java:246)\n\tat java.io.BufferedInputStream.read1(BufferedInputStream.java:286)\n\tat java.io.BufferedInputStream.read(BufferedInputStream.java:345)\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:127)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:274)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:258)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter$4.call(RemoteInterpreter.java:233)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter$4.call(RemoteInterpreter.java:229)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.callRemoteFunction(RemoteInterpreterProcess.java:135)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:228)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:437)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:188)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:307)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -678,21 +679,6 @@
             "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 1000 rows. Learn more about \u003cstrong\u003ezeppelin.spark.maxResult\u003c/strong\u003e\u003c/div\u003e"
           }
         ]
-      },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://localhost:4040/jobs/job?id\u003d339",
-            "http://localhost:4040/jobs/job?id\u003d340",
-            "http://localhost:4040/jobs/job?id\u003d341",
-            "http://localhost:4040/jobs/job?id\u003d342"
-          ],
-          "interpreterSettingId": "spark"
-        }
       },
       "apps": [],
       "jobName": "paragraph_1547908115419_-2077191361",
@@ -2114,21 +2100,6 @@
           }
         ]
       },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://localhost:4040/jobs/job?id\u003d498",
-            "http://localhost:4040/jobs/job?id\u003d499",
-            "http://localhost:4040/jobs/job?id\u003d500",
-            "http://localhost:4040/jobs/job?id\u003d501"
-          ],
-          "interpreterSettingId": "spark"
-        }
-      },
       "apps": [],
       "jobName": "paragraph_1548155306436_1624388317",
       "id": "20190122-120826_1449708940",
@@ -2139,9 +2110,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "df_query3.registerTempTable(\"test\")\n//z.angularBind(\"test\", \"test\")\n\ndef list(table: String, col: String) : Array[(String, String)] \u003d {\n  sqlContext.sql(\"select distinct \" + col + \" from \" + table + \" order by \" + col).collect.map(x \u003d\u003e (x(0).asInstanceOf[String], x(0).asInstanceOf[String]))\n}\n\ndef tables(): Array[(String, String)] \u003d {\n sqlContext.sql(\"show tables\").collect.map(x \u003d\u003e (x(0).asInstanceOf[String], x(0).asInstanceOf[String]))\n}\n\ndef columns(table: String) : Array[(String, String)] \u003d {\n  sqlContext.sql(\"select * from \" + table + \" limit 0\").columns.map(x \u003d\u003e (x, x))\n}\n\nval SQLDate \u003d z.select(\"SQLDate\", list(\"test\", \"MonthYear\")).asInstanceOf[String]\nval Language \u003d z.select(\"Language\", list(\"test\", \"language\")).asInstanceOf[String]\n//val Country \u003d z.select(\"Country\", list(\"test\", \"ActionGeo_CountryCode\")).asInstanceOf[String]\nval query \u003d \"select MonthYear, language, ActionGeo_CountryCode, Positive from test where language\u003d\u003d \u0027\" +  Language + \"\u0027 order by desc Positive\"\nval df \u003d sqlContext.sql(query)\nprintln(\"%table \" + df.columns.mkString(\"\\t\"))\nprintln(df.map(x \u003d\u003e x.mkString(\"\\t\")).collect().mkString(\"\\n\"))",
+      "text": "//val results \u003d sqlContext.sql(\"SELECT * from my_keyspace_name.df_query3\")\n\ndf_query3.registerTempTable(\"test\")\n\n\ndef list(table: String, col: String) : Array[(String, String)] \u003d {\n  sqlContext.sql(\"select distinct \" + col + \" from \" + table + \" order by \" + col).collect.map(x \u003d\u003e (x(0).asInstanceOf[String], x(0).asInstanceOf[String]))\n}\n\ndef tables(): Array[(String, String)] \u003d {\n sqlContext.sql(\"show tables\").collect.map(x \u003d\u003e (x(0).asInstanceOf[String], x(0).asInstanceOf[String]))\n}\n\ndef columns(table: String) : Array[(String, String)] \u003d {\n  sqlContext.sql(\"select * from \" + table + \" limit 0\").columns.map(x \u003d\u003e (x, x))\n}\n\nval SQLDate \u003d z.select(\"SQLDate\", list(\"test\", \"MonthYear\")).asInstanceOf[String]\nval Language \u003d z.select(\"Language\", list(\"test\", \"language\")).asInstanceOf[String]\n//val Country \u003d z.select(\"Country\", list(\"test\", \"ActionGeo_CountryCode\")).asInstanceOf[String]\nval query \u003d \"select MonthYear, language, ActionGeo_CountryCode, Positive from test where language\u003d\u003d \u0027\" +  Language + \"\u0027 order by desc Positive\"\nval df \u003d sqlContext.sql(query)\nprintln(\"%table \" + df.columns.mkString(\"\\t\"))\nprintln(df.map(x \u003d\u003e x.mkString(\"\\t\")).collect().mkString(\"\\n\"))",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 21:00:42.916",
+      "dateUpdated": "2019-01-23 11:37:26.652",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -2433,23 +2404,6 @@
             "data": "MonthYear\tlanguage\tActionGeo_CountryCode\tPositive\n2018-02\tces\tUK\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tLO\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tDJ\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tDJ\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tIT\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tIT\t0.0\n2018-02\tces\tDJ\t0.0\n2018-02\tces\tKV\t0.0\n2018-02\tces\tEZ\t0.0\n2018-02\tces\tEZ\t0.0\n2018-02\tces\tUK\t0.0\n2018-02\tces\tDJ\t0.0\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tNL\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tNL\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tEZ\t0.0642673521850896\n2018-02\tces\tCH\t0.0759301442672697\n2018-02\tces\tCH\t0.0759301442672697\n2018-02\tces\tCH\t0.0759301442672697\n2018-02\tces\tEZ\t0.0759301442672697\n2018-02\tces\tRB\t0.12928248222366\n2018-02\tces\tRB\t0.12928248222366\n2018-02\tces\tYI\t0.19404915912031\n2018-02\tces\tYI\t0.19404915912031\n2018-02\tces\tUS\t0.22720817949446\n2018-02\tces\tLO\t0.22720817949446\n2018-02\tces\tUS\t0.22720817949446\n2018-02\tces\tUS\t0.22720817949446\n2018-02\tces\tLO\t0.22720817949446\n2018-02\tces\tLO\t0.22720817949446\n2018-02\tces\tUS\t0.22720817949446\n2018-02\tces\tLO\t0.22720817949446\n"
           }
         ]
-      },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://localhost:4040/jobs/job?id\u003d512",
-            "http://localhost:4040/jobs/job?id\u003d513",
-            "http://localhost:4040/jobs/job?id\u003d514",
-            "http://localhost:4040/jobs/job?id\u003d515",
-            "http://localhost:4040/jobs/job?id\u003d516",
-            "http://localhost:4040/jobs/job?id\u003d517"
-          ],
-          "interpreterSettingId": "spark"
-        }
       },
       "apps": [],
       "jobName": "paragraph_1548154971536_-989322248",
@@ -2758,22 +2712,6 @@
           }
         ]
       },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://localhost:4040/jobs/job?id\u003d459",
-            "http://localhost:4040/jobs/job?id\u003d460",
-            "http://localhost:4040/jobs/job?id\u003d461",
-            "http://localhost:4040/jobs/job?id\u003d462",
-            "http://localhost:4040/jobs/job?id\u003d463"
-          ],
-          "interpreterSettingId": "spark"
-        }
-      },
       "apps": [],
       "jobName": "paragraph_1548172694765_2021326492",
       "id": "20190122-165814_373773635",
@@ -2939,10 +2877,50 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%angular\n",
+      "text": "df_query3",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 18:05:02.611",
-      "config": {},
+      "dateUpdated": "2019-01-23 10:25:18.908",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548235511353_-487563069",
+      "id": "20190123-102511_1056064218",
+      "dateCreated": "2019-01-23 10:25:11.353",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_query3.createCassandraTable(\n   \"tone_actors_daily\",\n   \"df_query3\",\n   partitionKeyColumns \u003d Some(Seq(\"Actor1Name\",\"Actor2Name\")),\n   clusteringKeyColumns \u003d Some(Seq(\"GLOBALEVENTID\")))",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-23 10:48:03.117",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
@@ -2951,6 +2929,132 @@
       "jobName": "paragraph_1548176702610_1603647363",
       "id": "20190122-180502_1375935108",
       "dateCreated": "2019-01-22 18:05:02.610",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_tone_actors_daily.write.cassandraFormat(\"test_1\", \"tone_actors_daily\").save()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-23 10:24:35.007",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548235471693_1246494807",
+      "id": "20190123-102431_802880311",
+      "dateCreated": "2019-01-23 10:24:31.693",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.joda.time.DateTime\nprint(DateTime.now())\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-23 16:33:26.634",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.joda.time.DateTime\n2019-01-23T16:33:26.829+01:00"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548257044873_-552798792",
+      "id": "20190123-162404_931613218",
+      "dateCreated": "2019-01-23 16:24:04.873",
+      "dateStarted": "2019-01-23 16:33:26.668",
+      "dateFinished": "2019-01-23 16:33:26.913",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%angular\n\u003cform id\u003d\"filters\"\u003e\n    \u003cbutton type\u003d\"submit\" class\u003d\"btn btn-primary\" ng-click\u003d\"z.runParagraph(\u002720190123-162404_931613218\u0027)\"\u003eSubmit\u003c/button\u003e\n\u003c/form\u003e",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-23 16:33:31.803",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/undefined",
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "ANGULAR",
+            "data": "\u003cform id\u003d\"filters\"\u003e\n    \u003cbutton type\u003d\"submit\" class\u003d\"btn btn-primary\" ng-click\u003d\"z.runParagraph(\u002720190123-162404_931613218\u0027)\"\u003eSubmit\u003c/button\u003e\n\u003c/form\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548257244848_1647923507",
+      "id": "20190123-162724_826133881",
+      "dateCreated": "2019-01-23 16:27:24.849",
+      "dateStarted": "2019-01-23 16:33:23.208",
+      "dateFinished": "2019-01-23 16:33:23.211",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%angular\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-23 16:33:00.800",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548257580799_-234202803",
+      "id": "20190123-163300_1803509967",
+      "dateCreated": "2019-01-23 16:33:00.800",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
@@ -2962,141 +3066,8 @@
   "angularObjects": {
     "md:shared_process": [],
     "angular:shared_process": [],
-    "spark:shared_process": [
-      {
-        "name": "df",
-        "object": "df",
-        "noteId": "2E458KEZ1"
-      },
-      {
-        "name": "Language",
-        "object": [
-          {
-            "schema": {
-              "fields": [
-                {
-                  "name": "MonthYear",
-                  "dataType": {
-                    "ordering": {}
-                  },
-                  "nullable": true,
-                  "metadata": {
-                    "map": {},
-                    "_hashCode": -1.60932692E9,
-                    "bitmap$0": true
-                  }
-                },
-                {
-                  "name": "MonthYear",
-                  "dataType": {
-                    "ordering": {}
-                  },
-                  "nullable": true,
-                  "metadata": {
-                    "map": {},
-                    "_hashCode": -1.60932692E9,
-                    "bitmap$0": true
-                  }
-                }
-              ],
-              "_hashCode": 0.0,
-              "bitmap$0": 0.0
-            },
-            "values": [
-              "2018-02",
-              "2018-02"
-            ]
-          },
-          {
-            "schema": {
-              "fields": [
-                {
-                  "name": "MonthYear",
-                  "dataType": {
-                    "ordering": {}
-                  },
-                  "nullable": true,
-                  "metadata": {
-                    "map": {},
-                    "_hashCode": -1.60932692E9,
-                    "bitmap$0": true
-                  }
-                },
-                {
-                  "name": "MonthYear",
-                  "dataType": {
-                    "ordering": {}
-                  },
-                  "nullable": true,
-                  "metadata": {
-                    "map": {},
-                    "_hashCode": -1.60932692E9,
-                    "bitmap$0": true
-                  }
-                }
-              ],
-              "_hashCode": 0.0,
-              "bitmap$0": 0.0
-            },
-            "values": [
-              "2017-02",
-              "2017-02"
-            ]
-          },
-          {
-            "schema": {
-              "fields": [
-                {
-                  "name": "MonthYear",
-                  "dataType": {
-                    "ordering": {}
-                  },
-                  "nullable": true,
-                  "metadata": {
-                    "map": {},
-                    "_hashCode": -1.60932692E9,
-                    "bitmap$0": true
-                  }
-                },
-                {
-                  "name": "MonthYear",
-                  "dataType": {
-                    "ordering": {}
-                  },
-                  "nullable": true,
-                  "metadata": {
-                    "map": {},
-                    "_hashCode": -1.60932692E9,
-                    "bitmap$0": true
-                  }
-                }
-              ],
-              "_hashCode": 0.0,
-              "bitmap$0": 0.0
-            },
-            "values": [
-              "2018-01",
-              "2018-01"
-            ]
-          }
-        ],
-        "noteId": "2E458KEZ1"
-      },
-      {
-        "name": "list",
-        "object": [
-          "HelloWorld1",
-          "HelloWorld2",
-          "HelloWorld3"
-        ],
-        "noteId": "2E458KEZ1"
-      },
-      {
-        "name": "someScopeVar",
-        "object": 2.0,
-        "noteId": "2E458KEZ1"
-      }
-    ]
+    "spark:shared_process": [],
+    "cassandra:shared_process": []
   },
   "config": {
     "isZeppelinNotebookCronEnable": false
