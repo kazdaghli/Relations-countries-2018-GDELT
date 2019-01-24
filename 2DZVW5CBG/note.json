@@ -1831,7 +1831,7 @@
     {
       "text": "%angular\n\u003cform id\u003d\"filters\"\u003e\n    \u003cbutton type\u003d\"submit\" class\u003d\"btn btn-primary\" ng-click\u003d\"z.runParagraph(\u002720190123-133337_1437271303\u0027)\"\u003eSubmit\u003c/button\u003e\n\u003c/form\u003e",
       "user": "anonymous",
-      "dateUpdated": "2019-01-23 16:41:15.907",
+      "dateUpdated": "2019-01-23 22:15:51.876",
       "config": {
         "colWidth": 6.0,
         "fontSize": 9.0,
@@ -1896,8 +1896,8 @@
       "jobName": "paragraph_1548247745994_1469347419",
       "id": "20190123-134905_633391285",
       "dateCreated": "2019-01-23 13:49:05.994",
-      "dateStarted": "2019-01-23 16:41:15.907",
-      "dateFinished": "2019-01-23 16:41:15.912",
+      "dateStarted": "2019-01-23 22:15:51.877",
+      "dateFinished": "2019-01-23 22:15:54.072",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
