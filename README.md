@@ -3,4 +3,4 @@ GDELT NoSQL project
 
 ## Architecture
 
-![architecture](https://github.com/sarah911/NoSQL_Project/Data/architecture.PNG)
+![architecture](https://github.com/sarah911/NoSQL_Project/blob/master/Data/architecture.PNG)
