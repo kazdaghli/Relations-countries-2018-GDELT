@@ -38,11 +38,11 @@ Q1: Find the number of articles and events for a triplet ( Data, Country, Langua
 
 Q2: Find events of an actor in the past 6 months
 
-<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q2.PNG" width="300">
+<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q2.PNG" width="400">
 
 Q3: Find actors with the most negative or positive views based on ( Date, Country, Language )
 
-<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q3.PNG" width="300">
+<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q3.PNG" width="400">
 
 Q4: Find actors, countries and organizations that divide the most given a date
 
@@ -66,5 +66,5 @@ Part 3: Based on articles written in a country about another one (Table GKG)
 
 
 ## The final presentation
-![presentation]
+![presentation](https://github.com/sarah911/NoSQL_Project/blob/master/Pr%C3%A9sentation%20finale.pdf)
 
