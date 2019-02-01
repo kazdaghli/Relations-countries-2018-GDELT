@@ -160,45 +160,6 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val bucket_name \u003d \"du-weijia-telecom-gdelt2018\"\nval AWS_ID \u003d \"AKIAJOZH2VNBCRDJMTFA\" //(1) ID du fichier credentials\nval AWS_KEY \u003d \"dg0JP7o/ycrH566aQpLGmzouqqkpQn2p099Inmow\" //(2) Secret du fichier credentials\nval awsClient \u003d new AmazonS3Client(new BasicAWSCredentials(AWS_ID, AWS_KEY))\nsc.hadoopConfiguration.set(\"fs.s3a.access.key\", AWS_ID) \nsc.hadoopConfiguration.set(\"fs.s3a.secret.key\", AWS_KEY) \nsc.hadoopConfiguration.set(\"fs.s3a.connection.maximum\",\"100000\")",
-      "user": "anonymous",
-      "dateUpdated": "2019-01-22 16:34:05.866",
-      "config": {
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false,
-          "completionKey": "TAB",
-          "completionSupport": true
-        },
-        "colWidth": 12.0,
-        "editorMode": "ace/mode/scala",
-        "fontSize": 9.0,
-        "results": {},
-        "enabled": true
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "bucket_name: String \u003d du-weijia-telecom-gdelt2018\nAWS_ID: String \u003d AKIAJOZH2VNBCRDJMTFA\nAWS_KEY: String \u003d dg0JP7o/ycrH566aQpLGmzouqqkpQn2p099Inmow\nwarning: there was one deprecation warning; re-run with -deprecation for details\nawsClient: com.amazonaws.services.s3.AmazonS3Client \u003d com.amazonaws.services.s3.AmazonS3Client@7b4e2c5d\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1548169059841_-737361361",
-      "id": "20171217-230735_1688540039",
-      "dateCreated": "2019-01-22 14:57:39.841",
-      "dateStarted": "2019-01-22 16:34:06.468",
-      "dateFinished": "2019-01-22 16:35:05.350",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
       "text": "%md Les fichiers sont stockés compressés, on a besoin d\u0027un bout de code pour les décompresser en parallel sur les workers au fur et a mesure qu\u0027on les lit depuis S3:",
       "user": "anonymous",
       "dateUpdated": "2019-01-22 14:57:39.841",
@@ -236,6 +197,34 @@
       "dateCreated": "2019-01-22 14:57:39.841",
       "status": "READY",
       "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val bucket_name \u003d \"du-weijia-telecom-gdelt2018\"",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:05:38.800",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548702332578_-1135408176",
+      "id": "20190128-200532_855438068",
+      "dateCreated": "2019-01-28 20:05:32.578",
+      "status": "READY",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -354,9 +343,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "// Export Events\nval eventsRDD \u003d RDDDownloader(\"s3a://\" + bucket_name + \"/events/201801*.export.CSV.zip\")\nval mentionsRDD \u003d RDDDownloader(\"s3a://\" + bucket_name + \"/mentions/201801*.CSV.zip\")",
+      "text": "// Export Events\nval eventsRDD \u003d RDDDownloader(\"s3a://\" + bucket_name + \"/events/2018*.export.CSV.zip\")\nval mentionsRDD \u003d RDDDownloader(\"s3a://\" + bucket_name + \"/mentions/2018*.CSV.zip\")",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 16:35:11.254",
+      "dateUpdated": "2019-01-28 20:06:15.743",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -550,45 +539,6 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val ds1 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d15).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)), e(14).substring(6, 9))\n).toDS\n\nval ds2 \u003d cachedMentions.map(_.split(\"\\t\")).filter(_.length\u003d\u003d14).map(\n    e\u003d\u003e Mention(\n        toInt(e(0)),parse_date(e(1),inputFormat_ymdhms, outputFormat_ymdhms),parse_date(e(2),inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(3)),e(4),e(5),toInt(e(6)),toInt(e(7)),toInt(e(8)),toInt(e(9)),toInt(e(10)),toInt(e(11)),toInt(e(12)),toDouble(e(13)),\"eng\")\n).toDS\n\nval ds3 \u003d ds1.union(ds2)",
-      "user": "anonymous",
-      "dateUpdated": "2019-01-22 16:35:26.123",
-      "config": {
-        "colWidth": 12.0,
-        "fontSize": 9.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false,
-          "completionKey": "TAB",
-          "completionSupport": true
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "ds1: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds2: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\nds3: org.apache.spark.sql.Dataset[Mention] \u003d [GLOBALEVENTID: int, EventTimeDate: string ... 13 more fields]\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1548169272131_-232627450",
-      "id": "20190122-150112_2145771244",
-      "dateCreated": "2019-01-22 15:01:12.131",
-      "dateStarted": "2019-01-22 16:35:26.513",
-      "dateFinished": "2019-01-22 16:35:51.463",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
       "text": "var events \u003d cachedEvents.map(_.split(\"\\t\")).filter(_.length\u003d\u003d61).map(\n    e\u003d\u003e Event(\n        toInt(e(0)),parse_date(e(1), inputFormat_ymd, outputFormat_ymd),parse_date(e(2), inputFormat_ym, outputFormat_ym),toInt(e(3)),toDouble(e(4)),e(5),e(6),e(7),e(8),e(9),e(10),e(11),e(12),e(13),e(14),e(15),e(16),e(17),e(18),e(19),e(20),\n        e(21),e(22),e(23),e(24),toInt(e(25)),e(26),e(27),e(28),toInt(e(29)),toDouble(e(30)),toInt(e(31)),toInt(e(32)),toInt(e(33)),toDouble(e(34)),toInt(e(35)),e(36),e(37),e(38),e(39),toDouble(e(40)),\n        toDouble(e(41)),e(42),toInt(e(43)),e(44),e(45),e(46),e(47),toDouble(e(48)),toDouble(e(49)),e(50),toInt(e(51)),e(52),e(53),e(54),e(55),toDouble(e(56)),toDouble(e(57)),e(58),parse_date(e(59),inputFormat_ymdhms, outputFormat_ymdhms),e(60))\n\n).toDF()\n\nevents \u003d events.withColumn(\"SQLDate_date\",$\"SQLDATE\".cast(\"date\"))",
       "user": "anonymous",
       "dateUpdated": "2019-01-22 16:35:29.106",
@@ -734,27 +684,6 @@
             "data": "country_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nethnic_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\neventCodes_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngroup_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nreligion_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ntype_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nquad_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\ngeoType_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\nFIPS_transco: org.apache.spark.sql.DataFrame \u003d [LABEL: string, CODE: string]\nlanguage_transco: org.apache.spark.sql.DataFrame \u003d [CODE: string, LABEL: string]\n"
           }
         ]
-      },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d0",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d1",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d2",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d3",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d4",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d5",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d6",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d7",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d8",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d9"
-          ],
-          "interpreterSettingId": "spark"
-        }
       },
       "apps": [],
       "jobName": "paragraph_1548169575266_727341703",
@@ -963,9 +892,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val mentions_bis \u003d mentions.select($\"GLOBALEVENTID\", $\"MentionIdentifier\", $\"Language\").distinct\nval events_bis \u003d events.select($\"GLOBALEVENTID\", $\"SQLDATE\", $\"ActionGeo_CountryName\").where(\"ActionGeo_CountryName is not null\")\nval df_fin \u003d events_bis.join(mentions_bis, Seq(\"GLOBALEVENTID\"), \"inner\")\n\ndf_fin.createOrReplaceTempView(\"table_query_1\")\n\n//print(df_fin.count())",
+      "text": "val mentions_bis \u003d mentions.select($\"GLOBALEVENTID\", $\"MentionIdentifier\", $\"Language\").distinct\nval events_bis \u003d events.select($\"GLOBALEVENTID\", $\"SQLDATE\", $\"ActionGeo_CountryName\").where(\"ActionGeo_CountryName is not null\")\nval df_q1 \u003d events_bis.join(mentions_bis, Seq(\"GLOBALEVENTID\"), \"inner\")\n\ndf_q1.createOrReplaceTempView(\"table_query_1\")\n\n//print(df_fin.count())",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 16:36:46.755",
+      "dateUpdated": "2019-01-28 20:08:48.795",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1590,9 +1519,23 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548270782741_830710342",
+      "id": "20190123-201302_650746456",
+      "dateCreated": "2019-01-23 20:13:02.742",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "text": "%md # Cassandra",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 16:03:31.225",
+      "dateUpdated": "2019-01-28 19:56:40.029",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1625,15 +1568,15 @@
       "jobName": "paragraph_1548170587772_181143000",
       "id": "20190122-152307_1566105733",
       "dateCreated": "2019-01-22 15:23:07.772",
-      "dateStarted": "2019-01-22 16:03:20.212",
-      "dateFinished": "2019-01-22 16:03:20.264",
+      "dateStarted": "2019-01-28 19:56:40.043",
+      "dateFinished": "2019-01-28 19:56:40.134",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "import com.datastax.spark.connector._\nimport org.apache.spark.sql.cassandra._\nimport com.datastax.spark.connector.cql._ //(Optional) Imports java driver helper functions",
+      "text": "import com.datastax.spark.connector._\nimport org.apache.spark.sql.cassandra._\nimport com.datastax.spark.connector.cql._",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 17:13:27.244",
+      "dateUpdated": "2019-01-28 19:54:52.001",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1670,9 +1613,37 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val c \u003d CassandraConnector(sc.getConf)\nc.withSessionDo ( session \u003d\u003e session.execute(\"CREATE KEYSPACE tone_actors_daily WITH replication\u003d{\u0027class\u0027:\u0027SimpleStrategy\u0027, \u0027replication_factor\u0027:1}\"))\nc.withSessionDo ( session \u003d\u003e session.execute(\"CREATE TABLE tone_actors_daily.test_1 (k int PRIMARY KEY, v int)\"))",
+      "text": "val c \u003d CassandraConnector(sc.getConf)\nc.withSessionDo ( session \u003d\u003e session.execute(\"CREATE KEYSPACE queries WITH replication\u003d{\u0027class\u0027:\u0027SimpleStrategy\u0027, \u0027replication_factor\u0027:3}\"))",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 16:59:19.136",
+      "dateUpdated": "2019-01-28 20:15:44.640",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548701696037_-415964534",
+      "id": "20190128-195456_743444589",
+      "dateCreated": "2019-01-28 19:54:56.038",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:16:27.191",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1691,27 +1662,553 @@
         "forms": {}
       },
       "results": {
-        "code": "ERROR",
+        "code": "SUCCESS",
         "msg": [
           {
-            "type": "TEXT",
-            "data": "c: com.datastax.spark.connector.cql.CassandraConnector \u003d com.datastax.spark.connector.cql.CassandraConnector@169c4a40\ncom.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace tone_actors_daily already exists\n  at com.datastax.driver.core.exceptions.AlreadyExistsException.copy(AlreadyExistsException.java:111)\n  at com.datastax.driver.core.DriverThrowables.propagateCause(DriverThrowables.java:37)\n  at com.datastax.driver.core.DefaultResultSetFuture.getUninterruptibly(DefaultResultSetFuture.java:245)\n  at com.datastax.driver.core.AbstractSession.execute(AbstractSession.java:68)\n  at com.datastax.driver.core.AbstractSession.execute(AbstractSession.java:43)\n  at sun.reflect.GeneratedMethodAccessor292.invoke(Unknown Source)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at com.datastax.spark.connector.cql.SessionProxy.invoke(SessionProxy.scala:37)\n  at com.sun.proxy.$Proxy81.execute(Unknown Source)\n  at sun.reflect.GeneratedMethodAccessor292.invoke(Unknown Source)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at com.datastax.spark.connector.cql.SessionProxy.invoke(SessionProxy.scala:37)\n  at com.sun.proxy.$Proxy82.execute(Unknown Source)\n  at $anonfun$1.apply(\u003cconsole\u003e:56)\n  at $anonfun$1.apply(\u003cconsole\u003e:56)\n  at com.datastax.spark.connector.cql.CassandraConnector$$anonfun$withSessionDo$1.apply(CassandraConnector.scala:112)\n  at com.datastax.spark.connector.cql.CassandraConnector$$anonfun$withSessionDo$1.apply(CassandraConnector.scala:111)\n  at com.datastax.spark.connector.cql.CassandraConnector.closeResourceAfterUse(CassandraConnector.scala:145)\n  at com.datastax.spark.connector.cql.CassandraConnector.withSessionDo(CassandraConnector.scala:111)\n  ... 62 elided\nCaused by: com.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace tone_actors_daily already exists\n  at com.datastax.driver.core.exceptions.AlreadyExistsException.copy(AlreadyExistsException.java:130)\n  at com.datastax.driver.core.Responses$Error.asException(Responses.java:140)\n  at com.datastax.driver.core.DefaultResultSetFuture.onSet(DefaultResultSetFuture.java:179)\n  at com.datastax.driver.core.RequestHandler.setFinalResult(RequestHandler.java:177)\n  at com.datastax.driver.core.RequestHandler.access$2500(RequestHandler.java:46)\n  at com.datastax.driver.core.RequestHandler$SpeculativeExecution.setFinalResult(RequestHandler.java:799)\n  at com.datastax.driver.core.RequestHandler$SpeculativeExecution.onSet(RequestHandler.java:633)\n  at com.datastax.driver.core.Connection$Dispatcher.channelRead0(Connection.java:1070)\n  at com.datastax.driver.core.Connection$Dispatcher.channelRead0(Connection.java:993)\n  at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)\n  at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)\n  at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1359)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)\n  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)\n  at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:935)\n  at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollInReady(AbstractEpollStreamChannel.java:801)\n  at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:404)\n  at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:304)\n  at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:858)\n  at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:138)\n  ... 1 more\nCaused by: com.datastax.driver.core.exceptions.AlreadyExistsException: Keyspace tone_actors_daily already exists\n  at com.datastax.driver.core.Responses$Error$1.decode(Responses.java:85)\n  at com.datastax.driver.core.Responses$Error$1.decode(Responses.java:37)\n  at com.datastax.driver.core.Message$ProtocolDecoder.decode(Message.java:289)\n  at com.datastax.driver.core.Message$ProtocolDecoder.decode(Message.java:269)\n  at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:88)\n  ... 18 more\n"
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eWrite queries to Cassandra\u003c/h2\u003e\n\u003c/div\u003e"
           }
         ]
       },
       "apps": [],
-      "jobName": "paragraph_1548173203759_1562135838",
-      "id": "20190122-160643_1930092285",
-      "dateCreated": "2019-01-22 16:06:43.760",
-      "dateStarted": "2019-01-22 16:59:19.227",
-      "dateFinished": "2019-01-22 16:59:20.436",
-      "status": "ERROR",
+      "jobName": "paragraph_1548701730247_1827798516",
+      "id": "20190128-195530_131231102",
+      "dateCreated": "2019-01-28 19:55:30.247",
+      "dateStarted": "2019-01-28 19:56:55.156",
+      "dateFinished": "2019-01-28 19:56:55.176",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "df_tone_actors_daily.createCassandraTable(\n   \"tone_actors_daily\",\n   \"test_1\",\n   partitionKeyColumns \u003d Some(Seq(\"Actor1Name\",\"Actor2Name\")),\n   clusteringKeyColumns \u003d Some(Seq(\"SQLDATE\")))",
+      "text": "%md ### Query1 ",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 17:13:15.096",
+      "dateUpdated": "2019-01-28 20:19:01.896",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery1\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548701825879_-522790579",
+      "id": "20190128-195705_1420281018",
+      "dateCreated": "2019-01-28 19:57:05.879",
+      "dateStarted": "2019-01-28 20:19:01.904",
+      "dateFinished": "2019-01-28 20:19:01.987",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_q1.createCassandraTable(\n   \"queries\",\n   \"articles_and_events\",\n   partitionKeyColumns \u003d Some(Seq(\"SQLDATE\",\"ActionGeo_CountryName\", \"Language\")),\n   clusteringKeyColumns \u003d Some(Seq(\"GLOBALEVENTID\")))\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:48:00.376",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548701854547_-1652635034",
+      "id": "20190128-195734_841562022",
+      "dateCreated": "2019-01-28 19:57:34.547",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_q1.write.cassandraFormat(\"articles_and_events\", \"queries\").save()",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:19:30.311",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548702470679_801074694",
+      "id": "20190128-200750_793734952",
+      "dateCreated": "2019-01-28 20:07:50.679",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ### Query 2",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:26:32.805",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 2\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703136347_-763893833",
+      "id": "20190128-201856_923032727",
+      "dateCreated": "2019-01-28 20:18:56.347",
+      "dateStarted": "2019-01-28 20:26:32.809",
+      "dateFinished": "2019-01-28 20:26:32.818",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events_by_actor.createCassandraTable(\n   \"queries\",\n   \"events_by_actor\",\n   partitionKeyColumns \u003d Some(Seq(\"Actor_Name\")),\n   clusteringKeyColumns \u003d Some(Seq(\"Event_Date\", \"Event_ID\")))\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:49:18.070",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703151768_793411839",
+      "id": "20190128-201911_1167132444",
+      "dateCreated": "2019-01-28 20:19:11.768",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "events_by_actor.write.cassandraFormat(\"events_by_actor\", \"queries\").save()\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:21:32.349",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703153611_-2107391847",
+      "id": "20190128-201913_500861577",
+      "dateCreated": "2019-01-28 20:19:13.611",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ### Query 3",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:27:09.672",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 3\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703571092_883116609",
+      "id": "20190128-202611_1522063412",
+      "dateCreated": "2019-01-28 20:26:11.092",
+      "dateStarted": "2019-01-28 20:27:09.674",
+      "dateFinished": "2019-01-28 20:27:09.713",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_query3.createCassandraTable(\n   \"queries\",\n   \"controversial_actors\",\n   partitionKeyColumns \u003d Some(Seq(\"SQLMonth\",\"ActionGeo_CountryName\", \"Language\")),\n   clusteringKeyColumns \u003d Some(Seq(\"GLOBALEVENTID\")))\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:51:36.997",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703587992_326031295",
+      "id": "20190128-202627_272171357",
+      "dateCreated": "2019-01-28 20:26:27.992",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_query3.write.cassandraFormat(\"controversial_actors\", \"queries\").save()",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:53:51.555",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703603603_-77538726",
+      "id": "20190128-202643_235123919",
+      "dateCreated": "2019-01-28 20:26:43.603",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ### Query 4",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:27:54.883",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 4\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703624645_401150121",
+      "id": "20190128-202704_846160627",
+      "dateCreated": "2019-01-28 20:27:04.645",
+      "dateStarted": "2019-01-28 20:27:54.901",
+      "dateFinished": "2019-01-28 20:27:54.921",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "actor_final.createCassandraTable(\n   \"queries\",\n   \"division_by_actor\",\n   partitionKeyColumns \u003d Some(Seq(\"DATE\")),\n   clusteringKeyColumns \u003d Some(Seq(\"GLOBALEVENTID\", \"ACTOR\", \"COUNTRY\", \"ORGANIZATION\")))\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:56:42.788",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703638446_833110660",
+      "id": "20190128-202718_1167850529",
+      "dateCreated": "2019-01-28 20:27:18.446",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "actor_final.write.cassandraFormat(\"division_by_actor\", \"queries\").save()",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:54:50.890",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703654219_588821245",
+      "id": "20190128-202734_708465344",
+      "dateCreated": "2019-01-28 20:27:34.219",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ### Query 5 - 1",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:28:31.911",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 5 - 1\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703658591_1057567937",
+      "id": "20190128-202738_313651164",
+      "dateCreated": "2019-01-28 20:27:38.591",
+      "dateStarted": "2019-01-28 20:28:31.931",
+      "dateFinished": "2019-01-28 20:28:31.970",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_tone_actors_daily.createCassandraTable(\n   \"queries\",\n   \"tone_actors_daily\",\n   partitionKeyColumns \u003d Some(Seq(\"Actor1Name\",\"Actor1Name\")),\n   clusteringKeyColumns \u003d Some(Seq(\"SQLDATE\")))\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:58:45.499",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703679716_-914394004",
+      "id": "20190128-202759_127476675",
+      "dateCreated": "2019-01-28 20:27:59.716",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df_tone_actors_daily.write.cassandraFormat(\"tone_actors_daily\", \"queries\").save()",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 13:58:56.846",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703696033_-922636763",
+      "id": "20190128-202816_773025268",
+      "dateCreated": "2019-01-28 20:28:16.033",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md ### Query 5 - 2",
+      "user": "anonymous",
+      "dateUpdated": "2019-01-28 20:28:37.953",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 5 - 2\u003c/h3\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1548703705871_252203731",
+      "id": "20190128-202825_1331207122",
+      "dateCreated": "2019-01-28 20:28:25.871",
+      "dateStarted": "2019-01-28 20:28:37.967",
+      "dateFinished": "2019-01-28 20:28:38.012",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "query_tone_country_daily.createCassandraTable(\n   \"queries\",\n   \"tone_country_daily\",\n   partitionKeyColumns \u003d Some(Seq(\"Actor1CountryName\",\"Actor2CountryName\")),\n   clusteringKeyColumns \u003d Some(Seq(\"SQLDATE\")))",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 14:01:03.516",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1743,9 +2240,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "df_tone_actors_daily.write.cassandraFormat(\"test_1\", \"tone_actors_daily\").save()",
+      "text": "query_tone_country_daily.write.cassandraFormat(\"tone_country_daily\", \"queries\").save()",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 17:00:10.625",
+      "dateUpdated": "2019-02-01 14:00:04.943",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1766,31 +2263,6 @@
       "results": {
         "code": "SUCCESS",
         "msg": []
-      },
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d10",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d11",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d12",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d13",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d14",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d16",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d17",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d18",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d15",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d19",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d20",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d21",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d22",
-            "http://ip-172-31-30-14.ec2.internal:4040/jobs/job?id\u003d23"
-          ],
-          "interpreterSettingId": "spark"
-        }
       },
       "apps": [],
       "jobName": "paragraph_1548176393734_1628722014",
@@ -1816,7 +2288,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "gdeltDatasetEngineering_PP",
+  "name": "gdeltDatasetEngineering_events_mentions",
   "id": "2E4E4Q6WY",
   "noteParams": {},
   "noteForms": {},
