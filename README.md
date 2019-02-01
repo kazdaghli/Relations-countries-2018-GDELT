@@ -33,28 +33,35 @@ https://github.com/sarah911/NoSQL_Project/blob/master/2E1J1S7FX/note.json
 ## Queries 
 
 Q1: Find the number of articles and events for a triplet ( Data, Country, Language )
+
 <img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q1.PNG" width="200">
 
 Q2: Find events of an actor in the past 6 months
-<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q2.PNG" width="200">
+
+<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q2.PNG" width="300">
 
 Q3: Find actors with the most negative or positive views based on ( Date, Country, Language )
-<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q3.PNG" width="200">
+
+<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q3.PNG" width="300">
 
 Q4: Find actors, countries and organizations that divide the most given a date
+
 <img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q4.PNG" width="200">
 
 Q5: The evolution of relations between countries
 
 Part 1: Based on actors names (Table events)
+
 <img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q51.PNG" width="200">
 
 
 Part 2: Based on actors countries (Table mentions)
+
 <img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q52.PNG" width="200">
 
 
 Part 3: Based on articles written in a country about another one (Table GKG)
+
 <img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q53.PNG" width="200">
 
 
