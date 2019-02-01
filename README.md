@@ -34,7 +34,7 @@ https://github.com/sarah911/NoSQL_Project/blob/master/2E1J1S7FX/note.json
 
 Q1: Find the number of articles and events for a triplet ( Data, Country, Language )
 ![Q1](https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q1.PNG)
-
+<img src="https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q1.PNG" width="48">
 Q2: Find events of an actor in the past 6 months
 ![Q2](https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q2.PNG)
 
