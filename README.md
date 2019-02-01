@@ -45,11 +45,14 @@ Q4: Find actors, countries and organizations that divide the most given a date
 ![Q4](https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q4.PNG)
 
 Q5: The evolution of relations between countries
+
 Part 1: Based on actors names (Table events)
 ![Q51](https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q51.PNG)
 
+
 Part 2: Based on actors countries (Table mentions)
 ![Q52](https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q52.PNG)
+
 
 Part 3: Based on articles written in a country about another one (Table GKG)
 ![Q53](https://github.com/sarah911/NoSQL_Project/blob/master/Data/Q53.PNG)
