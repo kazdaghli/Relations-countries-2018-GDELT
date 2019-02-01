@@ -81,15 +81,21 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "def RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n       case (name: String, content: PortableDataStream) \u003d\u003e\n          val zis \u003d new ZipInputStream(content.open)\n          Stream.continually(zis.getNextEntry).\n                takeWhile(_ !\u003d null).\n                flatMap { _ \u003d\u003e\n                    val br \u003d new BufferedReader(new InputStreamReader(zis))\n                    Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                }\n    }\n    return resultRDD\n}\n// Export GKG\nval gkgRDD \u003d RDDDownloader(\"/home/lem/GDELTData/gkg/*.csv.zip\") \n",
+      "text": "def RDDDownloader(fileName: String): org.apache.spark.rdd.RDD[String] \u003d \n{\n    val resultRDD \u003d sc.binaryFiles(fileName). // charger quelques fichers via une regex\n    flatMap {  // decompresser les fichiers\n       case (name: String, content: PortableDataStream) \u003d\u003e\n          val zis \u003d new ZipInputStream(content.open)\n          Stream.continually(zis.getNextEntry).\n                takeWhile(_ !\u003d null).\n                flatMap { _ \u003d\u003e\n                    val br \u003d new BufferedReader(new InputStreamReader(zis))\n                    Stream.continually(br.readLine()).takeWhile(_ !\u003d null)\n                }\n    }\n    return resultRDD\n}\n// Export GKG\nval bucket_name \u003d \"du-weijia-telecom-gdelt2018\"\nval gkgRDD \u003d RDDDownloader(\"s3a://\" + bucket_name + \"/gkg/*.csv.zip\") \n",
       "user": "anonymous",
-      "dateUpdated": "2019-01-21 18:04:27.701",
+      "dateUpdated": "2019-01-28 20:03:15.458",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
         "enabled": true,
         "results": {},
-        "editorSetting": {}
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
       },
       "settings": {
         "params": {},
@@ -233,9 +239,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "import java.text.SimpleDateFormat\ndef toDouble(s : String): Double \u003d if (s.isEmpty) 0 else s.toDouble\ndef toInt(s : String): Int \u003d if (s.isEmpty) 0  else s.toInt\ndef toBigInt(s : String): BigInt \u003d if (s.isEmpty) BigInt(0) else BigInt(s)\n\ndef parseLocation(loc:String):String \u003d\n{\n    if (loc.split(\"#\").size \u003e 2){\n        return loc.split(\"#\")(1).split(\",\").last\n    }\n    else\n    {\n        return null\n    }\n}\n\nval inputFormat_ymd \u003d new SimpleDateFormat(\"yyyyMMdd\")\nval outputFormat_ymd \u003d new SimpleDateFormat(\"yyyy-MM-dd\")\n\nval inputFormat_ym \u003d new SimpleDateFormat(\"yyyyMM\")\nval outputFormat_ym \u003d new SimpleDateFormat(\"yyyy-MM\")\n\nval inputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyyMMddhhmmss\")\nval outputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyy-MM-dd hh:mm:ss\")\n    \ndef parse_date(s : String, inputFormat : SimpleDateFormat, outputFormat : SimpleDateFormat):\n    String \u003d if (s.isEmpty) s else  outputFormat.format(inputFormat.parse(s))   \n\n\n\n\nval prep_gkg \u003d \ncachedGKG.map(_.split(\"\\t\")).filter(_.length\u003d\u003d27).map(\n    e\u003d\u003e GKG(\n        e(0),parse_date(e(1), inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(2)),e(3),e(4),e(5),e(6),e(7),e(8),parseLocation(e(9)),e(10),e(11),e(12),e(13),e(14),e(15).split(\",\")(0),e(16),e(17),e(18),e(19),e(20),e(21),e(22),e(23),e(24),e(25),e(26))\n\n).toDF//S.createOrReplaceTempView(\"gkg\")",
+      "text": "import java.text.SimpleDateFormat\ndef toDouble(s : String): Double \u003d if (s.isEmpty) 0 else s.toDouble\ndef toInt(s : String): Int \u003d if (s.isEmpty) 0  else s.toInt\ndef toBigInt(s : String): BigInt \u003d if (s.isEmpty) BigInt(0) else BigInt(s)\n\ndef parseLocation(loc:String):String \u003d\n{\n    if (loc.split(\"#\").size \u003e 2){\n        return loc.split(\"#\")(1).split(\",\").last\n    }\n    else\n    {\n        return null\n    }\n}\n\nval inputFormat_ymd \u003d new SimpleDateFormat(\"yyyyMMdd\")\nval outputFormat_ymd \u003d new SimpleDateFormat(\"yyyy-MM-dd\")\n\nval inputFormat_ym \u003d new SimpleDateFormat(\"yyyyMM\")\nval outputFormat_ym \u003d new SimpleDateFormat(\"yyyy-MM\")\n\nval inputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyyMMddhhmmss\")\nval outputFormat_ymdhms \u003d new SimpleDateFormat(\"yyyy-MM-dd hh:mm:ss\")\n    \ndef parse_date(s : String, inputFormat : SimpleDateFormat, outputFormat : SimpleDateFormat):\n    String \u003d if (s.isEmpty) s else  outputFormat.format(inputFormat.parse(s))   \n\n\n\n\nval prep_gkg \u003d \ncachedGKG.map(_.split(\"\\t\")).filter(_.length\u003d\u003d27).map(\n    e\u003d\u003e GKG(\n        e(0),parse_date(e(1), inputFormat_ymdhms, outputFormat_ymdhms),toInt(e(2)),e(3),e(4),e(5),e(6),e(7),e(8),parseLocation(e(9)),e(10),e(11),e(12),e(13),e(14),e(15).split(\",\")(0),e(16),e(17),e(18),e(19),e(20),e(21),e(22),e(23),e(24),e(25),e(26))\n\n).toDF",
       "user": "anonymous",
-      "dateUpdated": "2019-01-21 18:57:04.367",
+      "dateUpdated": "2019-02-01 14:02:15.931",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -272,9 +278,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%md\n### Query 6 From GKG Preparation",
+      "text": "%md\n### Query 5 From GKG Preparation",
       "user": "anonymous",
-      "dateUpdated": "2019-01-22 09:54:11.814",
+      "dateUpdated": "2019-02-01 14:02:29.560",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -299,7 +305,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 6 From GKG Preparation\u003c/h3\u003e\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eQuery 5 From GKG Preparation\u003c/h3\u003e\n\u003c/div\u003e"
           }
         ]
       },
@@ -307,8 +313,8 @@
       "jobName": "paragraph_1548147223669_1823707713",
       "id": "20190122-095343_1063600649",
       "dateCreated": "2019-01-22 09:53:43.669",
-      "dateStarted": "2019-01-22 09:54:11.844",
-      "dateFinished": "2019-01-22 09:54:11.902",
+      "dateStarted": "2019-02-01 14:02:29.579",
+      "dateFinished": "2019-02-01 14:02:29.613",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -391,9 +397,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val df_tone_country_daily_articles  \u003d sqlContext.sql(query_tone_country_daily_articles)\nval lookUpDomainCountry  \u003d spark.read.format(\"csv\").option(\"header\", \"true\").load(\"/home/sara/Downloads/domainCountry\")\nval req6_3 \u003d df_tone_country_daily_articles.join( lookUpDomainCountry, df_tone_country_daily_articles(\"Country1\").contains(lookUpDomainCountry(\"Domain\")) ).select(col(\"CountryHumanName\").alias(\"Country1\"), col(\"Country2\"), col(\"DATE_NEW\").alias(\"Date\"), col(\"DailyAvgTone\"))",
+      "text": "val df_tone_country_daily_articles  \u003d sqlContext.sql(query_tone_country_daily_articles)\nval lookUpDomainCountry  \u003d spark.read.format(\"csv\").option(\"header\", \"true\").load(\"s3a://\" + bucket_name +\"/domainCountry\")\nval req6_3 \u003d df_tone_country_daily_articles.join( lookUpDomainCountry, df_tone_country_daily_articles(\"Country1\").contains(lookUpDomainCountry(\"Domain\")) ).select(col(\"CountryHumanName\").alias(\"Country1\"), col(\"Country2\"), col(\"DATE_NEW\").alias(\"Date\"), col(\"DailyAvgTone\"))",
       "user": "anonymous",
-      "dateUpdated": "2019-01-21 19:15:25.380",
+      "dateUpdated": "2019-02-01 14:05:39.345",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -504,16 +510,99 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "%md ## Query 5 - 3",
       "user": "anonymous",
-      "config": {},
+      "dateUpdated": "2019-02-01 14:03:13.237",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eQuery 5 - 3\u003c/h2\u003e\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "jobName": "paragraph_1548090500710_-1437668268",
       "id": "20190121-180820_286104030",
       "dateCreated": "2019-01-21 18:08:20.710",
+      "dateStarted": "2019-02-01 14:03:13.249",
+      "dateFinished": "2019-02-01 14:03:13.311",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "req6_3.createCassandraTable(\n   \"queries\",\n   \"tone_country_daily_articles\",\n   partitionKeyColumns \u003d Some(Seq(\"Actor1CountryName\",\"Actor2CountryName\")),\n   clusteringKeyColumns \u003d Some(Seq(\"SQLDATE\")))\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 14:06:01.928",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1549026193186_224450501",
+      "id": "20190201-140313_1773886808",
+      "dateCreated": "2019-02-01 14:03:13.187",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "req6_3.write.cassandraFormat(\"tone_country_daily_articles\", \"queries\").save()",
+      "user": "anonymous",
+      "dateUpdated": "2019-02-01 14:06:11.752",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1549026215154_-1660046511",
+      "id": "20190201-140335_68586310",
+      "dateCreated": "2019-02-01 14:03:35.154",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
