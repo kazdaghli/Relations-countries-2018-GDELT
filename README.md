@@ -20,6 +20,8 @@ Scripts to automate the cluster creation:
 2 - cluster_configuration.py : Configurate the cluster (number and types of instances etc) + link to spark and cassandra
 3 - create_cluster.sh : Launch to create EMR 
 
+Here is a video for cluster creation:
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://github.com/sarah911/NoSQL_Project/blob/master/Data/auto_config.mp4)
 ## Data Loading and preprocessing
 
 # Load data 
@@ -66,5 +68,5 @@ Part 3: Based on articles written in a country about another one (Table GKG)
 
 
 ## The final presentation
-![presentation](https://github.com/sarah911/NoSQL_Project/blob/master/Pr%C3%A9sentation%20finale.pdf)
+![Presentation](https://github.com/sarah911/NoSQL_Project/blob/master/Pr%C3%A9sentation%20finale.pdf)
 
