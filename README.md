@@ -22,8 +22,6 @@ Scripts to automate the cluster creation:
 
 ## Data Loading and preprocessing
 
-# Load data 
-
 For data with events and mentions tables : 
 https://github.com/sarah911/NoSQL_Project/blob/master/2E4E4Q6WY/note.json
 
