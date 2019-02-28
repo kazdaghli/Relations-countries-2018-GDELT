@@ -1,5 +1,6 @@
 # NoSQL_Project
 GDELT NoSQL project
+The aim of this project is to explore relations between countries in 2018 based on specific queries on the GDELT database.
 
 ## Architecture
 
